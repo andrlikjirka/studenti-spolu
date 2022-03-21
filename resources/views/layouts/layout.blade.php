@@ -7,7 +7,7 @@
     <meta name="keywords" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>studenti.spolu</title>
-    <!--<link rel="icon" type="image/png" href="img/favicon-32x32.png">-->
+    <link rel="icon" type="image/png" href="{{ asset('storage/favicon-32x32.png') }}">
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">

@@ -13,7 +13,7 @@
                     </p>
                 </div>
                 <div class="col-lg-6 col-md-6">
-                    <!--<img style="width: 90%;" class="d-block m-auto" src="img/Obrázek3.png" alt="">-->
+                    <img style="width: 90%;" class="d-block m-auto" src="{{ asset('storage/index-img.png') }}" alt="studenti spoluprace">
                 </div>
             </div>
         </div>
