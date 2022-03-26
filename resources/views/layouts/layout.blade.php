@@ -8,10 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>studenti.spolu</title>
     <link rel="icon" type="image/png" href="{{ asset('storage/favicon-32x32.png') }}">
-
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
 </head>
 <body>
 
@@ -19,7 +17,7 @@
 <header>
     <nav id="" class="navbar navbar-expand-lg navbar-light bg-white fixed-top py-3 shadow-sm">
         <div class="container px-5">
-            <a href="" class="navbar-brand text-primary fw-bold font-monospace">studenti|spolu</a>
+            <a href="{{ url('/') }}" class="navbar-brand text-primary fw-bold font-monospace">studenti|spolu</a>
             <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false"
                     aria-label="Toggle navigation">
@@ -28,13 +26,13 @@
             <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                 <ul class="navbar-nav m-auto ">
                     <li class="nav-item me-3">
-                        <a class="nav-link" href="">Projekty</a>
+                        <a class="nav-link" href="{{ url('./projekty') }}">Projekty</a>
                     </li>
                     <li class="nav-item me-3">
-                        <a class="nav-link" href="">Nabídky spolupráce</a>
+                        <a class="nav-link" href="{{ url('./nabidky-spoluprace') }}">Nabídky spolupráce</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="">Uživatelé</a>
+                        <a class="nav-link" href="{{ url('./uzivatele') }}">Uživatelé</a>
                     </li>
                 </ul>
                 <!--
@@ -52,9 +50,9 @@
                         Jiří Andrlík
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <li><a class="dropdown-item" href="">Můj profil</a></li>
-                        <li><a class="dropdown-item" href="">Moje projekty</a></li>
-                        <li><a class="dropdown-item" href="">Žádosti o spolupráci</a></li>
+                        <li><a class="dropdown-item" href="{{ url('./muj-profil') }}">Můj profil</a></li>
+                        <li><a class="dropdown-item" href="{{ url('./moje-projekty') }}">Moje projekty</a></li>
+                        <li><a class="dropdown-item" href="{{ url('./zadosti-o-spolupraci') }}">Žádosti o spolupráci</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
