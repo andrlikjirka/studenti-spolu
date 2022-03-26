@@ -35,15 +35,15 @@
                         <a class="nav-link" href="{{ url('./uzivatele') }}">Uživatelé</a>
                     </li>
                 </ul>
-                <!--
-                                                <a href="" class="btn btn-primary px-3 py-1 me-2">
-                                                    Přihlásit
-                                                </a>
-                                                <a href="" class="btn btn-outline-primary px-3 py-1">
-                                                    Registrace
-                                                </a>
-                -->
 
+                <a href="" class="btn btn-primary px-3 py-1 me-2">
+                    Přihlásit
+                </a>
+                <a href="{{ url('./registrace') }}" class="btn btn-outline-primary px-3 py-1">
+                    Registrace
+                </a>
+
+            <!--
                 <div class="dropdown">
                     <button class="btn btn-primary dropdown-toggle px-3 py-1" type="button" id="dropdownMenuButton1"
                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -66,6 +66,7 @@
                             </a></li>
                     </ul>
                 </div>
+                -->
 
 
             </div>
@@ -75,19 +76,19 @@
 
 @yield('content')
 
-<!-- Paticka -->
-<footer class="pt-4 pb-2 bg-white bg-gradient">
-    <div class="container px-5 text-center">
+                <!-- Paticka -->
+                <footer class="pt-4 pb-2 bg-white bg-gradient">
+                    <div class="container px-5 text-center">
 
-        <div class="small text-secondary">
-            <p>&copy; 2022, Jiří Andrlík</p>
-        </div>
-    </div>
-</footer>
+                        <div class="small text-secondary">
+                            <p>&copy; 2022, Jiří Andrlík</p>
+                        </div>
+                    </div>
+                </footer>
 
 
-<!-- Javascripty -->
-<script src="{{ asset('js/app.js') }}"></script>
+                <!-- Javascripty -->
+                <script src="{{ asset('js/app.js') }}"></script>
 
 </body>
 </html>

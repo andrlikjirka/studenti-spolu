@@ -7,6 +7,7 @@ use App\Http\Controllers\UzivateleController;
 use App\Http\Controllers\MujProfilController;
 use App\Http\Controllers\MojeProjektyController;
 use App\Http\Controllers\ZadostiController;
+use App\Http\Controllers\RegistraceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,5 +40,8 @@ Route::get('/moje-projekty', [MojeProjektyController::class, 'index'])->name('mo
 
 Route::get('/moje-projekty/{id}', [MojeProjektyController::class, 'show'])->where('id', '[0-9]+')->name('moje-projekty.show');
 
-Route::get('zadosti-o-spolupraci', [ZadostiController::class, 'index'])->name('zadosti.index');
+Route::get('/zadosti-o-spolupraci', [ZadostiController::class, 'index'])->name('zadosti.index');
+
+Route::get('/registrace', [RegistraceController::class, 'show'])->name('registrace');
+Route::post('/registrace', [RegistraceController::class, 'handle'] )->name('registrace');
 
