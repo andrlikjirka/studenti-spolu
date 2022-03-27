@@ -8,6 +8,8 @@ use App\Http\Controllers\MujProfilController;
 use App\Http\Controllers\MojeProjektyController;
 use App\Http\Controllers\ZadostiController;
 use App\Http\Controllers\RegistraceController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\LogoutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,3 +47,7 @@ Route::get('/zadosti-o-spolupraci', [ZadostiController::class, 'index'])->name('
 Route::get('/registrace', [RegistraceController::class, 'show'])->name('registrace');
 Route::post('/registrace', [RegistraceController::class, 'handle'] )->name('registrace');
 
+Route::get('/prihlaseni', [LoginController::class, 'show'])->name('prihlaseni');
+Route::post('/prihlaseni', [LoginController::class, 'handle'])->name('prihlaseni');
+
+Route::post('/odhlaseni', [LogoutController::class, 'handle'])->name('odhlaseni');

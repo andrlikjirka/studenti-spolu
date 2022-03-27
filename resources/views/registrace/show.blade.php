@@ -24,21 +24,21 @@
                                 <div class="row align-items-center">
                                     <div class="col-lg-6 col-md-6">
                                         <div class="mb-3">
-                                            <label for="jmeno" class="form-label small">
+                                            <label for="first_name" class="form-label small">
                                                 Jméno
                                                 <span class="text-danger">*</span>
                                             </label>
-                                            <input type="text" class="form-control" name="jmeno" id="jmeno" required>
+                                            <input type="text" class="form-control" name="first_name" id="first_name" required>
                                         </div>
 
                                     </div>
                                     <div class="col-lg-6 col-md-6">
                                         <div class="mb-3">
-                                            <label for="prijmeni" class="form-label small">
+                                            <label for="last_name" class="form-label small">
                                                 Příjmení
                                                 <span class="text-danger">*</span>
                                             </label>
-                                            <input type="text" class="form-control" name="prijmeni" id="prijmeni"
+                                            <input type="text" class="form-control" name="last_name" id="last_name"
                                                    required>
                                         </div>
                                     </div>
@@ -68,29 +68,29 @@
                                 <div class="row align-items-center">
                                     <div class="col-lg-6 col-md-6">
                                         <div class="mb-3">
-                                            <label for="heslo" class="form-label small">
+                                            <label for="password" class="form-label small">
                                                 Heslo
                                                 <span class="text-danger">*</span>
                                             </label>
-                                            <input type="password" class="form-control" name="heslo" id="heslo"
+                                            <input type="password" class="form-control" name="password" id="password"
                                                    required>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6">
                                         <div class="mb-4">
-                                            <label for="heslo_confirmation" class="form-label small">
+                                            <label for="password_confirmation" class="form-label small">
                                                 Potvrzení hesla
                                                 <span class="text-danger">*</span>
                                             </label>
-                                            <input type="password" class="form-control" name="heslo_confirmation"
-                                                   id="heslo_confirmation" required>
+                                            <input type="password" class="form-control" name="password_confirmation"
+                                                   id="password_confirmation" required>
                                         </div>
                                     </div>
                                 </div>
                                 <button type="submit" class="btn btn-primary mt-1 px-4">Registrovat se</button>
                                 <p class="mt-4 small">
                                     Již máte vytvořený účet?
-                                    <a class="text-primary" href="">Přihlaste se</a>
+                                    <a class="text-primary" href="{{ route('prihlaseni') }}">Přihlaste se</a>
                                 </p>
                             </form>
                         </div>
