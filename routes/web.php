@@ -1,11 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProjektyController;
+use App\Http\Controllers\ProjectsController;
 use App\Http\Controllers\NabidkaSpolupraceController;
 use App\Http\Controllers\UzivateleController;
 use App\Http\Controllers\MujProfilController;
-use App\Http\Controllers\MojeProjektyController;
+use App\Http\Controllers\MyProjectsController;
 use App\Http\Controllers\ZadostiController;
 use App\Http\Controllers\RegistraceController;
 use App\Http\Controllers\LoginController;
@@ -26,9 +26,9 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::get('/projekty', [ProjektyController::class, 'index'])->name('projekty.index');
+Route::get('/projekty', [ProjectsController::class, 'index'])->name('projekty.index');
 
-Route::get('/projekty/{id}', [ProjektyController::class, 'show'])->where('id', '[0-9]+')->name('projekty.show');
+Route::get('/projekty/{id}', [ProjectsController::class, 'show'])->where('id', '[0-9]+')->name('projekty.show');
 
 Route::get('/nabidky-spoluprace', [NabidkaSpolupraceController::class, 'index'])->name('nabidky-spoluprace.index');
 
@@ -38,9 +38,11 @@ Route::get('/uzivatele/{id}', [UzivateleController::class, 'show'])->where('id',
 
 Route::get('/muj-profil', [MujProfilController::class, 'index'])->name('muj-profil.index');
 
-Route::get('/moje-projekty', [MojeProjektyController::class, 'index'])->name('moje-projekty.index');
+Route::get('/moje-projekty', [MyProjectsController::class, 'index'])->name('moje-projekty.index');
+Route::post('/moje-projekty', [MyProjectsController::class, 'store'])->name('moje-projekty.store');
+Route::delete('/moje-projekty', [MyProjectsController::class, 'destroy'])->name('moje-projekty.destroy');
 
-Route::get('/moje-projekty/{id}', [MojeProjektyController::class, 'show'])->where('id', '[0-9]+')->name('moje-projekty.show');
+Route::get('/moje-projekty/{id}', [MyProjectsController::class, 'show'])->where('id', '[0-9]+')->name('moje-projekty.show');
 
 Route::get('/zadosti-o-spolupraci', [ZadostiController::class, 'index'])->name('zadosti.index');
 

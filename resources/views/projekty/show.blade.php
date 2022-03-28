@@ -17,10 +17,10 @@
 
             <div class="row mb-4 justify-content-center">
                 <div class="col-lg-10">
-                    <h3>Lorem ipsum dolor sit amet</h3>
-                    <span class="badge rounded-pill bg-warning">Rozpracováno</span>
-                    <p class="mt-2 mb-0 small">Autor: <a href="" class="text-decoration-none">Jiří Andrlík</a></p>
-                    <p class="mt-1 mb-0 small">Datum zveřejnění: 2022-03-16</p>
+                    <h3>{{ $project->name }}</h3>
+                    <span class="badge rounded-pill bg-warning">{{ $project->s_name }}</span>
+                    <p class="mt-2 mb-0 small">Autor: <a href="" class="text-decoration-none">{{ $project->u_first_name.' '.$project->u_last_name }}</a></p>
+                    <p class="mt-1 mb-0 small">Datum zveřejnění: {{ $project->create_date }}</p>
                 </div>
             </div>
 
@@ -61,22 +61,7 @@
                             <div class="card mt-4">
                                 <div class="card-header py-3 px-4 text-primary">Popis </div>
                                 <div class="card-body py-4 px-4">
-                                    <p class="mb-3">
-                                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Integer rutrum, orci
-                                        vestibulum
-                                        ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet
-                                        enim.
-                                        Curabitur vitae diam non enim vestibulum interdum.
-                                    </p>
-                                    <p class="mb-3">
-                                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Integer rutrum, orci
-                                        vestibulum
-                                        ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet.</p>
-                                    <ul>
-                                        <li>Lorem ipsum</li>
-                                        <li>Lorem ipsum</li>
-                                        <li>Lorem ipsum</li>
-                                    </ul>
+                                    <p class="mb-3"> {{ $project->description }} </p>
                                 </div>
                             </div>
                         </div>
@@ -95,12 +80,8 @@
                                             </thead>
                                             <tbody class="small">
                                             <tr>
-                                                <td><a href="">Dokumentace projektu</a></td>
-                                                <td>PDF</td>
-                                            </tr>
-                                            <tr>
-                                                <td><a href="">Uživatelský manuál</a></td>
-                                                <td>PDF</td>
+                                                <td><a href=""></a></td>
+                                                <td></td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -123,16 +104,15 @@
                                             </tr>
                                             </thead>
                                             <tbody class="small">
-                                            <tr>
-                                                <td><a href="uzivatele-detail.php">Jiří Andrlík</a></td>
-                                                <td>jandrlik</td>
-                                                <td>Autor</td>
-                                            </tr>
-                                            <tr>
-                                                <td><a href="">Karel Pokorný</a></td>
-                                                <td>kpokorny</td>
-                                                <td>Spolupracovník</td>
-                                            </tr>
+
+                                            @foreach($team_members as $member)
+                                                <tr>
+                                                    <td><a href="{{ url('/uzivatele-detail', $member->u_id_user) }}"> {{ $member->u_first_name.' '.$member->u_last_name }} </a></td>
+                                                    <td>{{ $member->u_login}}</td>
+                                                    <td>{{ $member->r_name }}</td>
+                                                </tr>
+                                            @endforeach
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -173,6 +153,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
