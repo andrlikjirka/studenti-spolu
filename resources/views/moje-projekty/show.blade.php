@@ -4,15 +4,37 @@
 
     <section class="bg-light" style="padding-top: 70px">
         <div class="container px-5 py-5">
+            @if(count($errors) > 0)
+                <div class="alert alert-danger small text-center mb-5">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </div>
+            @endif
+
+            @if(session('edit_project_message'))
+                <div class="alert alert-success small text-center mb-5"> {{ session('edit_project_message') }} </div>
+            @endif
+
+            @if(session('remove_team_member_message'))
+                <div class="alert alert-success small text-center mb-5"> {{ session('remove_team_member_message') }} </div>
+            @endif
+
             <div class="row mb-5 justify-content-center">
                 <div class="col-lg-10">
-                    <a href="./moje-projekty"><i class="bi bi-arrow-left me-3 "></i>Zpět na moje projekty</a>
+                    <a href="{{ url('/moje-projekty') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-arrow-left me-2" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                  d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                        </svg>
+                        Zpět na moje projekty</a>
                 </div>
             </div>
 
             <div class="row mb-4 justify-content-center">
                 <div class="col-lg-10">
-                    <h3 class="mb-3">Úprava projektu</h3>
+                    <h3 class="mb-3">{{ $title }}</h3>
                     <p class="text-secondary">
                         Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Integer rutrum, orci
                         vestibulum
@@ -40,7 +62,8 @@
                         <li class="nav-item" role="presentation">
                             <button class="nav-link" id="clenove-tymu-tab" data-bs-toggle="tab"
                                     data-bs-target="#clenove-tymu"
-                                    type="button" role="tab" aria-controls="clenove-tymu" aria-selected="false">Členové týmu
+                                    type="button" role="tab" aria-controls="clenove-tymu" aria-selected="false">Členové
+                                týmu
                             </button>
                         </li>
                         <li class="nav-item " role="presentation">
@@ -65,31 +88,54 @@
                             <div class="card mt-4">
                                 <div class="card-header py-3 px-4 text-primary">Informace o projektu</div>
                                 <div class="card-body py-4 px-4">
-                                    <form id="upravit-projekt" action="" method="post" enctype="multipart/form-data">
+                                    <form id="edit-project"
+                                          action="{{ route('moje-projekty.update', $my_project->id_project) }}"
+                                          method="post">
+                                        @csrf
+                                        @method('PUT')
                                         <div class="mb-3">
-                                            <label for="upravit-nazev-projekt" class="form-label">Název
+                                            <label for="edit-name-project" class="form-label">Název
                                                 projektu</label>
-                                            <input type="text" id="upravit-nazev-projekt" class="form-control"
-                                                   name="upravit-nazev-projekt" value="Lorem ipsum dolor sit amet" required>
+                                            <input type="text" id="edit-name-project" class="form-control"
+                                                   name="edit-name-project" value="{{ $my_project->name }}" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="upravit-popis-projekt" class="form-label">Popis projektu</label>
-                                            <textarea type="text" id="upravit-popis-projekt" class="form-control" rows="8"
-                                                      name="upravit-popis-projekt" required>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. Curabitur vitae diam non enim vestibulum interdum.
-                                        </textarea>
+                                            <label for="edit-abstract-project" class="form-label">Abstrakt</label>
+                                            <textarea type="text" id="edit-abstract-project" class="form-control"
+                                                      rows="3"
+                                                      name="edit-abstract-project"
+                                                      required>{{ $my_project->abstract }}</textarea>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="upravit-stav-projek" class="form-label">Stav projektu</label>
-                                            <select id="upravit-stav-projekt" class="form-select"
+                                            <label for="edit-description-project" class="form-label">Popis
+                                                projektu</label>
+                                            <textarea type="text" id="edit-description-project" class="form-control"
+                                                      rows="8"
+                                                      name="edit-description-project"
+                                                      required>{{ $my_project->description }}</textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="edit-status-project" class="form-label">Stav projektu</label>
+                                            <select id="edit-status-project" class="form-select"
+                                                    name="edit-status-project"
                                                     aria-label="Default select example" required>
                                                 <option disabled value="">Vyberte stav projektu</option>
-                                                <option value="1">Dokončený</option>
-                                                <option value="2" selected>Rozpracovaný</option>
-                                                <option value="3">Nedokončený</option>
+                                                <option
+                                                    value="1" @if($my_project->id_status == 1) {{ 'selected' }} @endif>
+                                                    Rozpracovaný
+                                                </option>
+                                                <option
+                                                    value="2" @if($my_project->id_status == 2) {{ 'selected' }} @endif>
+                                                    Dokončený
+                                                </option>
+                                                <option
+                                                    value="3" @if($my_project->id_status == 3) {{ 'selected' }} @endif>
+                                                    Nedokončený
+                                                </option>
                                             </select>
                                         </div>
                                         <button type="submit" class="btn btn-warning" name="action"
-                                                value="upravit-projekt">Upravit informace o projektu
+                                                value="edit-project">Upravit informace o projektu
                                         </button>
                                     </form>
                                 </div>
@@ -106,7 +152,8 @@
                                         <div class="row">
                                             <div class="col-lg-9 col-md-8">
                                                 <div class="mb-3">
-                                                    <input class="form-control" type="file" id="formFileMultiple" multiple>
+                                                    <input class="form-control" type="file" id="formFileMultiple"
+                                                           multiple>
                                                 </div>
                                             </div>
                                             <div class="col-lg-3 col-md-4">
@@ -176,38 +223,31 @@
                                             </tr>
                                             </thead>
                                             <tbody class="small">
-                                            <tr>
-                                                <td>Jiří Andrlík</td>
-                                                <td>jandrlik</td>
-                                                <td>Autor</td>
-                                                <td>
-                                                    <!--
-                                                    <form action="" class="m-0 p-0">
-                                                        input hidden
-                                                    <button type='submit'
-                                                            class='btn btn-sm btn-outline-danger m-0 p-0'
-                                                            onclick='deleteReviewer(event)'>
-                                                        <i class='bi bi-x-circle p-1 m-0'></i>
-                                                    </button>
-                                                    </form>
-                                                    -->
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Karel Pokorný</td>
-                                                <td>kpokorny</td>
-                                                <td>Spolupracovník</td>
-                                                <td>
-                                                    <form action="" class="m-0 p-0">
-                                                        <!-- input hidden -->
-                                                        <button type='submit'
-                                                                class='btn btn-sm btn-outline-danger m-0 py-1 px-2'
-                                                                onclick='deleteReviewer(event)'>
-                                                            Odebrat
-                                                        </button>
-                                                    </form>
-                                                </td>
-                                            </tr>
+
+                                            @foreach($team_members as $member)
+                                                <tr>
+                                                    <td>{{ $member->u_first_name.' '.$member->u_last_name }}</td>
+                                                    <td>{{ $member->u_login }}</td>
+                                                    <td>{{ $member->r_name }}</td>
+                                                    <td>
+                                                        @if($member->u_id_user != \Illuminate\Support\Facades\Auth::id())
+                                                            <form
+                                                                action="{{ route('moje-projekty.remove-team-member', $my_project->id_project) }}"
+                                                                class="m-0 p-0" method="post">
+                                                                @csrf
+                                                                <input type="hidden" name="remove_id_user"
+                                                                       value="{{ $member->u_id_user }}">
+                                                                <button type='submit' name="action"
+                                                                        value="remove-team-member"
+                                                                        class='btn btn-sm btn-outline-danger m-0 py-1 px-2'
+                                                                        onclick='deleteReviewer(event)'>
+                                                                    Odebrat
+                                                                </button>
+                                                            </form>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                             </tbody>
                                         </table>
                                     </div>
@@ -219,14 +259,18 @@
                         <div class="tab-pane fade" id="nabidky-spoluprace" role="tabpanel"
                              aria-labelledby="nabidky-spoluprace-tab">
                             <div class="card mt-4">
-                                <div class="card-header py-3 px-4 text-primary">Správa nabídek spolupráce na projektu</div>
+                                <div class="card-header py-3 px-4 text-primary">Správa nabídek spolupráce na projektu
+                                </div>
                                 <div class="card-body py-4 px-4">
                                     <!-- Button trigger modal CHYBI MODAL-->
                                     <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
                                             data-bs-target="#NovaNabidkaSpolupraceModal">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle me-2" viewBox="0 0 16 16">
-                                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor" class="bi bi-plus-circle me-2" viewBox="0 0 16 16">
+                                            <path
+                                                d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                            <path
+                                                d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
                                         </svg>
                                         Nová nabídka spolupráce
                                     </button>
@@ -251,9 +295,13 @@
                                                     <button type="button" class="btn btn-warning btn-sm d-inline-block"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#UpravitNabidkaSpolupraceModal">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square me-1" viewBox="0 0 16 16">
-                                                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                             fill="currentColor" class="bi bi-pencil-square me-1"
+                                                             viewBox="0 0 16 16">
+                                                            <path
+                                                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                            <path fill-rule="evenodd"
+                                                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                                                         </svg>
                                                         Upravit
                                                     </button>
@@ -262,9 +310,13 @@
                                                         <button type='submit'
                                                                 class='btn btn-sm btn-danger'
                                                                 onclick='deleteReviewer(event)'>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle me-1" viewBox="0 0 16 16">
-                                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                                 height="16" fill="currentColor"
+                                                                 class="bi bi-x-circle me-1" viewBox="0 0 16 16">
+                                                                <path
+                                                                    d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                                <path
+                                                                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
                                                             </svg>
                                                             Smazat
                                                         </button>
@@ -315,7 +367,8 @@
                             </div>
                             <div class="mb-3">
                                 <label for="popis-nabidkaSpoluprace" class="form-label">Popis nabídky spolupráce</label>
-                                <textarea class="form-control" id="popis-nabidkaSpoluprace" rows="6" required></textarea>
+                                <textarea class="form-control" id="popis-nabidkaSpoluprace" rows="6"
+                                          required></textarea>
                             </div>
                         </form>
                     </div>
@@ -348,7 +401,8 @@
                             </div>
                             <div class="mb-3">
                                 <label for="stav-nabidkaSpoluprace" class="form-label">Stav nabídky spolupráce</label>
-                                <select id="stav-nabidkaSpoluprace" class="form-select" aria-label="Stav nabídky spolupráce"
+                                <select id="stav-nabidkaSpoluprace" class="form-select"
+                                        aria-label="Stav nabídky spolupráce"
                                         required>
                                     <option selected disabled value="">Vyberte stav nabídky spolupráce</option>
                                     <option value="1">Aktivní</option>

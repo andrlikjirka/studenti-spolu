@@ -43,6 +43,8 @@ Route::post('/moje-projekty', [MyProjectsController::class, 'store'])->name('moj
 Route::delete('/moje-projekty', [MyProjectsController::class, 'destroy'])->name('moje-projekty.destroy');
 
 Route::get('/moje-projekty/{id}', [MyProjectsController::class, 'show'])->where('id', '[0-9]+')->name('moje-projekty.show');
+Route::put('/moje-projekty/{id}', [MyProjectsController::class, 'update'])->where('id', '[0-9]+')->name('moje-projekty.update');
+Route::post('/moje-projekty/{id}', [MyProjectsController::class, 'remove_team_member'])->where('id', '[0-9]+')->name('moje-projekty.remove-team-member');
 
 Route::get('/zadosti-o-spolupraci', [ZadostiController::class, 'index'])->name('zadosti.index');
 

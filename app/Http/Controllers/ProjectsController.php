@@ -19,9 +19,9 @@ class ProjectsController extends Controller
                 AND   c.id_user = u.id_user
                 AND   p.id_status = s.id_status
                 AND   r.id_role = c.id_role
-                AND   r.id_role = 1
+                AND   r.id_role = :id_role
             ORDER BY p.create_date DESC;
-        '); //ziskat data z DB
+        ', [':id_role' => 1]); //ziskat data z DB
 
         return view('projekty/index')
                     ->with('title', $title)
@@ -38,8 +38,8 @@ class ProjectsController extends Controller
                 AND   c.id_user = u.id_user
                 AND   p.id_status = s.id_status
                 AND   p.id_project = :id_project
-                AND   c.id_role = 1;
-        ', [':id_project' => $id]);
+                AND   c.id_role = :id_role;
+        ', [':id_project' => $id, ':id_role' => 1]);
 
         $team_members = DB::select('
         SELECT u.id_user as u_id_user, u.first_name as u_first_name, u.last_name as u_last_name, u.login as u_login, r.name as r_name
