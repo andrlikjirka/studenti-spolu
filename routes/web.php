@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectsController;
-use App\Http\Controllers\NabidkaSpolupraceController;
+use App\Http\Controllers\OfferCooperationController;
 use App\Http\Controllers\UzivateleController;
 use App\Http\Controllers\MujProfilController;
 use App\Http\Controllers\MyProjectsController;
@@ -30,7 +30,7 @@ Route::get('/projekty', [ProjectsController::class, 'index'])->name('projekty.in
 
 Route::get('/projekty/{id}', [ProjectsController::class, 'show'])->where('id', '[0-9]+')->name('projekty.show');
 
-Route::get('/nabidky-spoluprace', [NabidkaSpolupraceController::class, 'index'])->name('nabidky-spoluprace.index');
+Route::get('/nabidky-spoluprace', [OfferCooperationController::class, 'index'])->name('nabidky-spoluprace.index');
 
 Route::get('/uzivatele', [UzivateleController::class, 'index'])->name('uzivatele.index');
 
@@ -44,7 +44,7 @@ Route::delete('/moje-projekty', [MyProjectsController::class, 'destroy'])->name(
 
 Route::get('/moje-projekty/{id}', [MyProjectsController::class, 'show'])->where('id', '[0-9]+')->name('moje-projekty.show');
 Route::put('/moje-projekty/{id}', [MyProjectsController::class, 'update'])->where('id', '[0-9]+')->name('moje-projekty.update');
-Route::post('/moje-projekty/{id}', [MyProjectsController::class, 'remove_team_member'])->where('id', '[0-9]+')->name('moje-projekty.remove-team-member');
+Route::post('/moje-projekty/{id}', [MyProjectsController::class, 'handle'])->where('id', '[0-9]+')->name('moje-projekty.handle-forms');
 
 Route::get('/zadosti-o-spolupraci', [ZadostiController::class, 'index'])->name('zadosti.index');
 

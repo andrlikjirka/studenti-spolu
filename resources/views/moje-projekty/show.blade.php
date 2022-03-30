@@ -17,7 +17,23 @@
             @endif
 
             @if(session('remove_team_member_message'))
-                <div class="alert alert-success small text-center mb-5"> {{ session('remove_team_member_message') }} </div>
+                <div
+                    class="alert alert-success small text-center mb-5"> {{ session('remove_team_member_message') }} </div>
+            @endif
+
+            @if(session('new-offer-cooperation-message'))
+                <div
+                    class="alert alert-success small text-center mb-5"> {{ session('new-offer-cooperation-message') }} </div>
+            @endif
+
+            @if(session('remove-offer-cooperation-message'))
+                <div
+                    class="alert alert-success small text-center mb-5"> {{ session('remove-offer-cooperation-message') }} </div>
+            @endif
+
+            @if(session('edit-offer-cooperation-message'))
+                <div
+                    class="alert alert-success small text-center mb-5"> {{ session('edit-offer-cooperation-message') }} </div>
             @endif
 
             <div class="row mb-5 justify-content-center">
@@ -232,7 +248,7 @@
                                                     <td>
                                                         @if($member->u_id_user != \Illuminate\Support\Facades\Auth::id())
                                                             <form
-                                                                action="{{ route('moje-projekty.remove-team-member', $my_project->id_project) }}"
+                                                                action="{{ route('moje-projekty.handle-forms',  $my_project->id_project) }}"
                                                                 class="m-0 p-0" method="post">
                                                                 @csrf
                                                                 <input type="hidden" name="remove_id_user"
@@ -262,9 +278,9 @@
                                 <div class="card-header py-3 px-4 text-primary">Správa nabídek spolupráce na projektu
                                 </div>
                                 <div class="card-body py-4 px-4">
-                                    <!-- Button trigger modal CHYBI MODAL-->
-                                    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal"
-                                            data-bs-target="#NovaNabidkaSpolupraceModal">
+                                    <!-- Button trigger modal -->
+                                    <button type="button" class="btn btn-secondary mb-3" data-bs-toggle="modal"
+                                            data-bs-target="#NewOfferCooperationModal">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                              fill="currentColor" class="bi bi-plus-circle me-2" viewBox="0 0 16 16">
                                             <path
@@ -285,44 +301,59 @@
                                             </tr>
                                             </thead>
                                             <tbody class="small">
-                                            <tr>
-                                                <td>Curabitur vitae diam diam</td>
-                                                <td><span class="badge rounded-pill bg-light text-dark">Systémové inženýrství a informatika</span>
-                                                </td>
-                                                <td><span class="badge rounded-pill bg-success">Aktivní</span></td>
-                                                <td>
-                                                    <!--Button trigger modal -->
-                                                    <button type="button" class="btn btn-warning btn-sm d-inline-block"
+                                            @foreach($offers_cooperation as $offer)
+                                                <tr>
+                                                    <td>{{ $offer->o_name }}</td>
+                                                    <td><span
+                                                            class="badge rounded-pill bg-light text-dark">{{ $offer->f_name }}</span>
+                                                    </td>
+                                                    <td><span class="badge rounded-pill
+                                                        @if($offer->s_id_status == 1) {{ 'bg-success' }} @elseif($offer->s_id_status == 2) {{ 'bg-danger' }} @endif">
+                                                            {{ $offer->s_name }}
+                                                        </span>
+                                                    </td>
+                                                    <td>
+                                                        <!--Button trigger modal -->
+                                                        <button
+                                                            onclick="edit_offer_cooperation({{ $offer->o_id_offer }},'{{ $offer->o_name }}', '{{ $offer->o_description }}', {{ $offer->s_id_status }}, {{ $offer->f_id_field }})"
+                                                            type="button" class="btn btn-warning btn-sm d-inline-block"
                                                             data-bs-toggle="modal"
-                                                            data-bs-target="#UpravitNabidkaSpolupraceModal">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                             fill="currentColor" class="bi bi-pencil-square me-1"
-                                                             viewBox="0 0 16 16">
-                                                            <path
-                                                                d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                                            <path fill-rule="evenodd"
-                                                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                                                        </svg>
-                                                        Upravit
-                                                    </button>
-                                                    <form action="" class="m-0 p-0 d-inline-block">
-                                                        <!-- input hidden -->
-                                                        <button type='submit'
-                                                                class='btn btn-sm btn-danger'
-                                                                onclick='deleteReviewer(event)'>
+                                                            data-bs-target="#EditOfferCooperationModal">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                                                 height="16" fill="currentColor"
-                                                                 class="bi bi-x-circle me-1" viewBox="0 0 16 16">
+                                                                 height="16"
+                                                                 fill="currentColor" class="bi bi-pencil-square me-1"
+                                                                 viewBox="0 0 16 16">
                                                                 <path
-                                                                    d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                                                <path
-                                                                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                                                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                                <path fill-rule="evenodd"
+                                                                      d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                                                             </svg>
-                                                            Smazat
+                                                            Upravit
                                                         </button>
-                                                    </form>
-                                                </td>
-                                            </tr>
+                                                        <form
+                                                            action="{{ route('moje-projekty.handle-forms', $my_project->id_project) }}"
+                                                            method="post" class="m-0 p-0 d-inline-block">
+                                                            @csrf
+                                                            <input type="hidden" name="remove_id_offer"
+                                                                   value="{{ $offer->o_id_offer }}">
+                                                            <button type='submit' name="action"
+                                                                    value="remove-offer-cooperation"
+                                                                    class='btn btn-sm btn-danger'
+                                                                    onclick='deleteReviewer(event)'>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                                     height="16" fill="currentColor"
+                                                                     class="bi bi-x-circle me-1" viewBox="0 0 16 16">
+                                                                    <path
+                                                                        d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                                    <path
+                                                                        d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                                                </svg>
+                                                                Smazat
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                             </tbody>
                                         </table>
                                     </div>
@@ -336,8 +367,8 @@
         </div>
 
         <!-- Modal NOVA NABIDKA -->
-        <div class="modal fade" id="NovaNabidkaSpolupraceModal" data-bs-backdrop="static" tabindex="-1"
-             aria-labelledby="NovaNabidkaSpolupraceLabel" aria-hidden="true">
+        <div class="modal fade" id="NewOfferCooperationModal" data-bs-backdrop="static" tabindex="-1"
+             aria-labelledby="NewOfferCooperationLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -345,37 +376,38 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body px-4 py-4">
-                        <form action="" id="nova-nabidkaSpoluprace">
+                        <form action="{{ route('moje-projekty.handle-forms',  $my_project->id_project) }}" method="post"
+                              id="new-offer-cooperation">
+                            @csrf
                             <div class="mb-3">
-                                <label for="nazev-nabidkaSpoluprace" class="form-label">Název nabídky spolupráce</label>
-                                <input type="text" class="form-control" id="nazev-nabidkaSpoluprace"
+                                <label for="name-offer-cooperation" class="form-label">Název nabídky spolupráce</label>
+                                <input type="text" class="form-control" id="name-offer-cooperation"
+                                       name="name-offer-cooperation"
                                        placeholder="Zadejte název nabídky spolupráce (např. Vývojář mobilních aplikací)"
                                        required>
                             </div>
                             <div class="mb-3">
-                                <label for="obor-nabidkaSpoluprace" class="form-label">Obor nabídky spolupráce</label>
-                                <select id="obor-nabidkaSpoluprace" class="form-select" aria-label="Obor spolupráce"
-                                        required>
+                                <label for="field-offer-cooperation" class="form-label">Obor nabídky spolupráce</label>
+                                <select id="field-offer-cooperation" class="form-select" aria-label="Obor spolupráce"
+                                        name="field-offer-cooperation" required>
                                     <option selected disabled value="">Vyberte obor spolupráce</option>
-                                    <option value="1">Informační management</option>
-                                    <option value="2">Informatika</option>
-                                    <option value="3">Podniková ekonomika</option>
-                                    <option value="4">Projektový management</option>
-                                    <option value="5">Systémové inženýrství a informatika</option>
-                                    <option value="6">Výpočetní technika</option>
+                                    @foreach($fields_all as $field)
+                                        <option value="{{ $field->id_field }}">{{ $field->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="popis-nabidkaSpoluprace" class="form-label">Popis nabídky spolupráce</label>
-                                <textarea class="form-control" id="popis-nabidkaSpoluprace" rows="6"
-                                          required></textarea>
+                                <label for="description-offer-cooperation" class="form-label">Popis nabídky
+                                    spolupráce</label>
+                                <textarea class="form-control" id="description-offer-cooperation" rows="6"
+                                          name="description-offer-cooperation" required></textarea>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zrušit</button>
-                        <button type="submit" form="nova-nabidkaSpoluprace" class="btn btn-primary" name="action"
-                                value="nova-nabidkaSpoluprace">Uložit a zveřejnit
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Zrušit</button>
+                        <button type="submit" form="new-offer-cooperation" class="btn btn-secondary" name="action"
+                                value="new-offer-cooperation">Vytvořit a zveřejnit
                         </button>
                     </div>
                 </div>
@@ -383,8 +415,8 @@
         </div>
 
         <!-- Modal UPRAVA NABIDKY -->
-        <div class="modal fade" id="UpravitNabidkaSpolupraceModal" data-bs-backdrop="static" tabindex="-1"
-             aria-labelledby="UpravitNabidkaSpolupraceLabel" aria-hidden="true">
+        <div class="modal fade" id="EditOfferCooperationModal" data-bs-backdrop="static" tabindex="-1"
+             aria-labelledby="EditOfferCooperationLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-scrollable modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -392,47 +424,55 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body px-4 py-4">
-                        <form action="" id="upravit-nabidkaSpoluprace">
+                        <form action="{{ route('moje-projekty.handle-forms',  $my_project->id_project) }}" method="post"
+                              id="edit-offer-cooperation">
+                            @csrf
                             <div class="mb-3">
-                                <label for="nazev-nabidkaSpoluprace" class="form-label">Název nabídky spolupráce</label>
-                                <input type="text" class="form-control" id="nazev-nabidkaSpoluprace"
+                                <label for="edit-name-offer-cooperation" class="form-label">Název nabídky
+                                    spolupráce</label>
+                                <input type="text" class="form-control" id="edit-name-offer-cooperation"
+                                       name="edit-name-offer-cooperation"
                                        placeholder="Zadejte název nabídky spolupráce (např. Vývojář mobilních aplikací)"
-                                       value="Curabitur vitae diam diam" required>
+                                       value="" required>
                             </div>
                             <div class="mb-3">
-                                <label for="stav-nabidkaSpoluprace" class="form-label">Stav nabídky spolupráce</label>
-                                <select id="stav-nabidkaSpoluprace" class="form-select"
+                                <label for="edit-status-offer-cooperation" class="form-label">Stav nabídky
+                                    spolupráce</label>
+                                <select id="edit-status-offer-cooperation" class="form-select"
+                                        name="edit-status-offer-cooperation"
                                         aria-label="Stav nabídky spolupráce"
                                         required>
                                     <option selected disabled value="">Vyberte stav nabídky spolupráce</option>
-                                    <option value="1">Aktivní</option>
-                                    <option value="2">Neaktivní</option>
+                                    @foreach($status_offer_all as $status)
+                                        <option value="{{ $status->id_status }}">{{ $status->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="obor-nabidkaSpoluprace" class="form-label">Obor nabídky spolupráce</label>
-                                <select id="obor-nabidkaSpoluprace" class="form-select" aria-label="Obor spolupráce"
+                                <label for="edit-field-offer-cooperation" class="form-label">Obor nabídky
+                                    spolupráce</label>
+                                <select id="edit-field-offer-cooperation" class="form-select"
+                                        aria-label="Obor spolupráce" name="edit-field-offer-cooperation"
                                         required>
                                     <option selected disabled value="">Vyberte obor spolupráce</option>
-                                    <option value="1">Informační management</option>
-                                    <option value="2">Informatika</option>
-                                    <option value="3">Podniková ekonomika</option>
-                                    <option value="4">Projektový management</option>
-                                    <option value="5" selected>Systémové inženýrství a informatika</option>
-                                    <option value="6">Výpočetní technika</option>
+                                    @foreach($fields_all as $field)
+                                        <option value="{{ $field->id_field }}">{{ $field->name }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="popis-nabidkaSpoluprace" class="form-label">Popis nabídky spolupráce</label>
-                                <textarea class="form-control" id="popis-nabidkaSpoluprace" rows="6" required>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. Curabitur vitae diam non enim vestibulum interdum.
-                            </textarea>
+                                <label for="edit-description-offer-cooperation" class="form-label">Popis nabídky
+                                    spolupráce</label>
+                                <textarea class="form-control" id="edit-description-offer-cooperation"
+                                          name="edit-description-offer-cooperation" rows="6" required></textarea>
                             </div>
+                            <input type="hidden" id="edit-id-offer" name="edit-id-offer" value="">
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zrušit</button>
-                        <button type="submit" form="upravit-nabidkaSpoluprace" class="btn btn-warning" name="action"
-                                value="upravit-nabidkaSpoluprace">Uložit úpravy
+                        <button type="submit" form="edit-offer-cooperation" class="btn btn-warning" name="action"
+                                value="edit-offer-cooperation">Uložit úpravy
                         </button>
                     </div>
                 </div>
@@ -440,5 +480,17 @@
         </div>
 
     </section>
+
+    <script>
+        function edit_offer_cooperation(id, name, description, id_status, id_field) {
+            document.getElementById("edit-id-offer").value = id;
+            document.getElementById("edit-name-offer-cooperation").value = name;
+            document.getElementById("edit-description-offer-cooperation").value = description;
+            var statusSelect = document.getElementById("edit-status-offer-cooperation");
+            statusSelect[id_status].selected = true;
+            var fieldSelect = document.getElementById("edit-field-offer-cooperation");
+            fieldSelect[id_field].selected = true;
+        }
+    </script>
 
 @endsection

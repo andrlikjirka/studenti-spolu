@@ -76,12 +76,21 @@
 
                                 <div class="card bg-white mb-3">
                                     <div class="card-body p-4">
-                                        <a href="./moje-projekty/{{ $project_author->id_project }}"
+                                        <!--
+                                        <a href=" route('moje-projekty.show', $project_author->id_project) "
                                            class="text-decoration-none">
-                                            <h5 class="card-title">{{ $project_author->name }}</h5>
+
                                         </a>
+                                        -->
+                                        <h5 class="card-title text-primary">{{ $project_author->name }}</h5>
                                         <p class="card-text">{{ $project_author->abstract }}</p>
-                                        <span class="badge rounded-pill bg-warning">{{ $project_author->s_name }}</span>
+                                        <span class="badge rounded-pill
+                                            @if($project_author->s_id_status == 1) {{ 'bg-warning' }}
+                                        @elseif($project_author->s_id_status == 2) {{ 'bg-success' }}
+                                        @elseif($project_author->s_id_status == 3) {{ 'bg-danger' }}
+                                        @endif">
+                                            {{ $project_author->s_name }}
+                                        </span>
                                         <!--
                                         <p class="mt-2 mb-0 small">Autor:
                                             <a href="" class="text-decoration-none">
@@ -93,11 +102,21 @@
                                             zveřejnění: {{ $project_author->create_date }}</p>
                                     </div>
                                     <div class="card-footer py-2 px-4">
+                                        <a href="{{ route('moje-projekty.show', $project_author->id_project) }}"
+                                           class="btn btn-sm btn-warning" role="button">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                 fill="currentColor" class="bi bi-pencil-square me-1" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                <path fill-rule="evenodd"
+                                                      d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                            </svg>
+                                            Upravit projekt
+                                        </a>
                                         <form action="{{ route('moje-projekty.destroy') }}" method="post"
                                               class="d-inline-block">
-                                        @csrf
-                                        @method('DELETE')
-                                        <!-- input hidden ID -->
+                                            @csrf
+                                            @method('DELETE')
                                             <input type="hidden" name="delete_id_project"
                                                    value="{{ $project_author->id_project }}">
                                             <button type="submit" class="btn btn-sm btn-danger">
@@ -130,11 +149,16 @@
                                             <h5 class="card-title">{{ $project_collab->name }}</h5>
                                         </a>
                                         <p class="card-text">{{ $project_collab->abstract }}</p>
-                                        <span class="badge rounded-pill bg-warning">{{ $project_collab->s_name }}</span>
+                                        <span class="badge rounded-pill
+                                            @if($project_collab->s_id_status == 1) {{ 'bg-warning' }}
+                                        @elseif($project_collab->s_id_status == 2) {{ 'bg-success' }}
+                                        @elseif($project_collab->s_id_status == 3) {{ 'bg-danger' }} @endif">
+                                            {{ $project_collab->s_name }}
+                                        </span>
 
                                         <p class="mt-2 mb-0 small">Autor:
                                             <a href="" class="text-decoration-none">
-                                                 {{ $project_collab->u_first_name.' '.$project_collab->u_last_name }}
+                                                {{ $project_collab->u_first_name.' '.$project_collab->u_last_name }}
                                             </a>
                                         </p>
 
@@ -163,37 +187,36 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body px-4 py-4">
-                            <form id="novy-projekt" action="{{ route('moje-projekty.store') }}" method="post">
+                            <form id="new-project" action="{{ route('moje-projekty.store') }}" method="post">
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="novy-projekt-nazev" class="form-label">
+                                    <label for="new-name-project" class="form-label">
                                         Název projektu
                                         <span class="text-danger">*</span>
                                     </label>
-                                    <input type="text" id="novy-projekt-nazev" class="form-control"
-                                           name="novy-projekt-nazev" required>
+                                    <input type="text" id="new-name-project" class="form-control"
+                                           name="new-name-project" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="novy-projekt-abstrakt" class="form-label">Abstrakt</label>
-                                    <textarea type="text" id="novy-projekt-abstrakt" class="form-control" rows="3"
-                                              name="novy-projekt-abstrakt">
-                                        </textarea>
+                                    <label for="new-abstract-project" class="form-label">Abstrakt</label>
+                                    <textarea type="text" id="new-abstract-project" class="form-control" rows="3"
+                                              name="new-abstract-project"></textarea>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="novy-projekt-popis" class="form-label">
+                                    <label for="new-description-project" class="form-label">
                                         Popis projektu
                                         <span class="text-danger">*</span>
                                     </label>
-                                    <textarea type="text" id="novy-projekt-popis" class="form-control" rows="8"
-                                              name="novy-projekt-popis" required>
-                                        </textarea>
+                                    <textarea type="text" id="new-description-project" class="form-control" rows="8"
+                                              name="new-description-project" required></textarea>
                                 </div>
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Zrušit</button>
-                            <button type="submit" form="novy-projekt" class="btn btn-secondary" name="action"
-                                    value="novy-projekt">Uložit a zveřejnit
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Zrušit
+                            </button>
+                            <button type="submit" form="new-project" class="btn btn-secondary" name="action"
+                                    value="new-project">Uložit a zveřejnit
                             </button>
                         </div>
                     </div>
