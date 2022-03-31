@@ -28,7 +28,7 @@ class ProjectsController extends Controller
                     ->with('projects', $projects);
     }
 
-    public function show($id)
+    public function show($id_project)
     {
         $project = DB::select('
             SELECT p.id_project as id_project, p.name as name, p.abstract as abstract, p.description as description, s.name as s_name,
@@ -39,7 +39,7 @@ class ProjectsController extends Controller
                 AND   p.id_status = s.id_status
                 AND   p.id_project = :id_project
                 AND   c.id_role = :id_role;
-        ', [':id_project' => $id, ':id_role' => 1]);
+        ', [':id_project' => $id_project, ':id_role' => 1]);
 
         $team_members = DB::select('
         SELECT u.id_user as u_id_user, u.first_name as u_first_name, u.last_name as u_last_name, u.login as u_login, r.name as r_name
@@ -49,7 +49,7 @@ class ProjectsController extends Controller
             AND   c.id_role = r.id_role
             AND   p.id_project = :id_project
             ORDER BY c.id_role;
-        ', ['id_project' => $id]);
+        ', ['id_project' => $id_project]);
 
         return view('projekty.show')
             ->with('project', $project[0]) //$project je pole s jednim prvkem = ziskany projekt => chci primo ziskane pole, proto [0]
