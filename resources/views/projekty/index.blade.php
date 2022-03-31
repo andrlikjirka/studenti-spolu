@@ -17,10 +17,9 @@
                 <div class="col-lg-10">
 
                     @foreach($projects as $project)
-
                         <div class="card bg-white mb-3">
                             <div class="card-body p-4">
-                                <a href="./projekty/{{ $project->id_project }}" class="text-decoration-none">
+                                <a href="{{ route('projekty.show', $project->id_project) }}" class="text-decoration-none">
                                     <h5 class="card-title">{{ $project->name }}</h5>
                                 </a>
                                 <p class="card-text">
@@ -31,7 +30,6 @@
                                 <p class="mt-1 mb-0 small">Datum zveřejnění: {{ $project->create_date }}</p>
                             </div>
                         </div>
-
                     @endforeach
 
                     <!--
