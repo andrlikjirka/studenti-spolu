@@ -18,9 +18,11 @@
             <div class="row mb-4 justify-content-center">
                 <div class="col-lg-10">
                     <h3>{{ $project->name }}</h3>
-                    <span class="badge rounded-pill bg-warning">{{ $project->s_name }}</span>
-                    <p class="mt-2 mb-0 small">Autor: <a href="" class="text-decoration-none">{{ $project->u_first_name.' '.$project->u_last_name }}</a></p>
-                    <p class="mt-1 mb-0 small">Datum zveřejnění: {{ $project->create_date }}</p>
+                    <div class="mt-3">
+                        <span class="badge rounded-pill bg-warning">{{ $project->s_name }}</span>
+                        <p class="mt-2 mb-0 small">Autor: <a href="" class="text-decoration-none">{{ $project->u_first_name.' '.$project->u_last_name }}</a></p>
+                        <p class="mt-1 mb-0 small">Datum zveřejnění: {{ $project->create_date }}</p>
+                    </div>
                 </div>
             </div>
 
@@ -145,8 +147,8 @@
                                         </div>
                                         <div class="col-lg-6 col-md-7">
                                             <p class="mt-2 mb-2 small">Projekt:
-                                                <a href="projekty-detail.php" class="text-decoration-none">
-                                                    Lorem ipsum dolor sit amet
+                                                <a href="{{ route('projekty.show', $project->id_project) }}" class="text-decoration-none">
+                                                    {{ $project->name }}
                                                 </a>
                                             </p>
                                             <p class="mt-1 mb-0 small">Datum zveřejnění: 2022-03-16</p>
@@ -202,5 +204,6 @@
 
         </div>
     </section>
+
 
 @endsection

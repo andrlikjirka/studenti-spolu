@@ -206,7 +206,7 @@ class MyProjectsController extends Controller
             ':id_role' => 1
         ]);
 
-        return redirect()->route('moje-projekty.index')->with('new_project_message', 'Vytvoření a zveřejnění nového projektu proběhlo úspěšně.');
+        return redirect()->route('moje-projekty.show', $projectID)->with('new_project_message', 'Vytvoření a zveřejnění nového projektu proběhlo úspěšně.');
     }
 
     public function destroy(Request $request)

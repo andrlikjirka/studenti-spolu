@@ -62,7 +62,7 @@
 
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-secondary mb-3" data-bs-toggle="modal"
-                                    data-bs-target="#NovyProjektModal">
+                                    data-bs-target="#NewProjectModal">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                      class="bi bi-plus-circle me-2" viewBox="0 0 16 16">
                                     <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
@@ -177,9 +177,9 @@
 
 
             <!-- Modal -->
-            <div class="modal fade" id="NovyProjektModal" data-bs-backdrop="static" data-bs-keyboard="false"
+            <div class="modal fade" id="NewProjectModal" data-bs-backdrop="static" data-bs-keyboard="false"
                  tabindex="-1"
-                 aria-labelledby="NovyProjektLabel" aria-hidden="true">
+                 aria-labelledby="NewProjectLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -226,5 +226,17 @@
 
         </div>
     </section>
+
+    <script type="text/javascript">
+        // Vymazání obsahu modal okna při novém zobrazení stránky
+        window.onpageshow = function(event){
+            document.getElementById("new-name-project").value = '';
+            document.getElementById("new-abstract-project").value = '';
+            document.getElementById("new-description-project").value = '';
+            //var myModal = document.getElementById('NewProjectModal');
+            //myModal.hide();
+        };
+
+    </script>
 
 @endsection

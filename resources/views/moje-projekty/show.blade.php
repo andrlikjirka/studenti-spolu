@@ -12,6 +12,10 @@
                 </div>
             @endif
 
+            @if(session('new_project_message'))
+                <div class="alert alert-success small text-center mb-5"> {{ session('new_project_message') }} </div>
+            @endif
+
             @if(session('edit_project_message'))
                 <div class="alert alert-success small text-center mb-5"> {{ session('edit_project_message') }} </div>
             @endif
@@ -50,7 +54,7 @@
 
             <div class="row mb-4 justify-content-center">
                 <div class="col-lg-10">
-                    <h3 class="mb-3">{{ $title }}</h3>
+                    <h3 class="mb-3">{{ $my_project->name }}</h3>
                     <p class="text-secondary">
                         Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Integer rutrum, orci
                         vestibulum
@@ -482,6 +486,7 @@
     </section>
 
     <script>
+
         function edit_offer_cooperation(id, name, description, id_status, id_field) {
             document.getElementById("edit-id-offer").value = id;
             document.getElementById("edit-name-offer-cooperation").value = name;
@@ -491,6 +496,16 @@
             var fieldSelect = document.getElementById("edit-field-offer-cooperation");
             fieldSelect[id_field].selected = true;
         }
+
+        // Vymazání obsahu modal okna při novém zobrazení stránky
+        window.onpageshow = function (event) {
+            document.getElementById("name-offer-cooperation").value = '';
+            document.getElementById("field-offer-cooperation").value = '';
+            document.getElementById("description-offer-cooperation").value = '';
+            //var myModal = document.getElementById('NewOfferCooperationModal');
+            //myModal.hide();
+        };
+
     </script>
 
 @endsection
