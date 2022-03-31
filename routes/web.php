@@ -38,13 +38,17 @@ Route::get('/uzivatele/{id}', [UzivateleController::class, 'show'])->where('id',
 
 Route::get('/muj-profil', [MujProfilController::class, 'index'])->name('muj-profil.index');
 
-Route::get('/moje-projekty', [MyProjectsController::class, 'index'])->name('moje-projekty.index');
-Route::post('/moje-projekty', [MyProjectsController::class, 'store'])->name('moje-projekty.store');
-Route::delete('/moje-projekty', [MyProjectsController::class, 'destroy'])->name('moje-projekty.destroy');
+Route::middleware(['prevent-back-history'])->group(function () {
+    Route::get('/moje-projekty', [MyProjectsController::class, 'index'])->name('moje-projekty.index');
+    Route::post('/moje-projekty', [MyProjectsController::class, 'store'])->name('moje-projekty.store');
+    Route::delete('/moje-projekty', [MyProjectsController::class, 'destroy'])->name('moje-projekty.destroy');
 
-Route::get('/moje-projekty/{id}', [MyProjectsController::class, 'show'])->where('id', '[0-9]+')->name('moje-projekty.show');
-Route::put('/moje-projekty/{id}', [MyProjectsController::class, 'update'])->where('id', '[0-9]+')->name('moje-projekty.update');
-Route::post('/moje-projekty/{id}', [MyProjectsController::class, 'handle'])->where('id', '[0-9]+')->name('moje-projekty.handle-forms');
+    Route::get('/moje-projekty/{id}', [MyProjectsController::class, 'show'])->where('id', '[0-9]+')->name('moje-projekty.show');
+    Route::put('/moje-projekty/{id}', [MyProjectsController::class, 'update'])->where('id', '[0-9]+')->name('moje-projekty.update');
+    Route::post('/moje-projekty/{id}', [MyProjectsController::class, 'handle'])->where('id', '[0-9]+')->name('moje-projekty.handle-forms');
+
+});
+
 
 Route::get('/zadosti-o-spolupraci', [ZadostiController::class, 'index'])->name('zadosti.index');
 
