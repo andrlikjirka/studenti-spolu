@@ -224,13 +224,41 @@ class MyProjectsController extends Controller
     public function handle(Request $request, $id_project)
     {
         if ($request->input('action') == 'remove-team-member') {
-            $this->remove_team_member($request, $id_project);
+            $result = $this->remove_team_member($request, $id_project);
+            if ($result == 1) {
+                return redirect()->route('moje-projekty.show', $id_project)
+                    ->with('remove_team_member_message', 'Odebrání člena týmu proběhlo úspěšně.');
+            } else {
+                return redirect()->route('moje-projekty.show', $id_project)
+                    ->with('error_remove_team_member_message', 'Odebrání člena týmu selhalo.');
+            }
         } else if ($request->input('action') == 'new-offer-cooperation') {
-            $this->new_cooperation_offer($request, $id_project);
+            $result = $this->new_cooperation_offer($request, $id_project);
+            if ($result == 1) {
+                return redirect()->route('moje-projekty.show', $id_project)
+                    ->with('new-offer-cooperation-message', 'Vytvoření a zveřejnění nové nabídky spolupráce proběhlo úspěšně.');
+            } else {
+                return redirect()->route('moje-projekty.show', $id_project)
+                    ->with('error-new-offer-cooperation-message', 'Vytvoření a zveřejnění nové nabídky spolupráce selhalo.');
+            }
         } else if ($request->input('action') == 'remove-offer-cooperation') {
-            $this->remove_offer_cooperation($request, $id_project);
+            $result = $this->remove_offer_cooperation($request, $id_project);
+            if ($result == 1) {
+                return redirect()->route('moje-projekty.show', $id_project)
+                    ->with('remove-offer-cooperation-message', 'Smazání nabídky spolupráce proběhlo úspěšně.');
+            } else {
+                return redirect()->route('moje-projekty.show', $id_project)
+                    ->with('error-remove-offer-cooperation-message', 'Smazání nabídky spolupráce selhalo.');
+            }
         } else if ($request->input('action') == 'edit-offer-cooperation') {
-            $this->edit_offer_cooperation($request, $id_project);
+            $result = $this->edit_offer_cooperation($request, $id_project);
+            if ($result == 1) {
+                return redirect()->route('moje-projekty.show', $id_project)
+                    ->with('edit-offer-cooperation-message', 'Úprava nabídky spolupráce proběhla úspěšně.');
+            } else {
+                return redirect()->route('moje-projekty.show', $id_project)
+                    ->with('error-edit-offer-cooperation-message', 'Úprava nabídky spolupráce selhala.');
+            }
         }
         //default route back
         return redirect()->route('moje-projekty.show', $id_project);
@@ -239,11 +267,10 @@ class MyProjectsController extends Controller
     private function remove_team_member(Request $request, $id_project)
     {
         $id_user = $request->input('remove_id_user');
-        DB::delete('
+        $result = DB::delete('
             DELETE FROM cooperation WHERE id_user = :id_user AND id_project = :id_project AND id_role = :id_role
         ', [':id_user' => $id_user, ':id_project' => $id_project, ':id_role' => 2]);
-
-        return redirect()->route('moje-projekty.show', $id_project)->with('remove_team_member_message', 'Odebrání člena týmu proběhlo úspěšně.');
+        return $result;
     }
 
     private function new_cooperation_offer(Request $request, $id_project)
@@ -259,7 +286,7 @@ class MyProjectsController extends Controller
         $description = $request->input('description-offer-cooperation');
         $create_date = date("Y-m-d H:i:s");
 
-        DB::insert('
+        $result = DB::insert('
             INSERT INTO offer_cooperation(name, description, create_date, id_field, id_project, id_status)
             VALUES (:name, :description, :create_date, :id_field, :id_project, :id_status)
         ', [
@@ -271,8 +298,7 @@ class MyProjectsController extends Controller
             ':id_status' => 1,
         ]);
 
-        return redirect()->route('moje-projekty.show', $id_project)
-                         ->with('new-offer-cooperation-message', 'Vytvoření a zveřejnění nové nabídky spolupráce proběhlo úspěšně.');
+        return $result;
     }
 
     private function edit_offer_cooperation(Request $request, $id_project)
@@ -291,7 +317,7 @@ class MyProjectsController extends Controller
         $edit_id_status_offer = $request->input('edit-status-offer-cooperation');
         $edit_id_field_offer = $request->input('edit-field-offer-cooperation');
 
-        DB::update('
+        $result = DB::update('
             UPDATE offer_cooperation
             SET name = :name, description = :description, id_field = :id_field, id_status = :id_status
             WHERE id_offer = :id_offer;
@@ -303,8 +329,7 @@ class MyProjectsController extends Controller
             ':id_offer' => $edit_id_offer
         ]);
 
-        return redirect()->route('moje-projekty.show', $id_project)
-                         ->with('edit-offer-cooperation-message', 'Úprava nabídky spolupráce proběhla úspěšně.');
+        return $result;
     }
 
     private function remove_offer_cooperation(Request $request, $id_project)
@@ -315,14 +340,13 @@ class MyProjectsController extends Controller
 
         $remove_id_offer = $request->input('remove_id_offer');
 
-        DB::delete('
+        $result = DB::delete('
             DELETE FROM offer_cooperation WHERE id_offer = :id_offer;
         ', [
             ':id_offer' => $remove_id_offer,
         ]);
 
-        return redirect()->route('moje-projekty.show', $id_project)
-            ->with('remove-offer-cooperation-message', 'Smazání nabídky spolupráce proběhlo úspěšně.');
+        return $result;
     }
 
 

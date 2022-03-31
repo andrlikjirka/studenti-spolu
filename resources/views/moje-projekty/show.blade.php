@@ -24,20 +24,36 @@
                 <div
                     class="alert alert-success small text-center mb-5"> {{ session('remove_team_member_message') }} </div>
             @endif
+            @if(session('error_remove_team_member_message'))
+                <div
+                    class="alert alert-danger small text-center mb-5"> {{ session('error_remove_team_member_message') }} </div>
+            @endif
 
             @if(session('new-offer-cooperation-message'))
                 <div
                     class="alert alert-success small text-center mb-5"> {{ session('new-offer-cooperation-message') }} </div>
+            @endif
+            @if(session('error-new-offer-cooperation-message'))
+                <div
+                    class="alert alert-danger small text-center mb-5"> {{ session('error-new-offer-cooperation-message') }} </div>
             @endif
 
             @if(session('remove-offer-cooperation-message'))
                 <div
                     class="alert alert-success small text-center mb-5"> {{ session('remove-offer-cooperation-message') }} </div>
             @endif
+            @if(session('error-remove-offer-cooperation-message'))
+                <div
+                    class="alert alert-danger small text-center mb-5"> {{ session('error-remove-offer-cooperation-message') }} </div>
+            @endif
 
             @if(session('edit-offer-cooperation-message'))
                 <div
                     class="alert alert-success small text-center mb-5"> {{ session('edit-offer-cooperation-message') }} </div>
+            @endif
+            @if(session('error-edit-offer-cooperation-message'))
+                <div
+                    class="alert alert-danger small text-center mb-5"> {{ session('error-edit-offer-cooperation-message') }} </div>
             @endif
 
             <div class="row mb-5 justify-content-center">
@@ -380,7 +396,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body px-4 py-4">
-                        <form action="{{ route('moje-projekty.handle-forms',  $my_project->id_project) }}" method="post"
+                        <form action="{{ route('moje-projekty.handle-forms', $my_project->id_project) }}" method="post"
                               id="new-offer-cooperation">
                             @csrf
                             <div class="mb-3">

@@ -18,13 +18,12 @@
                 <div class="col-lg-10">
                     <!-- FILTR (HLEDANI DNE OBORU) -->
                     <div class="mb-4">
-                        <form id="match_offer_cooperation" action="" method="post">
-                            @csrf
+                        <form id="match_offer_cooperation" action="{{ route('nabidky-spoluprace.index') }}" method="get">
                             <div class="">
-                                <input type="checkbox" id="match" name="match" value="true">
-                                <label for="match">Zobrazit jen odpovídající nabídky spolupráce</label>
+                                <input type="checkbox" id="match-checked" name="match-checked" value="true" @if(session('match') == true) {{ 'checked' }} @else {{ '' }} @endif>
+                                <label for="match-checked" >Zobrazit nabídky spolupráce podle vašich znalostí a dovedností v oboru</label>
                                 <button type="submit" class="mb-1 ms-2 btn btn-sm btn-outline-primary" name="action"
-                                        value="match_offer_cooperation">Zobrazit
+                                        value="match_offer">Zobrazit
                                 </button>
                             </div>
                         </form>

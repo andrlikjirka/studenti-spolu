@@ -6,7 +6,7 @@ use App\Http\Controllers\OffersCooperationController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\MyProfileController;
 use App\Http\Controllers\MyProjectsController;
-use App\Http\Controllers\ZadostiController;
+use App\Http\Controllers\RequestsCooperationController;
 use App\Http\Controllers\RegistraceController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
@@ -34,10 +34,18 @@ Route::get('/projekty/{id}', [ProjectsController::class, 'show'])
     ->name('projekty.show');
 
 Route::get('/nabidky-spoluprace', [OffersCooperationController::class, 'index'])
+    ->middleware('prevent-back-history')
     ->name('nabidky-spoluprace.index');
+
 Route::get('/nabidky-spoluprace/{id}', [OffersCooperationController::class, 'show'])
     ->where('id', '[0-9]+')
+    ->middleware('prevent-back-history')
     ->name('nabidky-spoluprace.show');
+
+Route::post('/nabidky-spoluprace/{id}', [OffersCooperationController::class, 'handle'])
+    ->where('id', '[0-9]+')
+    ->middleware('prevent-back-history')
+    ->name('nabidky-spoluprace.handle-forms');
 
 Route::get('/uzivatele', [UsersController::class, 'index'])
     ->name('uzivatele.index');
@@ -76,8 +84,9 @@ Route::post('/moje-projekty/{id}', [MyProjectsController::class, 'handle'])
     ->middleware('prevent-back-history')
     ->name('moje-projekty.handle-forms');
 
-Route::get('/zadosti-o-spolupraci', [ZadostiController::class, 'index'])
+Route::get('/zadosti-o-spolupraci', [RequestsCooperationController::class, 'index'])
     ->name('zadosti.index');
+
 
 Route::get('/registrace', [RegistraceController::class, 'show'])
     ->name('registrace');

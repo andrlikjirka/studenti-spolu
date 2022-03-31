@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class MujProfilController extends Controller
+class MyProfileController extends Controller
 {
     public function index()
     {

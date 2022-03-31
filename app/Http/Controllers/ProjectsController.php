@@ -24,8 +24,8 @@ class ProjectsController extends Controller
         ', [':id_role' => 1]); //ziskat data z DB
 
         return view('projekty/index')
-                    ->with('title', $title)
-                    ->with('projects', $projects);
+            ->with('title', $title)
+            ->with('projects', $projects);
     }
 
     public function show($id_project)
@@ -51,9 +51,24 @@ class ProjectsController extends Controller
             ORDER BY c.id_role;
         ', ['id_project' => $id_project]);
 
+        $project_offers_cooperation = DB::select('
+            SELECT p.id_project as p_id_project, p.name as p_name, o.id_offer as o_id_offer,o.name as o_name, o.description as o_description,
+               DATE(o.create_date) as o_create_date, f.id_field as f_id_field,f.name as f_name,
+               s.id_status as s_id_status, s.name as s_name
+            FROM offer_cooperation o, project p, field f, status_offer s
+                WHERE o.id_project = p.id_project
+                AND   o.id_field = f.id_field
+                AND   o.id_status = s.id_status
+                AND   p.id_project = :id_project
+                ORDER BY o.create_date;
+        ', [
+            ':id_project' => $id_project,
+        ]);
+
         return view('projekty.show')
             ->with('project', $project[0]) //$project je pole s jednim prvkem = ziskany projekt => chci primo ziskane pole, proto [0]
-            ->with('team_members', $team_members);
+            ->with('team_members', $team_members)
+            ->with('project_offers', $project_offers_cooperation);
     }
 
     public function create()
@@ -75,7 +90,6 @@ class ProjectsController extends Controller
     {
 
     }
-
 
 
 }
