@@ -12,8 +12,8 @@ class ProjectsController extends Controller
     {
         $title = 'Projekty';
         $projects = DB::select('
-            SELECT p.id_project as id_project, p.name as name, p.abstract as abstract, s.name as s_name,
-                   u.first_name as u_first_name, u.last_name as u_last_name, DATE(p.create_date) as create_date
+            SELECT p.id_project as id_project, p.name as name, p.abstract as abstract, s.id_status as s_id_status,
+                   s.name as s_name, u.first_name as u_first_name, u.last_name as u_last_name, DATE(p.create_date) as create_date
             FROM project p, cooperation c, users u, status_project s, role r
                 WHERE p.id_project = c.id_project
                 AND   c.id_user = u.id_user
@@ -31,8 +31,8 @@ class ProjectsController extends Controller
     public function show($id_project)
     {
         $project = DB::select('
-            SELECT p.id_project as id_project, p.name as name, p.abstract as abstract, p.description as description, s.name as s_name,
-                   u.first_name as u_first_name, u.last_name as u_last_name, DATE(p.create_date) as create_date
+            SELECT p.id_project as id_project, p.name as name, p.abstract as abstract, p.description as description, s.id_status as s_id_status,
+                   s.name as s_name, u.first_name as u_first_name, u.last_name as u_last_name, DATE(p.create_date) as create_date
             FROM project p, cooperation c, users u, status_project s
                 WHERE p.id_project = c.id_project
                 AND   c.id_user = u.id_user

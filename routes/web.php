@@ -85,8 +85,12 @@ Route::post('/moje-projekty/{id}', [MyProjectsController::class, 'handle'])
     ->name('moje-projekty.handle-forms');
 
 Route::get('/zadosti-o-spolupraci', [RequestsCooperationController::class, 'index'])
+    ->middleware('prevent-back-history')
     ->name('zadosti.index');
 
+Route::post('/zadosti-o-spolupraci', [RequestsCooperationController::class, 'handle'])
+    ->middleware('prevent-back-history')
+    ->name('zadosti-o-spolupraci.handle-forms');
 
 Route::get('/registrace', [RegistraceController::class, 'show'])
     ->name('registrace');

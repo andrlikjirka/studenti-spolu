@@ -164,7 +164,8 @@ class MyProjectsController extends Controller
         ', [':name' => $edit_name, ':abstract' => $edit_abstract, ':description' => $edit_description,
             ':id_status' => $edit_status, ':id_project' => $id]);
 
-        return redirect()->route('moje-projekty.show', $id)->with('edit_project_message', 'Úprava projektu proběhla úspěšně.');
+        return redirect()->route('moje-projekty.show', $id)
+            ->with('edit_project_message', 'Úprava projektu proběhla úspěšně.');
     }
 
     public function store(Request $request)

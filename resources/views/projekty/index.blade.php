@@ -25,7 +25,11 @@
                                 <p class="card-text">
                                     {{ $project->abstract }}
                                 </p>
-                                <span class="badge rounded-pill bg-warning">{{ $project->s_name }}</span>
+                                <span class="badge rounded-pill
+                                    @if($project->s_id_status == 1) {{ 'bg-warning' }}
+                                    @elseif($project->s_id_status == 2) {{ 'bg-success' }}
+                                    @elseif($project->s_id_status == 3) {{ 'bg-danger' }}
+                                    @endif">{{ $project->s_name }}</span>
                                 <p class="mt-2 mb-0 small">Autor: <a href="" class="text-decoration-none">{{ $project->u_first_name.' '.$project->u_last_name}}</a></p>
                                 <p class="mt-1 mb-0 small">Datum zveřejnění: {{ $project->create_date }}</p>
                             </div>
