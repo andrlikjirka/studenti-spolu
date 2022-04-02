@@ -64,8 +64,17 @@ class OffersCooperationController extends Controller
             ':id_offer' => $id_offer,
         ]);
 
-        return view('nabidky-spoluprace.show')
-            ->with('offer_cooperation', $offer_cooperation[0]); //$offer_cooperation je pole s jednim prvkem = ziskana nabidka => chci primo ziskany prvek, proto [0]
+        $isUser_TeamMember = $this->isUserTeamMember($offer_cooperation[0]->p_id_project);
+        $userAlreadySentWRequest = $this->userAlreadySentWaitingRequest($id_offer);
+
+        if (count($offer_cooperation) == 1) {
+            return view('nabidky-spoluprace.show')
+                ->with('offer_cooperation', $offer_cooperation[0]) //$offer_cooperation je pole s jednim prvkem = ziskana nabidka => chci primo ziskany prvek, proto [0]
+                ->with('isUser_TeamMember', $isUser_TeamMember)
+                ->with('userAlreadySentWRequest', $userAlreadySentWRequest);
+        } else {
+            return abort(404, 'Nabídka spolupráce nenalezena.'); //404 strana
+        }
     }
 
     public function create()
@@ -126,6 +135,47 @@ class OffersCooperationController extends Controller
         ]);
 
         return $result;
+    }
+
+    private function isUserTeamMember($id_project)
+    {
+        $authUser_TeamMember = DB::select('
+            SELECT c.id_role
+            FROM project p, cooperation c
+            WHERE p.id_project = c.id_project
+            AND p.id_project = :id_project
+            AND c.id_user = :id_user;
+        ', [
+            ':id_project' => $id_project,
+            ':id_user' => Auth::id()
+        ]);
+
+        if(count($authUser_TeamMember) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    private function userAlreadySentWaitingRequest($id_offer)
+    {
+        $alreadySentWRequest = DB::select('
+        SELECT id_request FROM request_cooperation
+        WHERE id_user = :id_user
+        AND   id_status = :id_status
+        AND   id_offer = :id_offer;
+        ', [
+            ':id_user' => Auth::id(),
+            ':id_status' => 1, //čekající na vyřízení
+            ':id_offer' => $id_offer
+        ]);
+
+        if (count($alreadySentWRequest) > 0) { //existuje odeslaná čakající žádost reagující na nabídku
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

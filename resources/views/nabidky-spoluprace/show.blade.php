@@ -42,9 +42,17 @@
                     </div>
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#NewRequestCooperationModal">
+                            data-bs-target="#NewRequestCooperationModal"
+                    @if($isUser_TeamMember OR $userAlreadySentWRequest) {{ 'disabled' }} @endif >
                         Žádost o spolupráci
                     </button>
+                    @if($isUser_TeamMember)
+                    <span class="small ms-1 fst-italic">- Již jste členem projektového týmu.</span>
+                    @endif
+                    @if($userAlreadySentWRequest)
+                        <span class="small ms-1 fst-italic">- Odeslaná žádost čeká na vyřízení.</span>
+                    @endif
+
                 </div>
             </div>
 
@@ -66,7 +74,7 @@
         </div>
 
 
-        <!-- Modal DODELAT -->
+        <!-- Modal  -->
         <div class="modal fade" id="NewRequestCooperationModal" data-bs-backdrop="static" data-bs-keyboard="false"
              tabindex="-1"
              aria-labelledby="NewRequestCooperationLabel" aria-hidden="true">
@@ -117,7 +125,7 @@
 
     <script>
         // Vymazání obsahu modal okna při novém zobrazení stránky
-        window.onpageshow = function (event) {
+        window.onpageshow = function () {
             //document.getElementById("request-id-user").value = '';
             document.getElementById("message-request-cooperation").value = '';
             //var myModal = document.getElementById('NewOfferCooperationModal');
