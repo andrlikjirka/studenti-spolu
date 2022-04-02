@@ -86,7 +86,7 @@ Route::post('/moje-projekty/{id}', [MyProjectsController::class, 'handle'])
 
 Route::get('/zadosti-o-spolupraci', [RequestsCooperationController::class, 'index'])
     ->middleware('prevent-back-history')
-    ->name('zadosti.index');
+    ->name('zadosti-o-spolupraci.index');
 
 Route::post('/zadosti-o-spolupraci', [RequestsCooperationController::class, 'handle'])
     ->middleware('prevent-back-history')
