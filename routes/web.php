@@ -7,7 +7,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\MyProfileController;
 use App\Http\Controllers\MyProjectsController;
 use App\Http\Controllers\RequestsCooperationController;
-use App\Http\Controllers\RegistraceController;
+use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 
@@ -56,6 +56,8 @@ Route::get('/uzivatele/{id}', [UsersController::class, 'show'])
 
 Route::get('/muj-profil', [MyProfileController::class, 'index'])
     ->name('muj-profil.index');
+Route::post('/muj-profil', [MyProfileController::class, 'handle'])
+    ->name('muj-profil.handle-forms');
 
 Route::get('/moje-projekty', [MyProjectsController::class, 'index'])
     ->middleware('prevent-back-history')
@@ -92,10 +94,10 @@ Route::post('/zadosti-o-spolupraci', [RequestsCooperationController::class, 'han
     ->middleware('prevent-back-history')
     ->name('zadosti-o-spolupraci.handle-forms');
 
-Route::get('/registrace', [RegistraceController::class, 'show'])
+Route::get('/registrace', [RegistrationController::class, 'show'])
     ->name('registrace');
 
-Route::post('/registrace', [RegistraceController::class, 'handle'])
+Route::post('/registrace', [RegistrationController::class, 'handle'])
     ->name('registrace');
 
 Route::get('/prihlaseni', [LoginController::class, 'show'])

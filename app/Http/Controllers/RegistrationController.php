@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class RegistraceController extends Controller
+class RegistrationController extends Controller
 {
     public function show()
     {
@@ -24,7 +24,7 @@ class RegistraceController extends Controller
             'first_name' => 'required|string|max:45',
             'last_name' => 'required|string|max:45',
             'login' => 'required|string|unique:users|max:60',
-            'e-mail' => 'required|email|unique:users|max:255',
+            'e-mail' => 'required|email|max:255',
             'password' => 'required|string|max:255|confirmed',
         ]);
 

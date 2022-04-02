@@ -3,6 +3,13 @@
 @section('content')
     <section class="bg-light" style="padding-top: 70px">
         <div class="container px-5 py-5">
+            @if(count($errors) > 0)
+                <div class="alert alert-danger small text-center mb-5">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </div>
+            @endif
 
             @if(session('edit_request_message'))
                 <div class="alert alert-success small text-center mb-5"> {{ session('edit_request_message') }} </div>
