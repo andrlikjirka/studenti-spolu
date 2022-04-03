@@ -13,44 +13,38 @@
 
             @if(session('edit_request_message'))
                 <div class="alert alert-success small text-center mb-5"> {{ session('edit_request_message') }} </div>
-            @endif
-            @if(session('error_edit_request_message'))
+            @elseif(session('error_edit_request_message'))
                 <div
                     class="alert alert-danger small text-center mb-5"> {{ session('error_edit_request_message') }} </div>
             @endif
 
             @if(session('delete_request_message'))
                 <div class="alert alert-success small text-center mb-5"> {{ session('delete_request_message') }} </div>
-            @endif
-            @if(session('error_delete_request_message'))
+            @elseif(session('error_delete_request_message'))
                 <div
                     class="alert alert-danger small text-center mb-5"> {{ session('error_delete_request_message') }} </div>
             @endif
 
             @if(session('accept_request_message'))
                 <div class="alert alert-success small text-center mb-5"> {{ session('accept_request_message') }} </div>
-            @endif
-            @if(session('error_accept_request_message'))
+            @elseif(session('error_accept_request_message'))
                 <div
                     class="alert alert-danger small text-center mb-5"> {{ session('error_accept_request_message') }} </div>
             @endif
 
             @if(session('reject_request_message'))
                 <div class="alert alert-success small text-center mb-5"> {{ session('reject_request_message') }} </div>
-            @endif
-            @if(session('error_reject_request_message'))
+            @elseif(session('error_reject_request_message'))
                 <div
                     class="alert alert-danger small text-center mb-5"> {{ session('error_reject_request_message') }} </div>
             @endif
 
             @if(session('waiting_request_message'))
                 <div class="alert alert-success small text-center mb-5"> {{ session('waiting_request_message') }} </div>
-            @endif
-            @if(session('error_waiting_request_message'))
+            @elseif(session('error_waiting_request_message'))
                 <div
                     class="alert alert-danger small text-center mb-5"> {{ session('error_waiting_request_message') }} </div>
             @endif
-
 
             <div class="row mb-3 justify-content-center">
                 <div class="col-lg-10">
@@ -264,38 +258,40 @@
 
                                     </div>
                                     <div class="card-footer py-2 px-4">
-                                        <!-- Button trigger modal -->
-                                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
-                                                data-bs-target="#EditRequestCooperationModal"
-                                                onclick="edit_request_cooperation({{ $request_sent->r_id_request }}, '{{ $request_sent->o_name }}', '{{ $request_sent->p_name }}','{{ $request_sent->f_name }}', '{{ $request_sent->r_message }}')">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                 fill="currentColor" class="bi bi-pencil-square me-1"
-                                                 viewBox="0 0 16 16">
-                                                <path
-                                                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                                <path fill-rule="evenodd"
-                                                      d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                                            </svg>
-                                            Upravit žádost
-                                        </button>
-                                        <form action="{{ route('zadosti-o-spolupraci.handle-forms') }}" method="post"
-                                              class="d-inline-block">
-                                            @csrf
-                                            <input type="hidden" name="delete-request-sent"
-                                                   value="{{ $request_sent->r_id_request }}">
-                                            <button type="submit" class="btn btn-sm btn-danger" name="action"
-                                                    value="delete-request-cooperation">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                     fill="currentColor" class="bi bi-x-circle me-1"
-                                                     viewBox="0 0 16 16">
-                                                    <path
-                                                        d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                                    <path
-                                                        d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                                                </svg>
-                                                Zrušit žádost
-                                            </button>
-                                        </form>
+                                        @if($request_sent->s_id_status == 1)
+                                            <!-- Button trigger modal -->
+                                                <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                                                        data-bs-target="#EditRequestCooperationModal"
+                                                        onclick="edit_request_cooperation({{ $request_sent->r_id_request }}, '{{ $request_sent->o_name }}', '{{ $request_sent->p_name }}','{{ $request_sent->f_name }}', '{{ $request_sent->r_message }}')">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                         fill="currentColor" class="bi bi-pencil-square me-1"
+                                                         viewBox="0 0 16 16">
+                                                        <path
+                                                            d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                        <path fill-rule="evenodd"
+                                                              d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+                                                    </svg>
+                                                    Upravit žádost
+                                                </button>
+                                                <form action="{{ route('zadosti-o-spolupraci.handle-forms') }}" method="post"
+                                                      class="d-inline-block">
+                                                    @csrf
+                                                    <input type="hidden" name="delete-request-sent"
+                                                           value="{{ $request_sent->r_id_request }}">
+                                                    <button type="submit" class="btn btn-sm btn-danger" name="action"
+                                                            value="delete-request-cooperation">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                             fill="currentColor" class="bi bi-x-circle me-1"
+                                                             viewBox="0 0 16 16">
+                                                            <path
+                                                                d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                            <path
+                                                                d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                                        </svg>
+                                                        Zrušit žádost
+                                                    </button>
+                                                </form>
+                                        @endif
                                     </div>
                                 </div>
                             @endforeach
