@@ -15,7 +15,9 @@
                 <div class="alert alert-success small text-center mb-5"> {{ session('edit-profile-message') }} </div>
             @elseif(session('edit-password-message'))
                 <div class="alert alert-success small text-center mb-5"> {{ session('edit-password-message') }} </div>
-            @endif
+            @elseif(session('edit-fields-message'))
+                    <div class="alert alert-success small text-center mb-5"> {{ session('edit-fields-message') }} </div>
+                @endif
 
             <div class="row mb-4 justify-content-center">
                 <div class="col-lg-10">
@@ -121,65 +123,35 @@
                     <div class="card mt-4">
                         <div class="card-header py-3 px-4 text-primary">Znalosti a dovednosti v oboru</div>
                         <div class="card-body py-4 px-4">
-                            <form action="">
-                                <div class="row ">
+                            <form action="{{ route('muj-profil.handle-forms') }}" method="post">
+                                @csrf
+                                <div class="row align-items-center">
                                     <div class="col-md-9">
-                                        <select class="form-select" aria-label="Default select example" required>
-                                            <option selected disabled value="">Vyberte obor</option>
-                                            <option value="1">Podniková ekonomika</option>
-                                            <option value="2">Projektový management</option>
-                                            <option value="3">Marketing</option>
-                                            <option value="4">Průmyslový management</option>
-                                        </select>
+                                        <div class="overflow-auto border rounded-1" style="height: 205px">
+                                            <div class="list-group list-group-flush">
+                                                @foreach($fields as $field)
+                                                    <label class="list-group-item">
+                                                        <input class="form-check-input me-1" type="checkbox" name="fields[]" value="{{ $field->id_field }}"
+                                                               onchange="checkLimit()"
+                                                        @foreach($user_fields as $user_field)
+                                                            @if($field->id_field == $user_field->id_field)
+                                                                {{ 'checked' }}
+                                                            @endif
+                                                        @endforeach
+                                                        >
+                                                        {{ $field->name }}
+                                                    </label>
+                                                @endforeach
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <button type="submit" class="btn btn-primary px-4">Přidat obor</button>
+                                    <div class="col-md-3 text-md-center">
+                                        <button type="submit" class="btn btn-primary mt-sm-3 mt-md-0 "
+                                                id="edit-fields" name="action" value="edit-fields">Uložit změny</button>
                                     </div>
                                 </div>
                             </form>
-                            <div class="row mt-3">
-                                <div class="col-md-9">
-                                    <div class="table-responsive">
-                                        <table class="table table-sm">
-                                            <thead class="table-primary small">
-                                            <tr>
-                                                <th>Obor</th>
-                                                <th style="width: 5%;"></th>
-                                            </tr>
-                                            </thead>
-                                            <tbody class="small">
-                                            <tr>
-                                                <td>Informační management</td>
-                                                <td>
-                                                    <form action="" class="m-0 p-0">
-                                                        <!-- input hidden -->
-                                                        <button type='submit'
-                                                                class='btn btn-sm btn-outline-danger m-0 py-0 px-2'
-                                                                onclick='deleteReviewer(event)'>
-                                                            Odebrat
-                                                        </button>
-                                                    </form>
-                                                </td>
-                                            </tr>
 
-                                            <tr>
-                                                <td>Systémové inženýrství a informatika</td>
-                                                <td>
-                                                    <form action="" class="m-0 p-0">
-                                                        <!-- input hidden -->
-                                                        <button type='submit'
-                                                                class='btn btn-sm btn-outline-danger m-0 py-0 px-2'
-                                                                onclick='deleteReviewer(event)'>
-                                                            Odebrat
-                                                        </button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -188,5 +160,24 @@
             </div>
         </div>
     </section>
+
+    <script>
+        function checkLimit(){
+            var submitButton = document.getElementById('edit-fields');
+            var checkboxes = document.getElementsByClassName('form-check-input');
+            count = 0;
+            for (var i=0; i<checkboxes.length; i++ ) {
+                if (checkboxes[i].type === 'checkbox' && checkboxes[i].checked === true) {
+                    count++;
+                }
+            }
+            console.log(count);
+            if (count > 0) {
+                submitButton.classList.remove('disabled');
+            } else {
+                submitButton.classList.add('disabled');
+            }
+        }
+    </script>
 
 @endsection

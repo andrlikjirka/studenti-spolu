@@ -17,26 +17,3 @@ mix.js('resources/js/app.js', 'public/js')
         //
     ])
     .sass('resources/sass/app.scss', 'public/css');
-//    .sass('resources/sass/icons.scss', 'public/css')
-//    .copy('node_modules/bootstrap-icons/font/fonts', 'public/fonts');
-
-/*
-mix.webpackConfig({
-    module: {
-        rules: [
-            {
-                test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-                include: path.resolve(__dirname, './node_modules/bootstrap-icons/font/fonts'),
-                use: {
-                    loader: 'file-loader',
-                    options: {
-                        name: '[name].[ext]',
-                        outputPath: 'fonts',
-                        publicPath: '../fonts',
-                    },
-                }
-            }
-        ]
-    }
-});
-*/
