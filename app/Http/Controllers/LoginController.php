@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
 
-    public function show()
+    public function index()
     {
-        return view('prihlaseni/show');
+        return view('prihlaseni/index');
     }
 
     public function handle(Request $request)

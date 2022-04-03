@@ -171,7 +171,7 @@
                     count++;
                 }
             }
-            console.log(count);
+            //console.log(count);
             if (count > 0) {
                 submitButton.classList.remove('disabled');
             } else {

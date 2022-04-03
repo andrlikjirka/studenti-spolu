@@ -24,7 +24,7 @@ use App\Http\Controllers\LogoutController;
 
 Route::get('/', function () {
     return view('index');
-});
+})->name('index');
 
 Route::get('/projekty', [ProjectsController::class, 'index'])
     ->name('projekty.index');
@@ -94,13 +94,13 @@ Route::post('/zadosti-o-spolupraci', [RequestsCooperationController::class, 'han
     ->middleware('prevent-back-history')
     ->name('zadosti-o-spolupraci.handle-forms');
 
-Route::get('/registrace', [RegistrationController::class, 'show'])
+Route::get('/registrace', [RegistrationController::class, 'index'])
     ->name('registrace');
 
 Route::post('/registrace', [RegistrationController::class, 'handle'])
     ->name('registrace');
 
-Route::get('/prihlaseni', [LoginController::class, 'show'])
+Route::get('/prihlaseni', [LoginController::class, 'index'])
     ->name('prihlaseni');
 
 Route::post('/prihlaseni', [LoginController::class, 'handle'])
