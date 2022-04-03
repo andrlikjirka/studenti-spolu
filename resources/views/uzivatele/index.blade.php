@@ -16,11 +16,14 @@
             <div class="row mb-5 justify-content-center">
                 <div class="col-lg-10">
 
-                    <!-- FILTR (HLEDANI DNE OBORU)
+                    <!--FILTR (HLEDANI DNE OBORU)-->
                     <div class="mb-4">
-                        <form id="hledat-uzivatele" action="" method="get">
+                        <form id="hledat-uzivatele" action="{{ route('uzivatele.index') }}" method="get">
                             <label>
-                                <input type="text" name="last_name">
+                                <input class="form-control form-control-sm" type="text" placeholder="Jméno" name="first_name">
+                            </label>
+                            <label>
+                                <input class="form-control form-control-sm" type="text" placeholder="Příjmení" name="last_name">
                             </label>
                             <button type="submit" class="mb-1 ms-2 btn btn-sm btn-outline-primary" name="action"
                                     value="search-user">Hledat uživatele
@@ -28,7 +31,7 @@
                         </form>
                         <hr class="dropdown-divider">
                     </div>
-                    -->
+
                     <div class="row justify-content-center">
                         <div class="col-lg-10">
                             <div class="card">
@@ -43,10 +46,11 @@
                                             </thead>
                                             <tbody>
                                             @foreach($users as $user)
-                                                <tr>
-                                                    <td class=""><a href="{{ route('uzivatele.show', $user->id_user) }}" class="d-block">{{ $user->first_name.' '.$user->last_name }}</a></td>
-
-                                                </tr>
+                                                @if($user->id_status == 1)
+                                                    <tr>
+                                                        <td class=""><a href="{{ route('uzivatele.show', $user->id_user) }}" class="d-block">{{ $user->first_name.' '.$user->last_name }}</a></td>
+                                                    </tr>
+                                                @endif
                                             @endforeach
                                             </tbody>
                                         </table>

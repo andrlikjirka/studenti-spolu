@@ -11,18 +11,20 @@ class UsersController extends Controller
     public function index(Request $request)
     {
         $title = 'Uživatelé';
-        if ($request->input('action') == 'search-user' AND $request->has('last_name')) {
+        if ($request->input('action') == 'search-user') {
             $request->validate([
-                'last_name' => 'string',
+                'last_name' => 'nullable|string',
             ]);
+            $first_name = htmlspecialchars($request->input('first_name')).'%';
             $last_name = htmlspecialchars($request->input('last_name')).'%';
             $users = DB::select('
-            SELECT u.id_user, u.first_name, u.last_name, u.email FROM users u
-                WHERE u.last_name LIKE :last_name;
-        ', [':last_name' => $last_name]);
+            SELECT u.id_user, u.first_name, u.last_name, u.email, u.id_status FROM users u
+                WHERE u.first_name LIKE :first_name
+                AND   u.last_name LIKE :last_name;
+        ', [':first_name' => $first_name, ':last_name' => $last_name]);
         } else {
             $users = DB::select('
-            SELECT u.id_user, u.first_name, u.last_name, u.email FROM users u;
+            SELECT u.id_user, u.first_name, u.last_name, u.email, u.id_status FROM users u;
         ');
         }
         return view('uzivatele/index')
