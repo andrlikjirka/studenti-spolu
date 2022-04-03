@@ -23,8 +23,9 @@
                     </a>
                     <div class="mt-2">
                         <span class="">Znalosti a dovednosti v oborech:&nbsp;</span>
-                        <span class="badge bg-primary">Informační management</span>
-                        <span class="badge bg-primary">Systémové inženýrství a informatika</span>
+                        @foreach($user_fields as $user_field)
+                            <span class="badge bg-white text-dark">{{ $user_field->f_name }}</span>
+                        @endforeach
                     </div>
                 </div>
             </div>

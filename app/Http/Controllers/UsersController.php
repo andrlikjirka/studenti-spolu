@@ -32,6 +32,12 @@ class UsersController extends Controller
 
     public function show($id_user)
     {
+        $user_fields = DB::select('
+            SELECT f.id_field as f_id_field, f.name as f_name FROM users_field uf, field f
+            WHERE uf.id_field = f.id_field
+            AND   id_user = :id_user;
+        ', [':id_user' => $id_user]);
+
         $user = DB::select('
             SELECT u.id_user, u.first_name, u.last_name, u.email, u.description FROM users u
                 WHERE u.id_user = :id_user;
@@ -57,6 +63,7 @@ class UsersController extends Controller
 
         return view('uzivatele.show')
             ->with('user', $user[0])
+            ->with('user_fields', $user_fields)
             ->with('user_projects', $user_projects);
     }
 
