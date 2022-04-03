@@ -133,22 +133,26 @@
                                             <label for="edit-name-project" class="form-label">Název
                                                 projektu</label>
                                             <input type="text" id="edit-name-project" class="form-control"
-                                                   name="edit-name-project" value="{{ $my_project->name }}" required>
+                                                   name="edit-name-project" value="{{ $my_project->name }}" required
+                                            @if($my_project->u_id_user != \Illuminate\Support\Facades\Auth::id()) {{ 'readonly' }} @endif
+                                            >
                                         </div>
                                         <div class="mb-3">
                                             <label for="edit-abstract-project" class="form-label">Abstrakt</label>
                                             <textarea type="text" id="edit-abstract-project" class="form-control"
                                                       rows="3"
-                                                      name="edit-abstract-project"
-                                                      required>{{ $my_project->abstract }}</textarea>
+                                                      name="edit-abstract-project" required
+                                                @if($my_project->u_id_user != \Illuminate\Support\Facades\Auth::id()) {{ 'readonly' }} @endif
+                                            >{{ $my_project->abstract }}</textarea>
                                         </div>
                                         <div class="mb-3">
                                             <label for="edit-description-project" class="form-label">Popis
                                                 projektu</label>
                                             <textarea type="text" id="edit-description-project" class="form-control"
                                                       rows="8"
-                                                      name="edit-description-project"
-                                                      required>{{ $my_project->description }}</textarea>
+                                                      name="edit-description-project" required
+                                                @if($my_project->u_id_user != \Illuminate\Support\Facades\Auth::id()) {{ 'readonly' }} @endif
+                                            >{{ $my_project->description }}</textarea>
                                         </div>
                                         <div class="mb-3">
                                             <label for="edit-status-project" class="form-label">Stav projektu</label>
@@ -156,23 +160,21 @@
                                                     name="edit-status-project"
                                                     aria-label="Default select example" required>
                                                 <option disabled value="">Vyberte stav projektu</option>
-                                                <option
-                                                    value="1" @if($my_project->id_status == 1) {{ 'selected' }} @endif>
-                                                    Rozpracovaný
-                                                </option>
-                                                <option
-                                                    value="2" @if($my_project->id_status == 2) {{ 'selected' }} @endif>
-                                                    Dokončený
-                                                </option>
-                                                <option
-                                                    value="3" @if($my_project->id_status == 3) {{ 'selected' }} @endif>
-                                                    Nedokončený
-                                                </option>
+                                                @foreach($status_project_all as $status)
+                                                    <option
+                                                        value="{{ $status->id_status }}" @if($my_project->id_status == $status->id_status) {{ 'selected' }} @endif
+                                                    @if($my_project->u_id_user != \Illuminate\Support\Facades\Auth::id()) {{ 'disabled' }} @endif
+                                                    >
+                                                        {{ $status->name }}
+                                                    </option>
+                                                @endforeach
                                             </select>
                                         </div>
-                                        <button type="submit" class="btn btn-warning" name="action"
-                                                value="edit-project">Upravit informace o projektu
+                                        @if($my_project->u_id_user == \Illuminate\Support\Facades\Auth::id())
+                                        <button type="submit" class="btn btn-warning" name="action" value="edit-project">
+                                            Upravit informace o projektu
                                         </button>
+                                        @endif
                                     </form>
                                 </div>
                             </div>
@@ -253,7 +255,6 @@
                                             <thead class="table-primary small">
                                             <tr>
                                                 <th>Jméno a příjmení</th>
-                                                <th>Uživatelské jméno</th>
                                                 <th>Role</th>
                                                 <th style="width: 5%"></th>
                                             </tr>
@@ -262,11 +263,11 @@
 
                                             @foreach($team_members as $member)
                                                 <tr>
-                                                    <td>{{ $member->u_first_name.' '.$member->u_last_name }}</td>
-                                                    <td>{{ $member->u_login }}</td>
+                                                    <td><a href="{{ route('uzivatele.show', $member->u_id_user) }}">{{ $member->u_first_name.' '.$member->u_last_name }}</a></td>
                                                     <td>{{ $member->r_name }}</td>
                                                     <td>
-                                                        @if($member->u_id_user != \Illuminate\Support\Facades\Auth::id())
+                                                        @if($my_project->u_id_user == \Illuminate\Support\Facades\Auth::id() AND
+                                                             $member->r_id_role != 1)
                                                             <form
                                                                 action="{{ route('moje-projekty.handle-forms',  $my_project->id_project) }}"
                                                                 class="m-0 p-0" method="post">
@@ -275,7 +276,7 @@
                                                                        value="{{ $member->u_id_user }}">
                                                                 <button type='submit' name="action"
                                                                         value="remove-team-member"
-                                                                        class='btn btn-sm btn-outline-danger m-0 py-1 px-2'
+                                                                        class='btn btn-sm btn-outline-danger m-0 py-0 px-2'
                                                                         onclick='deleteReviewer(event)'>
                                                                     Odebrat
                                                                 </button>
@@ -298,18 +299,21 @@
                                 <div class="card-header py-3 px-4 text-primary">Správa nabídek spolupráce na projektu
                                 </div>
                                 <div class="card-body py-4 px-4">
+                                @if($my_project->u_id_user == \Illuminate\Support\Facades\Auth::id())
                                     <!-- Button trigger modal -->
-                                    <button type="button" class="btn btn-secondary mb-3" data-bs-toggle="modal"
-                                            data-bs-target="#NewOfferCooperationModal">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                             fill="currentColor" class="bi bi-plus-circle me-2" viewBox="0 0 16 16">
-                                            <path
-                                                d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                            <path
-                                                d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
-                                        </svg>
-                                        Nová nabídka spolupráce
-                                    </button>
+                                        <button type="button" class="btn btn-secondary mb-3" data-bs-toggle="modal"
+                                                data-bs-target="#NewOfferCooperationModal">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                 fill="currentColor" class="bi bi-plus-circle me-2" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                <path
+                                                    d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                                            </svg>
+                                            Nová nabídka spolupráce
+                                        </button>
+                                    @endif
+
                                     <div class="table-responsive">
                                         <table class="table table-sm mt-4">
                                             <thead class="table-primary small">
@@ -317,7 +321,9 @@
                                                 <th>Název nabídky</th>
                                                 <th>Obor</th>
                                                 <th>Stav</th>
+                                                @if($my_project->u_id_user == \Illuminate\Support\Facades\Auth::id())
                                                 <th>Akce</th>
+                                                @endif
                                             </tr>
                                             </thead>
                                             <tbody class="small">
@@ -332,46 +338,53 @@
                                                             {{ $offer->s_name }}
                                                         </span>
                                                     </td>
-                                                    <td>
-                                                        <!--Button trigger modal -->
-                                                        <button
-                                                            onclick="edit_offer_cooperation({{ $offer->o_id_offer }},'{{ $offer->o_name }}', '{{ $offer->o_description }}', {{ $offer->s_id_status }}, {{ $offer->f_id_field }})"
-                                                            type="button" class="btn btn-warning btn-sm d-inline-block"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#EditOfferCooperationModal">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                                                 height="16"
-                                                                 fill="currentColor" class="bi bi-pencil-square me-1"
-                                                                 viewBox="0 0 16 16">
-                                                                <path
-                                                                    d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                                                                <path fill-rule="evenodd"
-                                                                      d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
-                                                            </svg>
-                                                            Upravit
-                                                        </button>
-                                                        <form
-                                                            action="{{ route('moje-projekty.handle-forms', $my_project->id_project) }}"
-                                                            method="post" class="m-0 p-0 d-inline-block">
-                                                            @csrf
-                                                            <input type="hidden" name="remove_id_offer"
-                                                                   value="{{ $offer->o_id_offer }}">
-                                                            <button type='submit' name="action"
-                                                                    value="remove-offer-cooperation"
-                                                                    class='btn btn-sm btn-danger'
-                                                                    onclick='deleteReviewer(event)'>
+                                                    @if($my_project->u_id_user == \Illuminate\Support\Facades\Auth::id())
+                                                        <td>
+                                                            <!--Button trigger modal -->
+                                                            <button
+                                                                onclick="edit_offer_cooperation({{ $offer->o_id_offer }},'{{ $offer->o_name }}', '{{ $offer->o_description }}', {{ $offer->s_id_status }}, {{ $offer->f_id_field }})"
+                                                                type="button"
+                                                                class="btn btn-warning btn-sm d-inline-block"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#EditOfferCooperationModal">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16"
-                                                                     height="16" fill="currentColor"
-                                                                     class="bi bi-x-circle me-1" viewBox="0 0 16 16">
+                                                                     height="16"
+                                                                     fill="currentColor"
+                                                                     class="bi bi-pencil-square me-1"
+                                                                     viewBox="0 0 16 16">
                                                                     <path
-                                                                        d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                                                                    <path
-                                                                        d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                                                        d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                                                    <path fill-rule="evenodd"
+                                                                          d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
                                                                 </svg>
-                                                                Smazat
+                                                                Upravit
                                                             </button>
-                                                        </form>
-                                                    </td>
+                                                            <form
+                                                                action="{{ route('moje-projekty.handle-forms', $my_project->id_project) }}"
+                                                                method="post" class="m-0 p-0 d-inline-block">
+                                                                @csrf
+                                                                <input type="hidden" name="remove_id_offer"
+                                                                       value="{{ $offer->o_id_offer }}">
+                                                                <button type='submit' name="action"
+                                                                        value="remove-offer-cooperation"
+                                                                        class='btn btn-sm btn-danger'
+                                                                        onclick='deleteReviewer(event)'
+                                                                @if($my_project->u_id_user != \Illuminate\Support\Facades\Auth::id()) {{ 'disabled' }} @endif
+                                                                >
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16"
+                                                                         height="16" fill="currentColor"
+                                                                         class="bi bi-x-circle me-1"
+                                                                         viewBox="0 0 16 16">
+                                                                        <path
+                                                                            d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                                        <path
+                                                                            d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                                                    </svg>
+                                                                    Smazat
+                                                                </button>
+                                                            </form>
+                                                        </td>
+                                                    @endif
                                                 </tr>
                                             @endforeach
                                             </tbody>
@@ -385,6 +398,7 @@
 
             </div>
         </div>
+
 
         <!-- Modal NOVA NABIDKA -->
         <div class="modal fade" id="NewOfferCooperationModal" data-bs-backdrop="static" tabindex="-1"
@@ -434,6 +448,7 @@
             </div>
         </div>
 
+        @if($my_project->u_id_user == \Illuminate\Support\Facades\Auth::id())
         <!-- Modal UPRAVA NABIDKY -->
         <div class="modal fade" id="EditOfferCooperationModal" data-bs-backdrop="static" tabindex="-1"
              aria-labelledby="EditOfferCooperationLabel" aria-hidden="true">
@@ -498,11 +513,10 @@
                 </div>
             </div>
         </div>
-
+        @endif
     </section>
 
     <script>
-
         function edit_offer_cooperation(id, name, description, id_status, id_field) {
             document.getElementById("edit-id-offer").value = id;
             document.getElementById("edit-name-offer-cooperation").value = name;

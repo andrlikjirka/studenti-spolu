@@ -18,7 +18,7 @@ class MyProjectsController extends Controller
         //autorské projekty
         $projects_author = DB::select('
             SELECT p.id_project as id_project, p.name as name, p.abstract as abstract, s.id_status as s_id_status, s.name as s_name,
-                   u.first_name as u_first_name, u.last_name as u_last_name, DATE(p.create_date) as create_date
+                   u.id_user as u_id_user ,u.first_name as u_first_name, u.last_name as u_last_name, DATE(p.create_date) as create_date
             FROM project p, cooperation c, users u, status_project s, role r
                 WHERE p.id_project = c.id_project
                 AND   c.id_user = u.id_user
@@ -32,7 +32,7 @@ class MyProjectsController extends Controller
         //spolupracovnické projekty
         $projects_collab = DB::select('
             SELECT p.id_project as id_project, p.name as name, p.abstract as abstract, s.id_status as s_id_status, s.name as s_name,
-                   u.first_name as u_first_name, u.last_name as u_last_name, p.create_date as create_date
+                   u.id_user as u_id_user, u.first_name as u_first_name, u.last_name as u_last_name, p.create_date as create_date
                 FROM project p, cooperation c, users u, status_project s, role r
                 WHERE p.id_project = c.id_project
                 AND   c.id_user = u.id_user
@@ -59,6 +59,7 @@ class MyProjectsController extends Controller
         $logged_user_id = Auth::id();
 
         $my_project = $this->getMyProjectInfo($id);
+        $status_project_all = $this->getAllProjectStatus();
 
         $team_members = $this->getTeamMembers($id);
 
@@ -70,6 +71,7 @@ class MyProjectsController extends Controller
         return view('moje-projekty.show')
             ->with('title', $title)
             ->with('my_project', $my_project[0])
+            ->with('status_project_all', $status_project_all)
             ->with('team_members', $team_members)
             ->with('offers_cooperation', $offers_cooperation)
             ->with('fields_all', $fields_all)
@@ -79,8 +81,8 @@ class MyProjectsController extends Controller
     private function getMyProjectInfo($id_project)
     {
         $my_project = DB::select('
-           SELECT p.id_project as id_project, p.name as name, p.abstract as abstract, p.description as description, s.name as s_name,
-                   u.first_name as u_first_name, u.last_name as u_last_name, s.id_status as id_status, DATE(p.create_date) as create_date
+           SELECT p.id_project as id_project, p.name as name, p.abstract as abstract, p.description as description, s.name as s_name, DATE(p.create_date) as create_date,
+                  u.id_user as u_id_user, u.first_name as u_first_name, u.last_name as u_last_name, s.id_status as id_status
            FROM project p, cooperation c, users u, status_project s, role r
                 WHERE p.id_project = c.id_project
                 AND   c.id_user = u.id_user
@@ -93,10 +95,18 @@ class MyProjectsController extends Controller
         return $my_project;
     }
 
+    private function getAllProjectStatus()
+    {
+        $status_project_all = DB::select('
+            SELECT * FROM status_project;
+        ');
+        return $status_project_all;
+    }
+
     private function getTeamMembers($id_project)
     {
         $team_members = DB::select('
-        SELECT u.id_user as u_id_user, u.first_name as u_first_name, u.last_name as u_last_name, u.login as u_login, r.name as r_name
+        SELECT u.id_user as u_id_user, u.first_name as u_first_name, u.last_name as u_last_name, u.login as u_login, r.id_role as r_id_role, r.name as r_name
         FROM users u, cooperation c, project p, role r
             WHERE u.id_user = c.id_user
             AND   c.id_project = p.id_project

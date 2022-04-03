@@ -162,8 +162,7 @@
                                             </a>
                                         </p>
 
-                                        <p class="mt-2 mb-0 small">Datum
-                                            zveřejnění: {{ $project_collab->create_date }}</p>
+                                        <p class="mt-2 mb-0 small">Datum zveřejnění: {{ $project_collab->create_date }}</p>
                                     </div>
                                 </div>
                             @endforeach
