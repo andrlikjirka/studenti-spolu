@@ -1,3 +1,7 @@
+@php
+    $loggedUser = \Illuminate\Support\Facades\Auth::user();
+@endphp
+
 @extends('layouts.layout')
 
 @section('content')
@@ -134,7 +138,7 @@
                                                 projektu</label>
                                             <input type="text" id="edit-name-project" class="form-control"
                                                    name="edit-name-project" value="{{ $my_project->name }}" required
-                                            @if($my_project->u_id_user != \Illuminate\Support\Facades\Auth::id()) {{ 'readonly' }} @endif
+                                            @if($my_project->u_id_user != $loggedUser->id_user) {{ 'readonly' }} @endif
                                             >
                                         </div>
                                         <div class="mb-3">
@@ -142,7 +146,7 @@
                                             <textarea type="text" id="edit-abstract-project" class="form-control"
                                                       rows="3"
                                                       name="edit-abstract-project" required
-                                                @if($my_project->u_id_user != \Illuminate\Support\Facades\Auth::id()) {{ 'readonly' }} @endif
+                                                @if($my_project->u_id_user != $loggedUser->id_user) {{ 'readonly' }} @endif
                                             >{{ $my_project->abstract }}</textarea>
                                         </div>
                                         <div class="mb-3">
@@ -151,7 +155,7 @@
                                             <textarea type="text" id="edit-description-project" class="form-control"
                                                       rows="8"
                                                       name="edit-description-project" required
-                                                @if($my_project->u_id_user != \Illuminate\Support\Facades\Auth::id()) {{ 'readonly' }} @endif
+                                                @if($my_project->u_id_user != $loggedUser->id_user) {{ 'readonly' }} @endif
                                             >{{ $my_project->description }}</textarea>
                                         </div>
                                         <div class="mb-3">
@@ -163,17 +167,18 @@
                                                 @foreach($status_project_all as $status)
                                                     <option
                                                         value="{{ $status->id_status }}" @if($my_project->id_status == $status->id_status) {{ 'selected' }} @endif
-                                                    @if($my_project->u_id_user != \Illuminate\Support\Facades\Auth::id()) {{ 'disabled' }} @endif
+                                                    @if($my_project->u_id_user != $loggedUser->id_user) {{ 'disabled' }} @endif
                                                     >
                                                         {{ $status->name }}
                                                     </option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                        @if($my_project->u_id_user == \Illuminate\Support\Facades\Auth::id())
-                                        <button type="submit" class="btn btn-warning" name="action" value="edit-project">
-                                            Upravit informace o projektu
-                                        </button>
+                                        @if($my_project->u_id_user == $loggedUser->id_user)
+                                            <button type="submit" class="btn btn-warning" name="action"
+                                                    value="edit-project">
+                                                Upravit informace o projektu
+                                            </button>
                                         @endif
                                     </form>
                                 </div>
@@ -263,10 +268,12 @@
 
                                             @foreach($team_members as $member)
                                                 <tr>
-                                                    <td><a href="{{ route('uzivatele.show', $member->u_id_user) }}">{{ $member->u_first_name.' '.$member->u_last_name }}</a></td>
+                                                    <td>
+                                                        <a href="{{ route('uzivatele.show', $member->u_id_user) }}">{{ $member->u_first_name.' '.$member->u_last_name }}</a>
+                                                    </td>
                                                     <td>{{ $member->r_name }}</td>
                                                     <td>
-                                                        @if($my_project->u_id_user == \Illuminate\Support\Facades\Auth::id() AND
+                                                        @if($my_project->u_id_user == $loggedUser->id_user AND
                                                              $member->r_id_role != 1)
                                                             <form
                                                                 action="{{ route('moje-projekty.handle-forms',  $my_project->id_project) }}"
@@ -299,7 +306,7 @@
                                 <div class="card-header py-3 px-4 text-primary">Správa nabídek spolupráce na projektu
                                 </div>
                                 <div class="card-body py-4 px-4">
-                                @if($my_project->u_id_user == \Illuminate\Support\Facades\Auth::id())
+                                @if($my_project->u_id_user == $loggedUser->id_user)
                                     <!-- Button trigger modal -->
                                         <button type="button" class="btn btn-secondary mb-3" data-bs-toggle="modal"
                                                 data-bs-target="#NewOfferCooperationModal">
@@ -321,8 +328,8 @@
                                                 <th>Název nabídky</th>
                                                 <th>Obor</th>
                                                 <th>Stav</th>
-                                                @if($my_project->u_id_user == \Illuminate\Support\Facades\Auth::id())
-                                                <th>Akce</th>
+                                                @if($my_project->u_id_user == $loggedUser->id_user)
+                                                    <th>Akce</th>
                                                 @endif
                                             </tr>
                                             </thead>
@@ -338,7 +345,7 @@
                                                             {{ $offer->s_name }}
                                                         </span>
                                                     </td>
-                                                    @if($my_project->u_id_user == \Illuminate\Support\Facades\Auth::id())
+                                                    @if($my_project->u_id_user == $loggedUser->id_user)
                                                         <td>
                                                             <!--Button trigger modal -->
                                                             <button
@@ -369,7 +376,7 @@
                                                                         value="remove-offer-cooperation"
                                                                         class='btn btn-sm btn-danger'
                                                                         onclick='deleteReviewer(event)'
-                                                                @if($my_project->u_id_user != \Illuminate\Support\Facades\Auth::id()) {{ 'disabled' }} @endif
+                                                                @if($my_project->u_id_user != $loggedUser->id_user) {{ 'disabled' }} @endif
                                                                 >
                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16"
                                                                          height="16" fill="currentColor"
@@ -399,124 +406,130 @@
             </div>
         </div>
 
-
+    @if($my_project->u_id_user == $loggedUser->id_user)
         <!-- Modal NOVA NABIDKA -->
-        <div class="modal fade" id="NewOfferCooperationModal" data-bs-backdrop="static" tabindex="-1"
-             aria-labelledby="NewOfferCooperationLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Nová nabídka spolupráce</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body px-4 py-4">
-                        <form action="{{ route('moje-projekty.handle-forms', $my_project->id_project) }}" method="post"
-                              id="new-offer-cooperation">
-                            @csrf
-                            <div class="mb-3">
-                                <label for="name-offer-cooperation" class="form-label">Název nabídky spolupráce</label>
-                                <input type="text" class="form-control" id="name-offer-cooperation"
-                                       name="name-offer-cooperation"
-                                       placeholder="Zadejte název nabídky spolupráce (např. Vývojář mobilních aplikací)"
-                                       required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="field-offer-cooperation" class="form-label">Obor nabídky spolupráce</label>
-                                <select id="field-offer-cooperation" class="form-select" aria-label="Obor spolupráce"
-                                        name="field-offer-cooperation" required>
-                                    <option selected disabled value="">Vyberte obor spolupráce</option>
-                                    @foreach($fields_all as $field)
-                                        <option value="{{ $field->id_field }}">{{ $field->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="description-offer-cooperation" class="form-label">Popis nabídky
-                                    spolupráce</label>
-                                <textarea class="form-control" id="description-offer-cooperation" rows="6"
-                                          name="description-offer-cooperation" required></textarea>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Zrušit</button>
-                        <button type="submit" form="new-offer-cooperation" class="btn btn-secondary" name="action"
-                                value="new-offer-cooperation">Vytvořit a zveřejnit
-                        </button>
+            <div class="modal fade" id="NewOfferCooperationModal" data-bs-backdrop="static" tabindex="-1"
+                 aria-labelledby="NewOfferCooperationLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Nová nabídka spolupráce</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body px-4 py-4">
+                            <form action="{{ route('moje-projekty.handle-forms', $my_project->id_project) }}"
+                                  method="post"
+                                  id="new-offer-cooperation">
+                                @csrf
+                                <div class="mb-3">
+                                    <label for="name-offer-cooperation" class="form-label">Název nabídky
+                                        spolupráce</label>
+                                    <input type="text" class="form-control" id="name-offer-cooperation"
+                                           name="name-offer-cooperation"
+                                           placeholder="Zadejte název nabídky spolupráce (např. Vývojář mobilních aplikací)"
+                                           required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="field-offer-cooperation" class="form-label">Obor nabídky
+                                        spolupráce</label>
+                                    <select id="field-offer-cooperation" class="form-select"
+                                            aria-label="Obor spolupráce"
+                                            name="field-offer-cooperation" required>
+                                        <option selected disabled value="">Vyberte obor spolupráce</option>
+                                        @foreach($fields_all as $field)
+                                            <option value="{{ $field->id_field }}">{{ $field->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description-offer-cooperation" class="form-label">Popis nabídky
+                                        spolupráce</label>
+                                    <textarea class="form-control" id="description-offer-cooperation" rows="6"
+                                              name="description-offer-cooperation" required></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Zrušit
+                            </button>
+                            <button type="submit" form="new-offer-cooperation" class="btn btn-secondary" name="action"
+                                    value="new-offer-cooperation">Vytvořit a zveřejnit
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        @if($my_project->u_id_user == \Illuminate\Support\Facades\Auth::id())
-        <!-- Modal UPRAVA NABIDKY -->
-        <div class="modal fade" id="EditOfferCooperationModal" data-bs-backdrop="static" tabindex="-1"
-             aria-labelledby="EditOfferCooperationLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Upravit nabídku spolupráce</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body px-4 py-4">
-                        <form action="{{ route('moje-projekty.handle-forms',  $my_project->id_project) }}" method="post"
-                              id="edit-offer-cooperation">
-                            @csrf
-                            <div class="mb-3">
-                                <label for="edit-name-offer-cooperation" class="form-label">Název nabídky
-                                    spolupráce</label>
-                                <input type="text" class="form-control" id="edit-name-offer-cooperation"
-                                       name="edit-name-offer-cooperation"
-                                       placeholder="Zadejte název nabídky spolupráce (např. Vývojář mobilních aplikací)"
-                                       value="" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="edit-status-offer-cooperation" class="form-label">Stav nabídky
-                                    spolupráce</label>
-                                <select id="edit-status-offer-cooperation" class="form-select"
-                                        name="edit-status-offer-cooperation"
-                                        aria-label="Stav nabídky spolupráce"
-                                        required>
-                                    <option selected disabled value="">Vyberte stav nabídky spolupráce</option>
-                                    @foreach($status_offer_all as $status)
-                                        <option value="{{ $status->id_status }}">{{ $status->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="edit-field-offer-cooperation" class="form-label">Obor nabídky
-                                    spolupráce</label>
-                                <select id="edit-field-offer-cooperation" class="form-select"
-                                        aria-label="Obor spolupráce" name="edit-field-offer-cooperation"
-                                        required>
-                                    <option selected disabled value="">Vyberte obor spolupráce</option>
-                                    @foreach($fields_all as $field)
-                                        <option value="{{ $field->id_field }}">{{ $field->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label for="edit-description-offer-cooperation" class="form-label">Popis nabídky
-                                    spolupráce</label>
-                                <textarea class="form-control" id="edit-description-offer-cooperation"
-                                          name="edit-description-offer-cooperation" rows="6" required></textarea>
-                            </div>
-                            <input type="hidden" id="edit-id-offer" name="edit-id-offer" value="">
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zrušit</button>
-                        <button type="submit" form="edit-offer-cooperation" class="btn btn-warning" name="action"
-                                value="edit-offer-cooperation">Uložit úpravy
-                        </button>
+            <!-- Modal UPRAVA NABIDKY -->
+            <div class="modal fade" id="EditOfferCooperationModal" data-bs-backdrop="static" tabindex="-1"
+                 aria-labelledby="EditOfferCooperationLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Upravit nabídku spolupráce</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body px-4 py-4">
+                            <form action="{{ route('moje-projekty.handle-forms',  $my_project->id_project) }}"
+                                  method="post"
+                                  id="edit-offer-cooperation">
+                                @csrf
+                                <div class="mb-3">
+                                    <label for="edit-name-offer-cooperation" class="form-label">Název nabídky
+                                        spolupráce</label>
+                                    <input type="text" class="form-control" id="edit-name-offer-cooperation"
+                                           name="edit-name-offer-cooperation"
+                                           placeholder="Zadejte název nabídky spolupráce (např. Vývojář mobilních aplikací)"
+                                           value="" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="edit-status-offer-cooperation" class="form-label">Stav nabídky
+                                        spolupráce</label>
+                                    <select id="edit-status-offer-cooperation" class="form-select"
+                                            name="edit-status-offer-cooperation"
+                                            aria-label="Stav nabídky spolupráce"
+                                            required>
+                                        <option selected disabled value="">Vyberte stav nabídky spolupráce</option>
+                                        @foreach($status_offer_all as $status)
+                                            <option value="{{ $status->id_status }}">{{ $status->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="edit-field-offer-cooperation" class="form-label">Obor nabídky
+                                        spolupráce</label>
+                                    <select id="edit-field-offer-cooperation" class="form-select"
+                                            aria-label="Obor spolupráce" name="edit-field-offer-cooperation"
+                                            required>
+                                        <option selected disabled value="">Vyberte obor spolupráce</option>
+                                        @foreach($fields_all as $field)
+                                            <option value="{{ $field->id_field }}">{{ $field->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="edit-description-offer-cooperation" class="form-label">Popis nabídky
+                                        spolupráce</label>
+                                    <textarea class="form-control" id="edit-description-offer-cooperation"
+                                              name="edit-description-offer-cooperation" rows="6" required></textarea>
+                                </div>
+                                <input type="hidden" id="edit-id-offer" name="edit-id-offer" value="">
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zrušit</button>
+                            <button type="submit" form="edit-offer-cooperation" class="btn btn-warning" name="action"
+                                    value="edit-offer-cooperation">Uložit úpravy
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         @endif
     </section>
 
-    <script>
+    @if($my_project->u_id_user == $loggedUser->id_user)
+        <script>
         function edit_offer_cooperation(id, name, description, id_status, id_field) {
             document.getElementById("edit-id-offer").value = id;
             document.getElementById("edit-name-offer-cooperation").value = name;
@@ -532,10 +545,8 @@
             document.getElementById("name-offer-cooperation").value = '';
             document.getElementById("field-offer-cooperation").value = '';
             document.getElementById("description-offer-cooperation").value = '';
-            //var myModal = document.getElementById('NewOfferCooperationModal');
-            //myModal.hide();
         };
-
     </script>
+    @endif
 
 @endsection

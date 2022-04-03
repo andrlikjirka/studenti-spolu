@@ -15,7 +15,6 @@
 
 @php
     $loggedUser = \Illuminate\Support\Facades\Auth::user();
-    echo $loggedUser;
 @endphp
 
 <!-- Navbar-->
