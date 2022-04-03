@@ -7,8 +7,7 @@
                 <div class="col-lg-10">
                     <h3 class="mb-3">{{ $title }}</h3>
                     <p class="text-secondary">
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Nullam feugiat, turpis at pulvinar
-                        vulputate, erat libero tristique tellus, nec bibendum odio risus sit amet ante. Etiam quis quam.
+                        Tato stránka systému obsahuje seznam všech zveřejněných týmových projektů. Výběrem konkrétního projektu si můžete zobrazit podrobné informace.
                     </p>
                 </div>
             </div>

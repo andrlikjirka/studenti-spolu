@@ -7,13 +7,14 @@
                 <div class="col-lg-6 col-md-6 text-white">
                     <h1 class="fw-bold py-3 font-monospace">studenti|spolu<sup class=""></sup></h1>
                     <p class="mt-3 lh-lg">
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Etiam egestas wisi a erat. Aliquam
-                        erat volutpat. Pellentesque sapien. Aenean vel massa quis mauris vehicula lacinia. Curabitur
-                        bibendum justo.
+                        Tento webový informační systém je určený pro vysokoškolské studenty, kteří
+                        potřebují pro své autorské projekty získat nové spolupracovníky nebo mají zájem aplikovat
+                        své znalosti a dovednosti při práci na týmových projektech ostatních autorů.
                     </p>
                 </div>
                 <div class="col-lg-6 col-md-6">
-                    <img style="width: 90%;" class="d-block m-auto" src="{{ asset('storage/index-img.png') }}" alt="studenti spoluprace">
+                    <img style="width: 90%;" class="d-block m-auto" src="{{ asset('storage/index-img.png') }}"
+                         alt="studenti spoluprace">
                 </div>
             </div>
         </div>

@@ -26,11 +26,9 @@
                 <div class="col-lg-10">
                     <h3 class="mb-3">{{ $title }}</h3>
                     <p class="text-secondary">
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Integer rutrum, orci
-                        vestibulum
-                        ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet
-                        enim.
-                        Curabitur interdum.
+                        Tato stránka systému je věnována všem vašim projektům. Můžete zde najít jak svoje autorské
+                        projekty, tak i projekty ostatních autorů, na kterých spolupracujete. Zároveň lze na této
+                        stránce vytvářet nové týmové projekty a upravovat ty existující.
                     </p>
                 </div>
             </div>
@@ -105,7 +103,8 @@
                                         <a href="{{ route('moje-projekty.show', $project_author->id_project) }}"
                                            class="btn btn-sm btn-warning" role="button">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                 fill="currentColor" class="bi bi-pencil-square me-1" viewBox="0 0 16 16">
+                                                 fill="currentColor" class="bi bi-pencil-square me-1"
+                                                 viewBox="0 0 16 16">
                                                 <path
                                                     d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                                 <path fill-rule="evenodd"
@@ -159,13 +158,15 @@
                                             </a>
                                         </p>
 
-                                        <p class="mt-2 mb-0 small">Datum zveřejnění: {{ $project_collab->create_date }}</p>
+                                        <p class="mt-2 mb-0 small">Datum
+                                            zveřejnění: {{ $project_collab->create_date }}</p>
                                     </div>
                                     <div class="card-footer py-2 px-4">
                                         <a href="{{ route('moje-projekty.show', $project_collab->id_project) }}"
                                            class="btn btn-sm btn-warning" role="button">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                                 fill="currentColor" class="bi bi-pencil-square me-1" viewBox="0 0 16 16">
+                                                 fill="currentColor" class="bi bi-pencil-square me-1"
+                                                 viewBox="0 0 16 16">
                                                 <path
                                                     d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                                                 <path fill-rule="evenodd"
@@ -238,7 +239,7 @@
 
     <script type="text/javascript">
         // Vymazání obsahu modal okna při novém zobrazení stránky
-        window.onpageshow = function(event){
+        window.onpageshow = function (event) {
             document.getElementById("new-name-project").value = '';
             document.getElementById("new-abstract-project").value = '';
             document.getElementById("new-description-project").value = '';
