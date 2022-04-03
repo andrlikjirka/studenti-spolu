@@ -39,8 +39,9 @@ class ProjectsController extends Controller
                 AND   c.id_user = u.id_user
                 AND   p.id_status = s.id_status
                 AND   p.id_project = :id_project
-                AND   c.id_role = :id_role;
-        ', [':id_project' => $id_project, ':id_role' => 1]);
+                AND   c.id_role = :id_role
+                AND   u.id_status = :id_status;
+        ', [':id_project' => $id_project, ':id_role' => 1, ':id_status' => 1]);
 
         $team_members = DB::select('
         SELECT u.id_user as u_id_user, u.first_name as u_first_name, u.last_name as u_last_name, u.login as u_login, r.name as r_name
@@ -68,10 +69,14 @@ class ProjectsController extends Controller
             ':id_project' => $id_project,
         ]);
 
-        return view('projekty.show')
-            ->with('project', $project[0]) //$project je pole s jednim prvkem = ziskany projekt => chci primo ziskane pole, proto [0]
-            ->with('team_members', $team_members)
-            ->with('project_offers', $project_offers_cooperation);
+        if(count($project) == 1) {
+            return view('projekty.show')
+                ->with('project', $project[0]) //$project je pole s jednim prvkem = ziskany projekt => chci primo ziskane pole, proto [0]
+                ->with('team_members', $team_members)
+                ->with('project_offers', $project_offers_cooperation);
+        } else {
+            return abort(404, 'Projekt nenalezen.'); //404 strana
+        }
     }
 
     public function create()
