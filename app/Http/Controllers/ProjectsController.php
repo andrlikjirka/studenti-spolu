@@ -12,16 +12,17 @@ class ProjectsController extends Controller
     {
         $title = 'Projekty';
         $projects = DB::select('
-            SELECT p.id_project as id_project, p.name as name, p.abstract as abstract, s.id_status as s_id_status,
-                   s.name as s_name, u.first_name as u_first_name, u.last_name as u_last_name, DATE(p.create_date) as create_date
+            SELECT p.id_project as id_project, p.name as name, p.abstract as abstract, s.id_status as s_id_status, DATE(p.create_date) as create_date,
+                   s.name as s_name, u.id_user as u_id_user, u.first_name as u_first_name, u.last_name as u_last_name, u.id_status as u_id_status
             FROM project p, cooperation c, users u, status_project s, role r
                 WHERE p.id_project = c.id_project
                 AND   c.id_user = u.id_user
                 AND   p.id_status = s.id_status
                 AND   r.id_role = c.id_role
+                AND   u.id_status = :id_status
                 AND   r.id_role = :id_role
             ORDER BY p.create_date DESC;
-        ', [':id_role' => 1]); //ziskat data z DB
+        ', [':id_status' => 1, ':id_role' => 1]); //ziskat data z DB
 
         return view('projekty/index')
             ->with('title', $title)
@@ -59,9 +60,11 @@ class ProjectsController extends Controller
                 WHERE o.id_project = p.id_project
                 AND   o.id_field = f.id_field
                 AND   o.id_status = s.id_status
+                AND   s.id_status = :id_status
                 AND   p.id_project = :id_project
                 ORDER BY o.create_date;
         ', [
+            ':id_status' => 1,
             ':id_project' => $id_project,
         ]);
 

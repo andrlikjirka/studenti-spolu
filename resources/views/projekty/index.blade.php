@@ -19,7 +19,8 @@
                     @foreach($projects as $project)
                         <div class="card bg-white mb-3">
                             <div class="card-body p-4">
-                                <a href="{{ route('projekty.show', $project->id_project) }}" class="text-decoration-none">
+                                <a href="{{ route('projekty.show', $project->id_project) }}"
+                                   class="text-decoration-none">
                                     <h5 class="card-title">{{ $project->name }}</h5>
                                 </a>
                                 <p class="card-text">
@@ -27,16 +28,18 @@
                                 </p>
                                 <span class="badge rounded-pill
                                     @if($project->s_id_status == 1) {{ 'bg-warning' }}
-                                    @elseif($project->s_id_status == 2) {{ 'bg-success' }}
-                                    @elseif($project->s_id_status == 3) {{ 'bg-danger' }}
-                                    @endif">{{ $project->s_name }}</span>
-                                <p class="mt-2 mb-0 small">Autor: <a href="" class="text-decoration-none">{{ $project->u_first_name.' '.$project->u_last_name}}</a></p>
+                                @elseif($project->s_id_status == 2) {{ 'bg-success' }}
+                                @elseif($project->s_id_status == 3) {{ 'bg-danger' }}
+                                @endif">{{ $project->s_name }}</span>
+                                <p class="mt-2 mb-0 small">Autor: <a href="{{ route('uzivatele.show', $project->u_id_user) }}"
+                                                                     class="text-decoration-none">{{ $project->u_first_name.' '.$project->u_last_name}}</a>
+                                </p>
                                 <p class="mt-1 mb-0 small">Datum zveřejnění: {{ $project->create_date }}</p>
                             </div>
                         </div>
-                    @endforeach
+                @endforeach
 
-                    <!--
+                <!--
                     <div class="card bg-white mb-3">
                         <div class="card-body p-4">
                             <a href="./projekty/1" class="text-decoration-none">
