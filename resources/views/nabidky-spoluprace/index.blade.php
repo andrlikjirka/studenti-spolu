@@ -31,24 +31,24 @@
                     </div>
 
                     @foreach($offers as $offer)
-                        <div class="card bg-white mb-3">
-                            <div class="card-body p-4">
-                                <a href="{{ route('nabidky-spoluprace.show', $offer->o_id_offer) }}" class="text-decoration-none">
-                                    <h5 class="card-title text-primary">{{ $offer->o_name }}</h5>
-                                </a>
-                                <hr>
-                                <div class="mt-0">
-                                    <span class="small">Obor: </span>
-                                    <span class="badge rounded-pill bg-primary ">{{ $offer->f_name }}</span>
-                                    <p class="mt-2 mb-2 small">Projekt:
-                                        <a href="{{ route('projekty.show', $offer->p_id_project) }}" class="text-decoration-none">
-                                            {{ $offer->p_name }}
-                                        </a>
-                                    </p>
-                                    <p class="mt-0 mb-0 small">Datum zveřejnění: {{ $offer->o_create_date }}</p>
+                            <div class="card bg-white mb-3">
+                                <div class="card-body p-4">
+                                    <a href="{{ route('nabidky-spoluprace.show', $offer->o_id_offer) }}" class="text-decoration-none">
+                                        <h5 class="card-title text-primary">{{ $offer->o_name }}</h5>
+                                    </a>
+                                    <hr>
+                                    <div class="mt-0">
+                                        <span class="small">Obor: </span>
+                                        <span class="badge rounded-pill bg-primary ">{{ $offer->f_name }}</span>
+                                        <p class="mt-2 mb-2 small">Projekt:
+                                            <a href="{{ route('projekty.show', $offer->p_id_project) }}" class="text-decoration-none">
+                                                {{ $offer->p_name }}
+                                            </a>
+                                        </p>
+                                        <p class="mt-0 mb-0 small">Datum zveřejnění: {{ $offer->o_create_date }}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                     @endforeach
 
 

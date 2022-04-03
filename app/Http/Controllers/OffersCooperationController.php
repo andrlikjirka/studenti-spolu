@@ -23,12 +23,13 @@ class OffersCooperationController extends Controller
                 WHERE o.id_project = p.id_project
                 AND   o.id_field = f.id_field
                 AND   o.id_status = s.id_status
+                AND   s.id_status = :id_status
                 AND   f.id_field IN (
                     SELECT u.id_field FROM users_field u
                         WHERE u.id_user = :id_user
                 )
                 ORDER BY o.create_date DESC;
-        ', [ ':id_user' => Auth::id() ]);
+        ', [':id_status' => 1,':id_user' => Auth::id() ]);
             $request->session()->put('match', 'true');
         } else {
             $offers = DB::select('
@@ -39,8 +40,9 @@ class OffersCooperationController extends Controller
                 WHERE o.id_project = p.id_project
                 AND   o.id_field = f.id_field
                 AND   o.id_status = s.id_status
+                AND   s.id_status = :id_status
                 ORDER BY o.create_date DESC;
-        ');
+        ', [':id_status' => 1]);
             $request->session()->forget('match');
         }
 
