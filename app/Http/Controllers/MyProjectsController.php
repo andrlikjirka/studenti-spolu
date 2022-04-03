@@ -59,23 +59,28 @@ class MyProjectsController extends Controller
         $logged_user_id = Auth::id();
 
         $my_project = $this->getMyProjectInfo($id);
-        $status_project_all = $this->getAllProjectStatus();
+        if (count($my_project) == 1) {
+            $status_project_all = $this->getAllProjectStatus();
 
-        $team_members = $this->getTeamMembers($id);
+            $team_members = $this->getTeamMembers($id);
 
-        $offers_cooperation = $this->getOffersCooperation($id);
+            $offers_cooperation = $this->getOffersCooperation($id);
 
-        $fields_all = $this->getAllFields();
-        $status_offer_all = $this->getAllOfferStatus();
+            $fields_all = $this->getAllFields();
+            $status_offer_all = $this->getAllOfferStatus();
 
-        return view('moje-projekty.show')
-            ->with('title', $title)
-            ->with('my_project', $my_project[0])
-            ->with('status_project_all', $status_project_all)
-            ->with('team_members', $team_members)
-            ->with('offers_cooperation', $offers_cooperation)
-            ->with('fields_all', $fields_all)
-            ->with('status_offer_all', $status_offer_all);
+            return view('moje-projekty.show')
+                ->with('title', $title)
+                ->with('my_project', $my_project[0])
+                ->with('status_project_all', $status_project_all)
+                ->with('team_members', $team_members)
+                ->with('offers_cooperation', $offers_cooperation)
+                ->with('fields_all', $fields_all)
+                ->with('status_offer_all', $status_offer_all);
+        } else {
+            return abort(404, 'Můj projekt nenalezen.'); //404 strana
+        }
+
     }
 
     private function getMyProjectInfo($id_project)

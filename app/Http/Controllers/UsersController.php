@@ -63,10 +63,15 @@ class UsersController extends Controller
             ':id_role' => 1,
         ]);
 
-        return view('uzivatele.show')
-            ->with('user', $user[0])
-            ->with('user_fields', $user_fields)
-            ->with('user_projects', $user_projects);
+        if(count($user) == 1) {
+            return view('uzivatele.show')
+                ->with('user', $user[0])
+                ->with('user_fields', $user_fields)
+                ->with('user_projects', $user_projects);
+        } else {
+            return abort(404, 'Uživatel nenalezen.'); //404 strana
+        }
+
     }
 
     public function create()
