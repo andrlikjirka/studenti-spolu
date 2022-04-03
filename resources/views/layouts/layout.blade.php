@@ -52,10 +52,12 @@
                             <li><a class="dropdown-item" href="{{ url('./moje-projekty') }}">Moje projekty</a></li>
                             <li><a class="dropdown-item" href="{{ url('./zadosti-o-spolupraci') }}">Žádosti o
                                     spolupráci</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="">Administrace aplikace</a></li>
+                            @if($loggedUser->id_right == 1)
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="">Administrace aplikace</a></li>
+                            @endif
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
