@@ -31,6 +31,7 @@ Route::get('/projekty', [ProjectsController::class, 'index'])
 
 Route::get('/projekty/{id}', [ProjectsController::class, 'show'])
     ->where('id', '[0-9]+')
+    ->middleware('auth')
     ->name('projekty.show');
 
 Route::get('/nabidky-spoluprace', [OffersCooperationController::class, 'index'])

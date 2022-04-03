@@ -48,7 +48,15 @@ class RegistrationController extends Controller
             ', [':id_user' => $user->id_user, 'id_field' => $field]);
         }
 
-        Auth::login($user);
-        return redirect()->route('index');
+        if (isset($_COOKIE['url'])) {
+            $redirectTo = $_COOKIE['url'];
+            setcookie('url', '', time() - 3600);
+        }
+        $request->session()->regenerate();
+        if (isset($redirectTo)) {
+            return redirect($redirectTo);
+        } else {
+            return redirect()->route('index');
+        }
     }
 }
