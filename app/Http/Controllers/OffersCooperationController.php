@@ -61,15 +61,17 @@ class OffersCooperationController extends Controller
                 WHERE o.id_project = p.id_project
                 AND   o.id_field = f.id_field
                 AND   o.id_status = s.id_status
+                AND   s.id_status = :id_status
                 AND   o.id_offer = :id_offer;
             ', [
-            ':id_offer' => $id_offer,
-        ]);
-
-        $isUser_TeamMember = $this->isUserTeamMember($offer_cooperation[0]->p_id_project);
-        $userAlreadySentWRequest = $this->userAlreadySentWaitingRequest($id_offer);
+                ':id_status' => 1,
+                ':id_offer' => $id_offer,
+            ]);
 
         if (count($offer_cooperation) == 1) {
+            $isUser_TeamMember = $this->isUserTeamMember($offer_cooperation[0]->p_id_project);
+            $userAlreadySentWRequest = $this->userAlreadySentWaitingRequest($id_offer);
+
             return view('nabidky-spoluprace.show')
                 ->with('offer_cooperation', $offer_cooperation[0]) //$offer_cooperation je pole s jednim prvkem = ziskana nabidka => chci primo ziskany prvek, proto [0]
                 ->with('isUser_TeamMember', $isUser_TeamMember)
