@@ -59,24 +59,6 @@
 
             <div class="row mb-5 justify-content-center">
                 <div class="col-lg-10">
-                    <!-- FILTR (HLEDANI DNE PROJEKTU) -->
-                    <div class="mb-4">
-                        <form id="hledat-zadosti" action="" method="post" class="">
-                            <div class="">
-                                <select class="form-select-sm" aria-label="Default select example">
-                                    <option selected value=""></option>
-                                    <option value="1">Lorem ipsum dolor sit amet</option>
-                                    <option value="2">Lorem ipsum dolor sit amet 2</option>
-                                    <option value="3">Lorem ipsum dolor sit amet 3</option>
-                                    <option value="4">Lorem ipsum dolor sit amet 4</option>
-                                </select>
-                                <button type="submit" class="mb-1 ms-2 btn btn-sm btn-outline-primary" name="action"
-                                        value="hledat-uzivatele">Hledat žádosti dle projektu
-                                </button>
-                            </div>
-                        </form>
-                        <hr class="dropdown-divider">
-                    </div>
 
                     <ul class="nav nav-pills mb-4 justify-content-center" id="pills-tab" role="tablist">
                         <li class="nav-item" role="presentation">
@@ -162,7 +144,7 @@
                                                         <path
                                                             d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
                                                     </svg>
-                                                    Přijmout žádost
+                                                    Schválit žádost
                                                 </button>
                                             </form>
                                             <form action="{{ route('zadosti-o-spolupraci.handle-forms') }}"

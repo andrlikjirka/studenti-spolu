@@ -23,8 +23,8 @@
                             <div class="">
                                 <input type="checkbox" id="match-checked" name="match-checked"
                                        value="true" @if(session('match') == true) {{ 'checked' }} @else {{ '' }} @endif>
-                                <label for="match-checked">Zobrazit nabídky spolupráce podle vašich znalostí a
-                                    dovedností v oboru</label>
+                                <label for="match-checked">Zobrazit nabídky spolupráce odpovídající vašim znalostem a
+                                    dovednostem</label>
                                 <button type="submit" class="mb-1 ms-2 btn btn-sm btn-outline-primary" name="action"
                                         value="match_offer">Zobrazit
                                 </button>

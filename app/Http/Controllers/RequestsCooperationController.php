@@ -28,7 +28,8 @@ class RequestsCooperationController extends Controller
                     WHERE p.id_project = c.id_project
                     AND   c.id_user = :id_user
                     AND   c.id_role = :id_role
-                );
+                )
+            ORDER BY r.create_date DESC;
         ', [
             ':id_user' => Auth::id(),
             ':id_role' => 1

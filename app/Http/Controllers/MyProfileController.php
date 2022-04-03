@@ -90,6 +90,10 @@ class MyProfileController extends Controller
 
     private function editFields(Request $request)
     {
+        $request->validate([
+           'fields' => 'required'
+        ]);
+
         $fields = $request->input('fields');
         $result = DB::transaction(function () use ($fields){
             DB::delete('DELETE FROM users_field WHERE id_user = :id_user', [':id_user' => Auth::id()]);

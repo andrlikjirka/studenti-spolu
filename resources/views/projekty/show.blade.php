@@ -123,7 +123,7 @@
                                             @foreach($team_members as $member)
                                                 <tr>
                                                     <td>
-                                                        <a href="{{ url('/uzivatele-detail', $member->u_id_user) }}"> {{ $member->u_first_name.' '.$member->u_last_name }} </a>
+                                                        <a href="{{ route('uzivatele.show', $member->u_id_user) }}"> {{ $member->u_first_name.' '.$member->u_last_name }} </a>
                                                     </td>
                                                     <td>{{ $member->u_login}}</td>
                                                     <td>{{ $member->r_name }}</td>

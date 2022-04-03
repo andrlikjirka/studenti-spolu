@@ -30,6 +30,7 @@ class RegistrationController extends Controller
             'login' => 'required|string|unique:users|max:60',
             'email' => 'required|email|max:255',
             'password' => 'required|string|max:255|confirmed',
+            'fields' => 'required'
         ]);
 
         $user = User::create([
@@ -53,6 +54,7 @@ class RegistrationController extends Controller
             setcookie('url', '', time() - 3600);
         }
         $request->session()->regenerate();
+        Auth::login($user);
         if (isset($redirectTo)) {
             return redirect($redirectTo);
         } else {

@@ -17,7 +17,7 @@
             <div class="row mb-4 justify-content-center">
                 <div class="col-lg-10">
                     <h3 class="">{{ $user->first_name.' '.$user->last_name }}</h3>
-                    <a href="mailto::{{ $user->email }}" type="button" class="btn btn-sm btn-outline-secondary mt-2">
+                    <a href="mailto:{{ $user->email }}" type="button" class="btn btn-sm btn-outline-secondary mt-2">
                         <i class="bi bi-envelope-fill"></i>
                         Kontaktovat e-mailem
                     </a>

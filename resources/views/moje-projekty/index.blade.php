@@ -26,9 +26,9 @@
                 <div class="col-lg-10">
                     <h3 class="mb-3">{{ $title }}</h3>
                     <p class="text-secondary">
-                        Tato stránka systému je věnována všem vašim projektům. Můžete zde najít jak svoje autorské
-                        projekty, tak i projekty ostatních autorů, na kterých spolupracujete. Zároveň lze na této
-                        stránce vytvářet nové týmové projekty a upravovat ty existující.
+                        Tato stránka systému je věnována všem vašim projektům. Můžete zde najít svoje autorské
+                        projekty i projekty ostatních autorů, na kterých spolupracujete. Zároveň lze na této
+                        stránce vytvářet nové týmové projekty a existující upravovat.
                     </p>
                 </div>
             </div>

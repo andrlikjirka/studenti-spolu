@@ -18,7 +18,7 @@
                     <div class="card">
                         <div class="card-header py-3 px-4 text-primary">Registrace nového uživatele</div>
                         <div class="card-body py-4 px-4">
-                            <form action="{{ route('registrace') }}" method="post" autocomplete="off">
+                            <form action="{{ route('registrace') }}" method="post" autocomplete="off" oninput="passwordConfirm()">
                             @csrf
                             <!-- Jméno, Uživatelské jméno -->
                                 <div class="row align-items-center mb-3">
@@ -131,6 +131,7 @@
                 submitButton.classList.add('disabled');
             }
         }
+
     </script>
 
 @endsection
