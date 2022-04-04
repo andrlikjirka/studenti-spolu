@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FilesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectsController;
 use App\Http\Controllers\OffersCooperationController;
@@ -123,3 +124,7 @@ Route::post('/prihlaseni', [LoginController::class, 'handle'])
 Route::post('/odhlaseni', [LogoutController::class, 'handle'])
     ->middleware('prevent-back-history')
     ->name('odhlaseni');
+
+Route::get('/soubory/{id}', [FilesController::class, 'show'])
+    ->middleware('auth')
+    ->name('soubory');

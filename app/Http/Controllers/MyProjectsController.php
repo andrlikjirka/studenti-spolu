@@ -61,10 +61,9 @@ class MyProjectsController extends Controller
         $my_project = $this->getMyProjectInfo($id);
         if (count($my_project) == 1) {
             $status_project_all = $this->getAllProjectStatus();
-
             $team_members = $this->getTeamMembers($id);
-
             $offers_cooperation = $this->getOffersCooperation($id);
+            $files = $this->getProjectFiles($id);
 
             $fields_all = $this->getAllFields();
             $status_offer_all = $this->getAllOfferStatus();
@@ -73,6 +72,7 @@ class MyProjectsController extends Controller
                 ->with('title', $title)
                 ->with('my_project', $my_project[0])
                 ->with('status_project_all', $status_project_all)
+                ->with('files', $files)
                 ->with('team_members', $team_members)
                 ->with('offers_cooperation', $offers_cooperation)
                 ->with('fields_all', $fields_all)
@@ -139,6 +139,14 @@ class MyProjectsController extends Controller
             ':id_project' => $id_project,
         ]);
         return $offersCooperation;
+    }
+
+    private function getProjectFiles($id_project)
+    {
+        $projectFiles = DB::select('
+           SELECT * FROM file WHERE id_project = :id_project;
+        ', [':id_project' => $id_project]);
+        return $projectFiles;
     }
 
     private function getAllFields()
@@ -239,7 +247,25 @@ class MyProjectsController extends Controller
     // funkce pro zpracovani doplnujicich formularu na strance detailu mého projektu
     public function handle(Request $request, $id_project)
     {
-        if ($request->input('action') == 'remove-team-member') {
+        if ($request->input('action') == 'file-upload') {
+            $result = $this->file_upload($request, $id_project);
+            if ($result == 1) {
+                return redirect()->route('moje-projekty.show', $id_project)
+                    ->with('file-upload-message', 'Nahrání souboru proběhlo úspěšně.');
+            } else {
+                return redirect()->route('moje-projekty.show', $id_project)
+                    ->with('error-file-upload-message', 'Nahrání souboru selhalo.');
+            }
+        } else if ($request->input('action') == 'delete-file') {
+            $result = $this->deleteFile($request);
+            if ($result == 1) {
+                return redirect()->route('moje-projekty.show', $id_project)
+                ->with('delete-file-message', 'Smazání souboru proběhlo úspěšně.');
+            } else {
+                return redirect()->route('moje-projekty.show', $id_project)
+                    ->with('error-delete-file-message', 'Smazání souboru selhalo.');
+            }
+        } else if ($request->input('action') == 'remove-team-member') {
             $result = $this->remove_team_member($request, $id_project);
             if ($result == 1) {
                 return redirect()->route('moje-projekty.show', $id_project)
@@ -362,6 +388,52 @@ class MyProjectsController extends Controller
             ':id_offer' => $remove_id_offer,
         ]);
 
+        return $result;
+    }
+
+    private function file_upload(Request $request, $id_project)
+    {
+        $request->validate([
+            'id_user' => 'required|integer'
+        ]);
+        $id_user = $request->input('id_user');
+        $file = $request->file('uploadFile');
+        $originalName = $file->getClientOriginalName();
+        $type = $file->getClientOriginalExtension();
+        $uploadDate = date('Y-m-d G:i:s');
+        $uploadDateTime = date("Y-m-d") . "_" . time();
+        $uniqueName = $id_user.'_'.$id_project.'_'.$uploadDateTime;
+        $destinationPath = storage_path() .'\app\uploads\\';
+        $target = $destinationPath.basename($uniqueName.'.'.$type);
+        $result = DB::insert('
+            INSERT INTO file(name, unique_name, type, upload_date, id_project)
+            VALUES (:name, :unique_name, :type, :upload_date, :id_project);
+            ', [
+                ':name' => $originalName,
+                ':unique_name' => $uniqueName,
+                ':type' => $type,
+                ':upload_date' => $uploadDate,
+                ':id_project' => $id_project,
+            ]);
+        move_uploaded_file($_FILES['uploadFile']['tmp_name'], $target);
+        return $result;
+    }
+
+    private function deleteFile(Request $request)
+    {
+        $request->validate([
+            'delete_id_file' => 'required|integer'
+        ]);
+        $delete_id_file = $request->input('delete_id_file');
+        $fileInfo = DB::select('SELECT * FROM file WHERE id_file=:id_file', [':id_file' => $delete_id_file]);
+        $result = DB::delete('
+            DELETE FROM file WHERE id_file = :id_file;
+        ', [':id_file' => $delete_id_file]);
+        if ($result == 1) {
+            $destinationPath = storage_path() .'\app\uploads\\';
+            $target = $destinationPath.basename($fileInfo[0]->unique_name.'.'.$fileInfo[0]->type);
+            unlink($target);
+        }
         return $result;
     }
 

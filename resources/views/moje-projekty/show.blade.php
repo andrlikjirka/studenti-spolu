@@ -18,46 +18,44 @@
 
             @if(session('new_project_message'))
                 <div class="alert alert-success small text-center mb-5"> {{ session('new_project_message') }} </div>
-            @endif
-
-            @if(session('edit_project_message'))
+            @elseif(session('edit_project_message'))
                 <div class="alert alert-success small text-center mb-5"> {{ session('edit_project_message') }} </div>
-            @endif
-
-            @if(session('remove_team_member_message'))
+            @elseif(session('remove_team_member_message'))
                 <div
                     class="alert alert-success small text-center mb-5"> {{ session('remove_team_member_message') }} </div>
-            @endif
-            @if(session('error_remove_team_member_message'))
+            @elseif(session('error_remove_team_member_message'))
                 <div
                     class="alert alert-danger small text-center mb-5"> {{ session('error_remove_team_member_message') }} </div>
-            @endif
-
-            @if(session('new-offer-cooperation-message'))
+            @elseif(session('new-offer-cooperation-message'))
                 <div
                     class="alert alert-success small text-center mb-5"> {{ session('new-offer-cooperation-message') }} </div>
-            @endif
-            @if(session('error-new-offer-cooperation-message'))
+            @elseif(session('error-new-offer-cooperation-message'))
                 <div
                     class="alert alert-danger small text-center mb-5"> {{ session('error-new-offer-cooperation-message') }} </div>
-            @endif
-
-            @if(session('remove-offer-cooperation-message'))
+            @elseif(session('remove-offer-cooperation-message'))
                 <div
                     class="alert alert-success small text-center mb-5"> {{ session('remove-offer-cooperation-message') }} </div>
-            @endif
-            @if(session('error-remove-offer-cooperation-message'))
+            @elseif(session('error-remove-offer-cooperation-message'))
                 <div
                     class="alert alert-danger small text-center mb-5"> {{ session('error-remove-offer-cooperation-message') }} </div>
-            @endif
-
-            @if(session('edit-offer-cooperation-message'))
+            @elseif(session('edit-offer-cooperation-message'))
                 <div
                     class="alert alert-success small text-center mb-5"> {{ session('edit-offer-cooperation-message') }} </div>
-            @endif
-            @if(session('error-edit-offer-cooperation-message'))
+            @elseif(session('error-edit-offer-cooperation-message'))
                 <div
                     class="alert alert-danger small text-center mb-5"> {{ session('error-edit-offer-cooperation-message') }} </div>
+            @elseif(session('file-upload-message'))
+                <div
+                    class="alert alert-success small text-center mb-5"> {{ session('file-upload-message') }} </div>
+            @elseif(session('error-file-upload-message'))
+                <div
+                    class="alert alert-danger small text-center mb-5"> {{ session('error-file-upload-message') }} </div>
+            @elseif(session('delete-file-message'))
+                    <div
+                        class="alert alert-success small text-center mb-5"> {{ session('delete-file-message') }} </div>
+            @elseif(session('error-delete-file-message'))
+                    <div
+                        class="alert alert-danger small text-center mb-5"> {{ session('error-delete-file-message') }} </div>
             @endif
 
             <div class="row mb-5 justify-content-center">
@@ -183,18 +181,21 @@
                             <div class="card mt-4">
                                 <div class="card-header py-3 px-4 text-primary">Soubory projektu</div>
                                 <div class="card-body py-4 px-4">
-                                    <form id="soubory-projekt" action="" method="post" enctype="multipart/form-data">
-                                        <label for="formFileMultiple" class="form-label">Výběr souborů</label>
+                                    <form id="project-file" action="{{ route('moje-projekty.handle-forms', $my_project->id_project) }}" method="post" enctype="multipart/form-data">
+                                        @csrf
+                                        <label for="formFileMultiple" class="form-label">Výběr souboru</label>
                                         <div class="row">
                                             <div class="col-lg-9 col-md-8">
                                                 <div class="mb-3">
-                                                    <input class="form-control" type="file" id="formFileMultiple"
-                                                           multiple>
+                                                    <input class="form-control" type="file" id="formFile"
+                                                           name="uploadFile" required>
+                                                    <input type="hidden" name="id_user"
+                                                           value="{{ $loggedUser->id_user }}">
                                                 </div>
                                             </div>
                                             <div class="col-lg-3 col-md-4">
                                                 <button type="submit" class="btn btn-primary" name="action"
-                                                        value="upravit-projekt">Nahrát soubory
+                                                        value="file-upload">Nahrát soubor
                                                 </button>
                                             </div>
                                         </div>
@@ -209,33 +210,22 @@
                                             </tr>
                                             </thead>
                                             <tbody class="small">
-                                            <tr>
-                                                <td><a href="">Dokumentace projektu</a></td>
-                                                <td>
-                                                    <form action="" class="m-0 p-0">
-                                                        <!-- input hidden -->
-                                                        <button type='submit'
-                                                                class='btn btn-sm btn-outline-danger m-0 py-1 px-2'
-                                                                onclick='deleteReviewer(event)'>
-                                                            Odebrat
-                                                        </button>
-                                                    </form>
-                                                </td>
-                                            </tr>
+                                            @foreach($files as $file)
+                                                <tr>
+                                                    <td><a href="{{ route('soubory', $file->id_file) }}" target="_blank">{{ $file->name }}</a></td>
+                                                    <td>
+                                                        <form action="{{ route('moje-projekty.handle-forms', $my_project->id_project) }}" method="post" class="m-0 p-0">
+                                                            @csrf
+                                                            <input type="hidden" name="delete_id_file" value="{{ $file->id_file }}">
+                                                            <button type='submit' name="action" value="delete-file"
+                                                                    class='btn btn-sm btn-outline-danger m-0 py-0 px-2 delete-file-button'>
+                                                                Odebrat
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
 
-                                            <tr>
-                                                <td><a href="">Uživatelský manuál</a></td>
-                                                <td>
-                                                    <form action="" class="m-0 p-0">
-                                                        <!-- input hidden -->
-                                                        <button type='submit'
-                                                                class='btn btn-sm btn-outline-danger m-0 py-1 px-2'
-                                                                onclick='deleteReviewer(event)'>
-                                                            Odebrat
-                                                        </button>
-                                                    </form>
-                                                </td>
-                                            </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -540,25 +530,34 @@
             };
 
             let remove_member_buttons = document.getElementsByClassName('remove-member-button');
-            for(let i = 0; i < remove_member_buttons.length; i++) {
+            for (let i = 0; i < remove_member_buttons.length; i++) {
                 remove_member_buttons[i].addEventListener("click", removeMember)
             }
             function removeMember(event) {
-                if (!window.confirm('Opravdu chcete smazat člena týmu?')) {
+                if (!window.confirm('Opravdu chcete smazat vybraného člena týmu?')) {
                     event.preventDefault();
                 }
             }
 
             let remove_offer_buttons = document.getElementsByClassName('remove-offer-button');
-            for(let i = 0; i < remove_offer_buttons.length; i++) {
+            for (let i = 0; i < remove_offer_buttons.length; i++) {
                 remove_offer_buttons[i].addEventListener("click", removeOffer)
             }
             function removeOffer(event) {
-                if (!window.confirm('Opravdu chcete smazat nabídku spolupráce?')) {
+                if (!window.confirm('Opravdu chcete smazat vybranou nabídku spolupráce?')) {
                     event.preventDefault();
                 }
             }
 
+            let delete_file_buttons = document.getElementsByClassName('delete-file-button');
+            for (let i = 0; i < delete_file_buttons.length; i++) {
+                delete_file_buttons[i].addEventListener("click", deleteFile)
+            }
+            function deleteFile(event) {
+                if (!window.confirm('Opravdu chcete smazat vybraný soubor?')) {
+                    event.preventDefault();
+                }
+            }
         </script>
     @endif
 
