@@ -118,7 +118,7 @@
                                             @method('DELETE')
                                             <input type="hidden" name="delete_id_project"
                                                    value="{{ $project_author->id_project }}">
-                                            <button type="submit" class="btn btn-sm btn-danger">
+                                            <button type="submit" class="btn btn-sm btn-danger delete-project-button">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                      fill="currentColor" class="bi bi-x-circle me-1"
                                                      viewBox="0 0 16 16">
@@ -246,6 +246,17 @@
             //var myModal = document.getElementById('NewProjectModal');
             //myModal.hide();
         };
+
+        let delete_project_buttons = document.getElementsByClassName('delete-project-button');
+        for(let i = 0; i < delete_project_buttons.length; i++) {
+            delete_project_buttons[i].addEventListener("click", removeProject)
+        }
+        function removeProject(event) {
+            if (!window.confirm('Opravdu chcete smazat projekt?')) {
+                event.preventDefault();
+            }
+        }
+
 
     </script>
 

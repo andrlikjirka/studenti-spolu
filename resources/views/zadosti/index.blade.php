@@ -261,7 +261,7 @@
                                                 @csrf
                                                 <input type="hidden" name="delete-request-sent"
                                                        value="{{ $request_sent->r_id_request }}">
-                                                <button type="submit" class="btn btn-sm btn-danger" name="action"
+                                                <button type="submit" class="btn btn-sm btn-danger" name="action" id="delete-request-button"
                                                         value="delete-request-cooperation">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                          fill="currentColor" class="bi bi-x-circle me-1"
@@ -348,6 +348,14 @@
             document.getElementById("edit-request-field").textContent = '';
             document.getElementById("edit-request-message").value = '';
         };
+
+        document.getElementById('delete-request-button').addEventListener('click', deleteRequest);
+        function deleteRequest(event) {
+            if (!window.confirm('Opravdu chcete zrušit žádost o spolupráci?')) {
+                event.preventDefault();
+            }
+        }
+
     </script>
 
 @endsection

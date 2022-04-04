@@ -276,8 +276,7 @@
                                                                        value="{{ $member->u_id_user }}">
                                                                 <button type='submit' name="action"
                                                                         value="remove-team-member"
-                                                                        class='btn btn-sm btn-outline-danger m-0 py-0 px-2'
-                                                                        onclick='deleteReviewer(event)'>
+                                                                        class='btn btn-sm btn-outline-danger m-0 py-0 px-2 remove-member-button'>
                                                                     Odebrat
                                                                 </button>
                                                             </form>
@@ -367,7 +366,7 @@
                                                                        value="{{ $offer->o_id_offer }}">
                                                                 <button type='submit' name="action"
                                                                         value="remove-offer-cooperation"
-                                                                        class='btn btn-sm btn-danger'
+                                                                        class='btn btn-sm btn-danger remove-offer-button'
                                                                         onclick='deleteReviewer(event)'
                                                                 @if($my_project->u_id_user != $loggedUser->id_user) {{ 'disabled' }} @endif
                                                                 >
@@ -523,23 +522,44 @@
 
     @if($my_project->u_id_user == $loggedUser->id_user)
         <script>
-        function edit_offer_cooperation(id, name, description, id_status, id_field) {
-            document.getElementById("edit-id-offer").value = id;
-            document.getElementById("edit-name-offer-cooperation").value = name;
-            document.getElementById("edit-description-offer-cooperation").value = description;
-            var statusSelect = document.getElementById("edit-status-offer-cooperation");
-            statusSelect[id_status].selected = true;
-            var fieldSelect = document.getElementById("edit-field-offer-cooperation");
-            fieldSelect[id_field].selected = true;
-        }
+            function edit_offer_cooperation(id, name, description, id_status, id_field) {
+                document.getElementById("edit-id-offer").value = id;
+                document.getElementById("edit-name-offer-cooperation").value = name;
+                document.getElementById("edit-description-offer-cooperation").value = description;
+                var statusSelect = document.getElementById("edit-status-offer-cooperation");
+                statusSelect[id_status].selected = true;
+                var fieldSelect = document.getElementById("edit-field-offer-cooperation");
+                fieldSelect[id_field].selected = true;
+            }
 
-        // Vymazání obsahu modal okna při novém zobrazení stránky
-        window.onpageshow = function (event) {
-            document.getElementById("name-offer-cooperation").value = '';
-            document.getElementById("field-offer-cooperation").value = '';
-            document.getElementById("description-offer-cooperation").value = '';
-        };
-    </script>
+            // Vymazání obsahu modal okna při novém zobrazení stránky
+            window.onpageshow = function (event) {
+                document.getElementById("name-offer-cooperation").value = '';
+                document.getElementById("field-offer-cooperation").value = '';
+                document.getElementById("description-offer-cooperation").value = '';
+            };
+
+            let remove_member_buttons = document.getElementsByClassName('remove-member-button');
+            for(let i = 0; i < remove_member_buttons.length; i++) {
+                remove_member_buttons[i].addEventListener("click", removeMember)
+            }
+            function removeMember(event) {
+                if (!window.confirm('Opravdu chcete smazat člena týmu?')) {
+                    event.preventDefault();
+                }
+            }
+
+            let remove_offer_buttons = document.getElementsByClassName('remove-offer-button');
+            for(let i = 0; i < remove_offer_buttons.length; i++) {
+                remove_offer_buttons[i].addEventListener("click", removeOffer)
+            }
+            function removeOffer(event) {
+                if (!window.confirm('Opravdu chcete smazat nabídku spolupráce?')) {
+                    event.preventDefault();
+                }
+            }
+
+        </script>
     @endif
 
 @endsection
