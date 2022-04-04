@@ -101,7 +101,7 @@
                             <button class="nav-link" id="nabidky-spoluprace-tab" data-bs-toggle="tab"
                                     data-bs-target="#nabidky-spoluprace"
                                     type="button" role="tab" aria-controls="nabidky-spoluprace" aria-selected="false">
-                                Nabídky
+                                Správa nabídek
                                 spolupráce
                             </button>
                         </li>
