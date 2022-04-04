@@ -94,10 +94,14 @@
                                             </tr>
                                             </thead>
                                             <tbody class="small">
-                                            <tr>
-                                                <td><a href=""></a></td>
-                                                <td></td>
-                                            </tr>
+                                            @foreach($files as $file)
+                                                <tr>
+                                                    <td><a href="{{ route('soubory', $file->id_file) }}" target="_blank">{{ $file->name }}</a></td>
+                                                    <td>
+                                                        <span class="badge bg-light text-dark">{{ $file->type }}</span>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                             </tbody>
                                         </table>
                                     </div>

@@ -69,9 +69,12 @@ class ProjectsController extends Controller
             ':id_project' => $id_project,
         ]);
 
+        $files = DB::select('SELECT * FROM file WHERE id_project=:id_project', [':id_project' => $id_project]);
+
         if(count($project) == 1) {
             return view('projekty.show')
                 ->with('project', $project[0]) //$project je pole s jednim prvkem = ziskany projekt => chci primo ziskane pole, proto [0]
+                ->with('files', $files)
                 ->with('team_members', $team_members)
                 ->with('project_offers', $project_offers_cooperation);
         } else {
