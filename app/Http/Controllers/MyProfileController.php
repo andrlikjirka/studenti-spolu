@@ -62,7 +62,6 @@ class MyProfileController extends Controller
             'first-name' => 'required|string|max:45',
             'last-name' => 'required|string|max:45',
             'email' => 'required|email|max:255',
-            'description' => 'required'
         ]);
 
         $edit_first_name = $request->input('first-name');

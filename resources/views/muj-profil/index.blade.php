@@ -79,7 +79,6 @@
                                                 Popis
                                             </label><br>
                                             <textarea class="form-control" name="description" id="description" rows="6"
-                                                      required
                                                       placeholder="Zadejte váš popis">{{ $profile->description }}</textarea>
                                         </div>
                                     </div>
