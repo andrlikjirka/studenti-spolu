@@ -208,9 +208,11 @@
                                            name="new-name-project" required>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="new-abstract-project" class="form-label">Abstrakt</label>
+                                    <label for="new-abstract-project" class="form-label">Abstrakt
+                                        <span class="text-danger">*</span>
+                                    </label>
                                     <textarea type="text" id="new-abstract-project" class="form-control" rows="3"
-                                              name="new-abstract-project"></textarea>
+                                              name="new-abstract-project" required></textarea>
                                 </div>
                                 <div class="mb-3">
                                     <label for="new-description-project" class="form-label">
