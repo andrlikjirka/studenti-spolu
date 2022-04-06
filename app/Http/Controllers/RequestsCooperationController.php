@@ -145,14 +145,22 @@ class RequestsCooperationController extends Controller
         $id_request = $request->input('edit-id-request');
         $edit_request_message = $request->input('edit-request-message');
 
-        $result = DB::update('
+        $old_request = DB::select('
+            SELECT * FROM request_cooperation WHERE id_request=:id_request;
+        ', [':id_request' => $id_request]);
+
+        if (strcmp($edit_request_message, $old_request[0]->message) !== 0) {
+            $result = DB::update('
             UPDATE request_cooperation
                 SET message = :message
                 WHERE id_request = :id_request;
         ', [
-            ':message' => $edit_request_message,
-            ':id_request' => $id_request,
-        ]);
+                ':message' => $edit_request_message,
+                ':id_request' => $id_request,
+            ]);
+        } else {
+            $result = 1;
+        }
         return $result;
     }
 
