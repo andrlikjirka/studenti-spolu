@@ -25,9 +25,11 @@ use App\Http\Controllers\LogoutController;
 
 Route::get('/', function () {
     return view('index');
-})->name('index');
+})->middleware('delete-url-cookie')
+    ->name('index');
 
 Route::get('/projekty', [ProjectsController::class, 'index'])
+    ->middleware('delete-url-cookie')
     ->name('projekty.index');
 
 Route::get('/projekty/{id}', [ProjectsController::class, 'show'])

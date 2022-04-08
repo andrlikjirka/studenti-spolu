@@ -64,6 +64,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'prevent-back-history' => \App\Http\Middleware\PreventBackHistory::class,
-
+        'delete-url-cookie' => \App\Http\Middleware\DeleteUrlCookie::class,
     ];
 }
