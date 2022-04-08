@@ -8,10 +8,30 @@ use Illuminate\Support\Facades\DB;
 class ProjectsController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         $title = 'Projekty';
-        $projects = DB::select('
+
+        if ($request->input('action') == 'search-project') {
+            $request->validate([
+                'project_name' => 'nullable|string',
+            ]);
+            $project_name = htmlspecialchars($request->input('project_name')).'%';
+            $projects = DB::select('
+            SELECT p.id_project as id_project, p.name as name, p.abstract as abstract, s.id_status as s_id_status, DATE(p.create_date) as create_date,
+                   s.name as s_name, u.id_user as u_id_user, u.first_name as u_first_name, u.last_name as u_last_name, u.id_status as u_id_status
+            FROM project p, cooperation c, users u, status_project s, role r
+                WHERE p.id_project = c.id_project
+                AND   c.id_user = u.id_user
+                AND   p.id_status = s.id_status
+                AND   r.id_role = c.id_role
+                AND   u.id_status = :id_status
+                AND   r.id_role = :id_role
+                AND   p.name LIKE :p_name
+            ORDER BY p.create_date DESC;
+        ', [':id_status' => 1, ':id_role' => 1, ':p_name' => $project_name]); //ziskat data z DB
+        } else {
+            $projects = DB::select('
             SELECT p.id_project as id_project, p.name as name, p.abstract as abstract, s.id_status as s_id_status, DATE(p.create_date) as create_date,
                    s.name as s_name, u.id_user as u_id_user, u.first_name as u_first_name, u.last_name as u_last_name, u.id_status as u_id_status
             FROM project p, cooperation c, users u, status_project s, role r
@@ -23,6 +43,7 @@ class ProjectsController extends Controller
                 AND   r.id_role = :id_role
             ORDER BY p.create_date DESC;
         ', [':id_status' => 1, ':id_role' => 1]); //ziskat data z DB
+        }
 
         return view('projekty/index')
             ->with('title', $title)

@@ -15,6 +15,19 @@
             <div class="row mb-5 justify-content-center">
                 <div class="col-lg-10">
 
+                    <!--FILTR (HLEDANI DLE NAZVU)-->
+                    <div class="mb-4">
+                        <form id="search-project" action="{{ route('projekty.index') }}" method="get">
+                            <label>
+                                <input class="form-control form-control-sm" type="text" placeholder="Název projektu" name="project_name">
+                            </label>
+                            <button type="submit" class="mb-1 ms-2 btn btn-sm btn-outline-primary" name="action"
+                                    value="search-project">Hledat projekt
+                            </button>
+                        </form>
+                        <hr class="dropdown-divider">
+                    </div>
+
                     @foreach($projects as $project)
                         <div class="card bg-white mb-3">
                             <div class="card-body p-4">
