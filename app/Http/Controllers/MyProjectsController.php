@@ -179,7 +179,7 @@ class MyProjectsController extends Controller
         $edit_description = $request->input('edit-description-project');
         $edit_status = $request->input('edit-status-project');
 
-        DB::update('
+        $result = DB::update('
             UPDATE project
                 SET name = :name, abstract = :abstract,
                     description = :description, id_status = :id_status

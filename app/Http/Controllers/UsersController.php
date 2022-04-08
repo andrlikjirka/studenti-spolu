@@ -13,6 +13,7 @@ class UsersController extends Controller
         $title = 'Uživatelé';
         if ($request->input('action') == 'search-user') {
             $request->validate([
+                'first_name' => 'nullable|string',
                 'last_name' => 'nullable|string',
             ]);
             $first_name = htmlspecialchars($request->input('first_name')).'%';

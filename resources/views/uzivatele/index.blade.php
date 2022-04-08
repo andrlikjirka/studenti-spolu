@@ -17,7 +17,7 @@
 
                     <!--FILTR (HLEDANI DNE OBORU)-->
                     <div class="mb-4">
-                        <form id="hledat-uzivatele" action="{{ route('uzivatele.index') }}" method="get">
+                        <form id="search-user" action="{{ route('uzivatele.index') }}" method="get">
                             <label>
                                 <input class="form-control form-control-sm" type="text" placeholder="Jméno" name="first_name">
                             </label>
