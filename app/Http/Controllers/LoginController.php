@@ -24,7 +24,8 @@ class LoginController extends Controller
             //in case intended url is available
             if (isset($_COOKIE['url'])) {
                 $redirectTo = $_COOKIE['url'];
-                setcookie('url', '', time() - 3600);
+                setcookie('url', '', time() - 3600, '/');
+                unset($_COOKIE['url']);
             }
             $request->session()->regenerate();
             if (isset($redirectTo)) {
