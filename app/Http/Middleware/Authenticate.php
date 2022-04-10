@@ -14,7 +14,6 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
-        //session(['url.intended' => url()->previous()]);
         setcookie('url', url()->current(), time()+3600, '/');
         return route('prihlaseni');
     }

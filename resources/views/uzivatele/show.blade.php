@@ -40,8 +40,13 @@
                             </button>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="projects-tab" data-bs-toggle="tab" data-bs-target="#projects"
+                            <button class="nav-link" id="projects-tab" data-bs-toggle="tab" data-bs-target="#author_projects"
                                     type="button" role="tab" aria-controls="projekty" aria-selected="false">Autorské projekty
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="projects-tab" data-bs-toggle="tab" data-bs-target="#cooperation_projects"
+                                    type="button" role="tab" aria-controls="projekty" aria-selected="false">Spolupracovnické projekty
                             </button>
                         </li>
                     </ul>
@@ -58,12 +63,34 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade" id="projects" role="tabpanel" aria-labelledby="projekty-tab">
+                        <div class="tab-pane fade" id="author_projects" role="tabpanel" aria-labelledby="projekty-tab">
                             <p class="my-3">Seznam mých autorských projektů:</p>
-                            @if(count($user_projects) == 0)
+                            @if(count($user_author_projects) == 0)
                                 <p class="my-3 fst-italic">Žádné autorské projekty</p>
                             @endif
-                            @foreach($user_projects as $project)
+                            @foreach($user_author_projects as $project)
+                                <div class="card bg-white mb-3">
+                                    <div class="card-body p-4">
+                                        <a href="{{ route('projekty.show', $project->p_id_project) }}" class="text-decoration-none">
+                                            <h5 class="card-title">{{ $project->p_name }}</h5>
+                                        </a>
+                                        <p class="card-text">
+                                            {{ $project->p_abstract }}
+                                        </p>
+                                        <span class="badge rounded-pill bg-warning">{{ $project->s_name }}</span>
+                                        <p class="mt-2 mb-0 small">Autor: <a href="" class="text-decoration-none">{{ $project->u_first_name.' '.$project->u_last_name}}</a></p>
+                                        <p class="mt-1 mb-0 small">Datum zveřejnění: {{ $project->create_date }}</p>
+                                    </div>
+                                </div>
+                            @endforeach
+
+                        </div>
+                        <div class="tab-pane fade" id="cooperation_projects" role="tabpanel" aria-labelledby="projekty-tab">
+                            <p class="my-3">Seznam mých spolupracovnickýh projektů:</p>
+                            @if(count($user_cooperation_projects) == 0)
+                                <p class="my-3 fst-italic">Žádné spolupracovnické projekty</p>
+                            @endif
+                            @foreach($user_cooperation_projects as $project)
                                 <div class="card bg-white mb-3">
                                     <div class="card-body p-4">
                                         <a href="{{ route('projekty.show', $project->p_id_project) }}" class="text-decoration-none">

@@ -16,6 +16,8 @@
 
             @if(session('new_project_message'))
                 <div class="alert alert-success small text-center mb-5"> {{ session('new_project_message') }} </div>
+            @elseif(session('error_new_project_message'))
+                <div class="alert alert-danger small text-center mb-5"> {{ session('error_new_project_message') }} </div>
             @endif
 
             @if(session('delete_project_message'))
@@ -74,14 +76,8 @@
 
                                 <div class="card bg-white mb-3">
                                     <div class="card-body p-4">
-                                        <!--
-                                        <a href=" route('moje-projekty.show', $project_author->id_project) "
-                                           class="text-decoration-none">
-
-                                        </a>
-                                        -->
-                                        <h5 class="card-title text-primary">{{ $project_author->name }}</h5>
-                                        <p class="card-text">{{ $project_author->abstract }}</p>
+                                        <h5 class="card-title text-primary">{{ $project_author->p_name }}</h5>
+                                        <p class="card-text">{{ $project_author->p_abstract }}</p>
                                         <span class="badge rounded-pill
                                             @if($project_author->s_id_status == 1) {{ 'bg-warning' }}
                                         @elseif($project_author->s_id_status == 2) {{ 'bg-success' }}
@@ -100,7 +96,7 @@
                                             zveřejnění: {{ $project_author->create_date }}</p>
                                     </div>
                                     <div class="card-footer py-2 px-4">
-                                        <a href="{{ route('moje-projekty.show', $project_author->id_project) }}"
+                                        <a href="{{ route('moje-projekty.show', $project_author->p_id_project) }}"
                                            class="btn btn-sm btn-warning" role="button">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                  fill="currentColor" class="bi bi-pencil-square me-1"
@@ -117,7 +113,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <input type="hidden" name="delete_id_project"
-                                                   value="{{ $project_author->id_project }}">
+                                                   value="{{ $project_author->p_id_project }}">
                                             <button type="submit" class="btn btn-sm btn-danger delete-project-button">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                      fill="currentColor" class="bi bi-x-circle me-1"
@@ -143,8 +139,8 @@
                             @foreach($projects_collab as $project_collab)
                                 <div class="card bg-white mb-3">
                                     <div class="card-body p-4">
-                                        <h5 class="card-title text-primary">{{ $project_collab->name }}</h5>
-                                        <p class="card-text">{{ $project_collab->abstract }}</p>
+                                        <h5 class="card-title text-primary">{{ $project_collab->p_name }}</h5>
+                                        <p class="card-text">{{ $project_collab->p_abstract }}</p>
                                         <span class="badge rounded-pill
                                             @if($project_collab->s_id_status == 1) {{ 'bg-warning' }}
                                         @elseif($project_collab->s_id_status == 2) {{ 'bg-success' }}
@@ -162,7 +158,7 @@
                                             zveřejnění: {{ $project_collab->create_date }}</p>
                                     </div>
                                     <div class="card-footer py-2 px-4">
-                                        <a href="{{ route('moje-projekty.show', $project_collab->id_project) }}"
+                                        <a href="{{ route('moje-projekty.show', $project_collab->p_id_project) }}"
                                            class="btn btn-sm btn-warning" role="button">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                                  fill="currentColor" class="bi bi-pencil-square me-1"

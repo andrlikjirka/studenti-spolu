@@ -18,6 +18,8 @@
 
             @if(session('new_project_message'))
                 <div class="alert alert-success small text-center mb-5"> {{ session('new_project_message') }} </div>
+            @elseif(session('error_new_project_message'))
+                <div class="alert alert-danger small text-center mb-5"> {{ session('error_new_project_message') }} </div>
             @elseif(session('edit_project_message'))
                 <div class="alert alert-success small text-center mb-5"> {{ session('edit_project_message') }} </div>
             @elseif(session('remove_team_member_message'))
@@ -157,7 +159,7 @@
                                                 <option disabled value="">Vyberte stav projektu</option>
                                                 @foreach($status_project_all as $status)
                                                     <option
-                                                        value="{{ $status->id_status }}" @if($my_project->id_status == $status->id_status) {{ 'selected' }} @endif
+                                                        value="{{ $status->id_status }}" @if($my_project->s_id_status == $status->id_status) {{ 'selected' }} @endif
                                                     @if($my_project->u_id_user != $loggedUser->id_user) {{ 'disabled' }} @endif
                                                     >
                                                         {{ $status->name }}

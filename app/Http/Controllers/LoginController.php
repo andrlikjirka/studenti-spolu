@@ -19,6 +19,7 @@ class LoginController extends Controller
             'login' => ['required'],
             'password' => ['required'],
         ]);
+        $credentials['id_status'] = 1; //user active?
 
         if (Auth::attempt($credentials)){
             //in case intended url is available

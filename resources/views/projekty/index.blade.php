@@ -19,7 +19,8 @@
                     <div class="mb-4">
                         <form id="search-project" action="{{ route('projekty.index') }}" method="get">
                             <label>
-                                <input class="form-control form-control-sm" type="text" placeholder="Název projektu" name="project_name">
+                                <input class="form-control form-control-sm" type="text" placeholder="Název projektu"
+                                       name="project_name" value="{{ request()->input('project_name') }}">
                             </label>
                             <button type="submit" class="mb-1 ms-2 btn btn-sm btn-outline-primary" name="action"
                                     value="search-project">Hledat projekt

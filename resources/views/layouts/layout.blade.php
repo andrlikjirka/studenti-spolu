@@ -15,6 +15,7 @@
 
 @php
     $loggedUser = \Illuminate\Support\Facades\Auth::user();
+    $isUserLoggedIn = \Illuminate\Support\Facades\Auth::check();
 @endphp
 
 <!-- Navbar-->
@@ -30,32 +31,32 @@
             <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                 <ul class="navbar-nav m-auto ">
                     <li class="nav-item me-3">
-                        <a class="nav-link" href="{{ url('./projekty') }}">Projekty</a>
+                        <a class="nav-link" href="{{ route('projekty.index') }}">Projekty</a>
                     </li>
                     <li class="nav-item me-3">
-                        <a class="nav-link" href="{{ url('./nabidky-spoluprace') }}">Nabídky spolupráce</a>
+                        <a class="nav-link" href="{{ route('nabidky-spoluprace.index') }}">Nabídky spolupráce</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url('./uzivatele') }}">Uživatelé</a>
+                        <a class="nav-link" href="{{ route('uzivatele.index') }}">Uživatelé</a>
                     </li>
                 </ul>
 
-                @if(\Illuminate\Support\Facades\Auth::check())
+                @if($isUserLoggedIn)
                     <div class="dropdown">
                         <button class="btn btn-primary dropdown-toggle px-3 py-1" type="button" id="dropdownMenuButton1"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                             {{ $loggedUser->first_name.' '.$loggedUser->last_name }}
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                            <li><a class="dropdown-item" href="{{ url('./muj-profil') }}">Můj profil</a></li>
-                            <li><a class="dropdown-item" href="{{ url('./moje-projekty') }}">Moje projekty</a></li>
-                            <li><a class="dropdown-item" href="{{ url('./zadosti-o-spolupraci') }}">Žádosti o
+                            <li><a class="dropdown-item" href="{{ route('muj-profil.index') }}">Můj profil</a></li>
+                            <li><a class="dropdown-item" href="{{ route('moje-projekty.index') }}">Moje projekty</a></li>
+                            <li><a class="dropdown-item" href="{{ route('zadosti-o-spolupraci.index') }}">Žádosti o
                                     spolupráci</a></li>
                             @if($loggedUser->id_right == 1)
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="">Administrace aplikace</a></li>
+                                <li><a class="dropdown-item" href="{{ route('admin.index') }}">Administrace aplikace</a></li>
                             @endif
                             <li>
                                 <hr class="dropdown-divider">

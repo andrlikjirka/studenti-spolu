@@ -19,10 +19,12 @@
                     <div class="mb-4">
                         <form id="search-user" action="{{ route('uzivatele.index') }}" method="get">
                             <label>
-                                <input class="form-control form-control-sm" type="text" placeholder="Jméno" name="first_name">
+                                <input class="form-control form-control-sm" type="text" placeholder="Jméno"
+                                       name="first_name" value="{{ request()->input('first_name') }}">
                             </label>
                             <label>
-                                <input class="form-control form-control-sm" type="text" placeholder="Příjmení" name="last_name">
+                                <input class="form-control form-control-sm" type="text" placeholder="Příjmení"
+                                       name="last_name" value="{{ request()->input('last_name') }}">
                             </label>
                             <button type="submit" class="mb-1 ms-2 btn btn-sm btn-outline-primary" name="action"
                                     value="search-user">Hledat uživatele

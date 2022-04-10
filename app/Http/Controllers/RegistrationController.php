@@ -24,7 +24,7 @@ class RegistrationController extends Controller
 
     public function handle(Request $request)
     {
-        request()->validate([
+        $request->validate([
             'first_name' => 'required|string|max:45',
             'last_name' => 'required|string|max:45',
             'login' => 'required|string|unique:users|max:60',
@@ -34,11 +34,11 @@ class RegistrationController extends Controller
         ]);
 
         $user = User::create([
-            'first_name' => request('first_name'),
-            'last_name' => request('last_name'),
-            'email' => request('email'),
-            'login' => request('login'),
-            'password' => Hash::make(request('password')),
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
+            'email' => $request->input('email'),
+            'login' => $request->input('login'),
+            'password' => Hash::make($request->input('password')),
         ]);
 
         $fields = $request->input('fields');

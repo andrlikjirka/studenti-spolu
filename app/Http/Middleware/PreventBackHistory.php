@@ -17,9 +17,9 @@ class PreventBackHistory
     public function handle(Request $request, Closure $next)
     {
         $response = $next($request);
-        $response->headers->set('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate');
-        $response->headers->set('Pragma', 'no-cache');
-        $response->headers->set('Expires', '0');
+        $response->header('Cache-Control', 'no-cache, no-store, max-age=0, must-revalidate')
+                 ->header('Pragma', 'no-cache')
+                 ->header('Expires', '0');
         return $response;
     }
 }
