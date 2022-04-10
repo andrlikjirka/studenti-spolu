@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Intefaces\OfferCooperationRepositoryInterface;
+use App\Intefaces\ProjectRepositoryInterface;
+use App\Repositories\OfferCooperationRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -9,40 +12,25 @@ use Illuminate\Support\Facades\DB;
 class OffersCooperationController extends Controller
 {
 
+    /**
+     * @var OfferCooperationRepositoryInterface
+     */
+    protected $offers;
+
+    public function __construct(OfferCooperationRepositoryInterface $offers)
+    {
+        $this->offers = $offers;
+    }
 
     public function index(Request $request)
     {
         $title = 'Nabídky spolupráce';
 
         if ($request->input('action') == 'match_offer' AND $request->input('match-checked') == true) {
-            $offers = DB::select('
-            SELECT p.id_project as p_id_project, p.name as p_name, o.id_offer as o_id_offer,o.name as o_name, o.description as o_description,
-                DATE(o.create_date) as o_create_date, f.id_field as f_id_field,f.name as f_name,
-                s.id_status as s_id_status, s.name as s_name
-            FROM offer_cooperation o, project p, field f, status_offer s
-                WHERE o.id_project = p.id_project
-                AND   o.id_field = f.id_field
-                AND   o.id_status = s.id_status
-                AND   s.id_status = :id_status
-                AND   f.id_field IN (
-                    SELECT u.id_field FROM users_field u
-                        WHERE u.id_user = :id_user
-                )
-                ORDER BY o.create_date DESC;
-        ', [':id_status' => 1,':id_user' => Auth::id() ]);
+            $offers = $this->offers->getMatchOffers();
             $request->session()->put('match', 'true');
         } else {
-            $offers = DB::select('
-            SELECT p.id_project as p_id_project, p.name as p_name, o.id_offer as o_id_offer,o.name as o_name, o.description as o_description,
-                DATE(o.create_date) as o_create_date, f.id_field as f_id_field,f.name as f_name,
-                s.id_status as s_id_status, s.name as s_name
-            FROM offer_cooperation o, project p, field f, status_offer s
-                WHERE o.id_project = p.id_project
-                AND   o.id_field = f.id_field
-                AND   o.id_status = s.id_status
-                AND   s.id_status = :id_status
-                ORDER BY o.create_date DESC;
-        ', [':id_status' => 1]);
+            $offers = $this->offers->getAllOffers();
             $request->session()->forget('match');
         }
 
@@ -53,20 +41,7 @@ class OffersCooperationController extends Controller
 
     public function show($id_offer)
     {
-        $offer_cooperation = DB::select('
-            SELECT p.id_project as p_id_project, p.name as p_name, o.id_offer as o_id_offer,o.name as o_name, o.description as o_description,
-                DATE(o.create_date) as o_create_date, f.id_field as f_id_field,f.name as f_name,
-                s.id_status as s_id_status, s.name as s_name
-            FROM offer_cooperation o, field f, project p, status_offer s
-                WHERE o.id_project = p.id_project
-                AND   o.id_field = f.id_field
-                AND   o.id_status = s.id_status
-                AND   s.id_status = :id_status
-                AND   o.id_offer = :id_offer;
-            ', [
-                ':id_status' => 1,
-                ':id_offer' => $id_offer,
-            ]);
+        $offer_cooperation = $this->offers->getOfferById($id_offer);
 
         if (count($offer_cooperation) == 1) {
             $isUser_TeamMember = $this->isUserTeamMember($offer_cooperation[0]->p_id_project);
@@ -79,26 +54,6 @@ class OffersCooperationController extends Controller
         } else {
             return abort(404, 'Nabídka spolupráce nenalezena.'); //404 strana
         }
-    }
-
-    public function create()
-    {
-
-    }
-
-    public function edit()
-    {
-
-    }
-
-    public function store()
-    {
-
-    }
-
-    public function destroy()
-    {
-
     }
 
     public function handle(Request $request, $id_offer)
@@ -127,17 +82,7 @@ class OffersCooperationController extends Controller
         $id_user = $request->input('request-id-user');
         $create_date = date("Y-m-d H:i:s");
 
-        $result = DB::insert('
-            INSERT INTO request_cooperation (message, create_date, id_user, id_offer, id_status)
-            VALUES (:message, :create_date, :id_user, :id_offer, :id_status);
-        ', [
-            ':message' => $message,
-            ':create_date' => $create_date,
-            ':id_user' => $id_user,
-            ':id_offer' => $id_offer,
-            ':id_status' => 1,
-        ]);
-
+        $result = $this->offers->createNewRequest($message, $create_date, $id_user, $id_offer);
         return $result;
     }
 

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Intefaces\FieldRepositoryInterface;
+use App\Intefaces\UserFieldRepositoryInterface;
+use App\Intefaces\UserRepositoryInterface;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,22 +13,29 @@ use Illuminate\Support\Facades\Hash;
 
 class MyProfileController extends Controller
 {
+    /**
+     * @var UserRepositoryInterface
+     */
+    protected $users;
+
+    protected $fields;
+
+    protected $user_fields;
+
+    public function __construct(UserRepositoryInterface $users, FieldRepositoryInterface $fields, UserFieldRepositoryInterface $user_fields)
+    {
+        $this->users = $users;
+        $this->fields = $fields;
+        $this->user_fields = $user_fields;
+    }
+
     public function index()
     {
         $title = 'Můj profil';
-        $profile = DB::select('
-            SELECT first_name, last_name, login, email, description
-            FROM users
-            WHERE id_user = :id_user;
-        ', [':id_user' => Auth::id()]);
-
-        $fields = DB::select('
-            SELECT * FROM field;
-        ');
-
-        $user_fields = DB::select('
-            SELECT id_field FROM users_field WHERE id_user=:id_user;
-        ', [':id_user' => Auth::id()]);
+        $id_user = Auth::id();
+        $profile = $this->users->getActiveUserById($id_user);
+        $fields = $this->fields->getAllFields();
+        $user_fields = $this->user_fields->getUserFieldsByUserId($id_user);
 
         return view('muj-profil/index')
                 ->with('title', $title)
@@ -92,17 +102,9 @@ class MyProfileController extends Controller
         $request->validate([
            'fields' => 'required'
         ]);
-
+        $id_user = Auth::id();
         $fields = $request->input('fields');
-        $result = DB::transaction(function () use ($fields){
-            DB::delete('DELETE FROM users_field WHERE id_user = :id_user', [':id_user' => Auth::id()]);
-            foreach ($fields as $field) {
-                DB::insert('
-                INSERT INTO users_field(id_user, id_field)
-                VALUES (:id_user, :id_field)
-            ', [':id_user' => Auth::id(), 'id_field' => $field]);
-            }
-        });
+        $result = $this->user_fields->editUserFields($id_user, $fields);
         return $result;
     }
 
