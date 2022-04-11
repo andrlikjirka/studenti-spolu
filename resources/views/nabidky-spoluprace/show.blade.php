@@ -102,7 +102,9 @@
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <label for="message-request-cooperation" class="form-label">Zpráva žádosti</label>
+                                <label for="message-request-cooperation" class="form-label">Zpráva žádosti
+                                    <span class="text-danger">*</span>
+                                </label>
                                 <textarea class="form-control" id="message-request-cooperation"
                                           name="request-message" rows="8" required></textarea>
                             </div>

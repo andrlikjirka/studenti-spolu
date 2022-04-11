@@ -56,46 +56,6 @@ class ProjectRepository implements ProjectRepositoryInterface
         ', [':id_project' => $id_project, ':id_role' => 1, ':id_status' => 1]);
     }
 
-    public function getTeamMembersByProjectId($id_project)
-    {
-        return DB::select('
-        SELECT u.id_user as u_id_user, u.first_name as u_first_name, u.last_name as u_last_name, u.login as u_login, r.name as r_name,
-               r.id_role as r_id_role
-        FROM users u, cooperation c, project p, role r
-            WHERE u.id_user = c.id_user
-            AND   c.id_project = p.id_project
-            AND   c.id_role = r.id_role
-            AND   p.id_project = :id_project
-            ORDER BY c.id_role;
-        ', ['id_project' => $id_project]);
-    }
-
-    public function removeTeamMember($id_project, $id_user)
-    {
-        return DB::delete('
-            DELETE FROM cooperation WHERE id_user = :id_user AND id_project = :id_project AND id_role = :id_role
-        ', [':id_user' => $id_user, ':id_project' => $id_project, ':id_role' => 2]);
-    }
-
-    public function getOffersCooperationByProjectId($id_project)
-    {
-        return DB::select('
-            SELECT p.id_project as p_id_project, p.name as p_name, o.id_offer as o_id_offer,o.name as o_name, o.description as o_description,
-               DATE(o.create_date) as o_create_date, f.id_field as f_id_field,f.name as f_name,
-               s.id_status as s_id_status, s.name as s_name
-            FROM offer_cooperation o, project p, field f, status_offer s
-                WHERE o.id_project = p.id_project
-                AND   o.id_field = f.id_field
-                AND   o.id_status = s.id_status
-                AND   s.id_status = :id_status
-                AND   p.id_project = :id_project
-                ORDER BY o.create_date;
-        ', [
-            ':id_status' => 1,
-            ':id_project' => $id_project,
-        ]);
-    }
-
     public function getProjectsByUserId($id_user, $id_role)
     {
         return DB::select('

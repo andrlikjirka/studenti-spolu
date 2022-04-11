@@ -6,6 +6,7 @@ use App\Intefaces\FieldRepositoryInterface;
 use App\Intefaces\FileRepositoryInterface;
 use App\Intefaces\OfferCooperationRepositoryInterface;
 use App\Intefaces\ProjectRepositoryInterface;
+use App\Intefaces\RequestCooperationRepositoryInterface;
 use App\Intefaces\StatusOfferRepositoryInterface;
 use App\Intefaces\StatusProjectRepositoryInterface;
 use App\Intefaces\UserFieldRepositoryInterface;
@@ -14,6 +15,7 @@ use App\Repositories\FieldRepository;
 use App\Repositories\FileRepository;
 use App\Repositories\OfferCooperationRepository;
 use App\Repositories\ProjectRepository;
+use App\Repositories\RequestCooperationRepository;
 use App\Repositories\StatusOfferRepository;
 use App\Repositories\StatusProjectRepository;
 use App\Repositories\UserFieldRepository;
@@ -37,6 +39,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(StatusProjectRepositoryInterface::class, StatusProjectRepository::class);
         $this->app->bind(FileRepositoryInterface::class, FileRepository::class);
         $this->app->bind(StatusOfferRepositoryInterface::class, StatusOfferRepository::class);
+        $this->app->bind(RequestCooperationRepositoryInterface::class, RequestCooperationRepository::class);
     }
 
     /**

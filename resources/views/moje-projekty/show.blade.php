@@ -407,7 +407,9 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label for="name-offer-cooperation" class="form-label">Název nabídky
-                                        spolupráce</label>
+                                        spolupráce
+                                        <span class="text-danger">*</span>
+                                    </label>
                                     <input type="text" class="form-control" id="name-offer-cooperation"
                                            name="name-offer-cooperation"
                                            placeholder="Zadejte název nabídky spolupráce (např. Vývojář mobilních aplikací)"
@@ -415,7 +417,9 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="field-offer-cooperation" class="form-label">Obor nabídky
-                                        spolupráce</label>
+                                        spolupráce
+                                        <span class="text-danger">*</span>
+                                    </label>
                                     <select id="field-offer-cooperation" class="form-select"
                                             aria-label="Obor spolupráce"
                                             name="field-offer-cooperation" required>
@@ -427,7 +431,9 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="description-offer-cooperation" class="form-label">Popis nabídky
-                                        spolupráce</label>
+                                        spolupráce
+                                        <span class="text-danger">*</span>
+                                    </label>
                                     <textarea class="form-control" id="description-offer-cooperation" rows="6"
                                               name="description-offer-cooperation" required></textarea>
                                 </div>
@@ -460,7 +466,9 @@
                                 @csrf
                                 <div class="mb-3">
                                     <label for="edit-name-offer-cooperation" class="form-label">Název nabídky
-                                        spolupráce</label>
+                                        spolupráce
+                                        <span class="text-danger">*</span>
+                                    </label>
                                     <input type="text" class="form-control" id="edit-name-offer-cooperation"
                                            name="edit-name-offer-cooperation"
                                            placeholder="Zadejte název nabídky spolupráce (např. Vývojář mobilních aplikací)"
@@ -468,7 +476,9 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="edit-status-offer-cooperation" class="form-label">Stav nabídky
-                                        spolupráce</label>
+                                        spolupráce
+                                        <span class="text-danger">*</span>
+                                    </label>
                                     <select id="edit-status-offer-cooperation" class="form-select"
                                             name="edit-status-offer-cooperation"
                                             aria-label="Stav nabídky spolupráce"
@@ -481,7 +491,9 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="edit-field-offer-cooperation" class="form-label">Obor nabídky
-                                        spolupráce</label>
+                                        spolupráce
+                                        <span class="text-danger">*</span>
+                                    </label>
                                     <select id="edit-field-offer-cooperation" class="form-select"
                                             aria-label="Obor spolupráce" name="edit-field-offer-cooperation"
                                             required>
@@ -493,7 +505,9 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="edit-description-offer-cooperation" class="form-label">Popis nabídky
-                                        spolupráce</label>
+                                        spolupráce
+                                        <span class="text-danger">*</span>
+                                    </label>
                                     <textarea class="form-control" id="edit-description-offer-cooperation"
                                               name="edit-description-offer-cooperation" rows="6" required></textarea>
                                 </div>

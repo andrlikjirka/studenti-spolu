@@ -8,6 +8,7 @@ use App\Intefaces\OfferCooperationRepositoryInterface;
 use App\Intefaces\ProjectRepositoryInterface;
 use App\Intefaces\StatusOfferRepositoryInterface;
 use App\Intefaces\StatusProjectRepositoryInterface;
+use App\Intefaces\UserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -21,6 +22,8 @@ class MyProjectsController extends Controller
      */
     protected $projects;
 
+    protected $users;
+
     protected $status_project;
 
     protected $offers;
@@ -31,11 +34,12 @@ class MyProjectsController extends Controller
 
     protected $fields;
 
-    public function __construct(ProjectRepositoryInterface $projects, StatusProjectRepositoryInterface $status_project,
+    public function __construct(ProjectRepositoryInterface $projects, UserRepositoryInterface $users, StatusProjectRepositoryInterface $status_project,
                                 OfferCooperationRepositoryInterface $offers, StatusOfferRepositoryInterface $status_offer,
                                 FileRepositoryInterface $files, FieldRepositoryInterface $fields)
     {
         $this->projects = $projects;
+        $this->users = $users;
         $this->status_project = $status_project;
         $this->offers = $offers;
         $this->status_offer = $status_offer;
@@ -64,16 +68,16 @@ class MyProjectsController extends Controller
     {
         $title = 'Úprava projektu';
         $logged_user_id = Auth::id();
+        $my_project = $this->projects->getProjectById($id);;
 
-        $my_project = $this->getMyProjectInfo($id);
         if (count($my_project) == 1) {
-            $status_project_all = $this->getAllProjectStatus();
-            $team_members = $this->getTeamMembers($id);
-            $offers_cooperation = $this->getOffersCooperation($id);
-            $files = $this->getProjectFiles($id);
+            $status_project_all = $this->status_project->getAllStatusProject();
+            $team_members = $this->users->getTeamMembersByProjectId($id);
+            $offers_cooperation = $this->offers->getOffersByProjectId($id);
+            $files = $this->files->getFilesByProjectId($id);
 
-            $fields_all = $this->getAllFields();
-            $status_offer_all = $this->getAllOfferStatus();
+            $fields_all = $this->fields->getAllFields();
+            $status_offer_all = $this->status_offer->getAllStatusOffer();
 
             return view('moje-projekty.show')
                 ->with('title', $title)
@@ -88,48 +92,6 @@ class MyProjectsController extends Controller
             return abort(404, 'Můj projekt nenalezen.'); //404 strana
         }
 
-    }
-
-    private function getMyProjectInfo($id_project)
-    {
-        $my_project = $this->projects->getProjectById($id_project);
-        return $my_project;
-    }
-
-    private function getAllProjectStatus()
-    {
-        $status_project_all = $this->status_project->getAllStatusProject();
-        return $status_project_all;
-    }
-
-    private function getTeamMembers($id_project)
-    {
-        $team_members = $this->projects->getTeamMembersByProjectId($id_project);
-        return $team_members;
-    }
-
-    private function getOffersCooperation($id_project)
-    {
-        $offersCooperation = $this->offers->getOffersByProjectId($id_project);
-        return $offersCooperation;
-    }
-
-    private function getProjectFiles($id_project)
-    {
-        $projectFiles = $this->files->getFilesByProjectId($id_project);
-        return $projectFiles;
-    }
-
-    private function getAllFields()
-    {
-        $fields_all = $this->fields->getAllFields();
-        return $fields_all;
-    }
-
-    private function getAllOfferStatus()
-    {
-        $status_offer_all = $this->status_offer->getAllStatusOffer();
-        return $status_offer_all;
     }
 
     public function update(Request $request, $id)
@@ -247,7 +209,7 @@ class MyProjectsController extends Controller
     private function remove_team_member(Request $request, $id_project)
     {
         $id_user = $request->input('remove_id_user');
-        $result = $this->projects->removeTeamMember($id_project, $id_user);
+        $result = $this->users->removeTeamMember($id_project, $id_user);
         return $result;
     }
 
@@ -264,18 +226,7 @@ class MyProjectsController extends Controller
         $description = $request->input('description-offer-cooperation');
         $create_date = date("Y-m-d H:i:s");
 
-        $result = DB::insert('
-            INSERT INTO offer_cooperation(name, description, create_date, id_field, id_project, id_status)
-            VALUES (:name, :description, :create_date, :id_field, :id_project, :id_status)
-        ', [
-            ':name' => $name,
-            ':description' => $description,
-            ':create_date' => $create_date,
-            ':id_field' => $id_field,
-            ':id_project' => $id_project,
-            ':id_status' => 1,
-        ]);
-
+        $result = $this->offers->createNewOffer($name, $description, $create_date, $id_field, $id_project);
         return $result;
     }
 
@@ -295,18 +246,7 @@ class MyProjectsController extends Controller
         $edit_id_status_offer = $request->input('edit-status-offer-cooperation');
         $edit_id_field_offer = $request->input('edit-field-offer-cooperation');
 
-        $result = DB::update('
-            UPDATE offer_cooperation
-            SET name = :name, description = :description, id_field = :id_field, id_status = :id_status
-            WHERE id_offer = :id_offer;
-        ', [
-            ':name' => $edit_name_offer,
-            ':description' => $edit_description_offer,
-            ':id_field' => $edit_id_field_offer,
-            ':id_status' => $edit_id_status_offer,
-            ':id_offer' => $edit_id_offer
-        ]);
-
+        $result = $this->offers->editOfferById($edit_id_offer, $edit_name_offer, $edit_description_offer, $edit_id_field_offer, $edit_id_status_offer);
         return $result;
     }
 
@@ -315,15 +255,8 @@ class MyProjectsController extends Controller
         $request->validate([
             'remove_id_offer' => 'required|integer',
         ]);
-
         $remove_id_offer = $request->input('remove_id_offer');
-
-        $result = DB::delete('
-            DELETE FROM offer_cooperation WHERE id_offer = :id_offer;
-        ', [
-            ':id_offer' => $remove_id_offer,
-        ]);
-
+        $result = $this->offers->removeOfferById($remove_id_offer);
         return $result;
     }
 
