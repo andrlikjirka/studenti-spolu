@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Intefaces\FileRepositoryInterface;
+use App\Intefaces\OfferCooperationRepositoryInterface;
 use App\Intefaces\ProjectRepositoryInterface;
+use App\Intefaces\UserRepositoryInterface;
 use App\Repositories\ProjectRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -15,12 +17,19 @@ class ProjectsController extends Controller
      */
     protected $projects;
 
+    protected $offers;
+
     protected $files;
 
-    public function __construct(ProjectRepositoryInterface $projects, FileRepositoryInterface $files)
+    protected $users;
+
+    public function __construct(ProjectRepositoryInterface $projects, OfferCooperationRepositoryInterface $offers,
+                                FileRepositoryInterface $files, UserRepositoryInterface $users)
     {
         $this->projects = $projects;
+        $this->offers = $offers;
         $this->files = $files;
+        $this->users = $users;
     }
 
     public function index(Request $request)
@@ -45,8 +54,8 @@ class ProjectsController extends Controller
     public function show($id_project)
     {
         $project = $this->projects->getProjectById($id_project);
-        $team_members = $this->projects->getTeamMembersByProjectId($id_project);
-        $project_offers_cooperation = $this->projects->getOffersCooperationByProjectId($id_project);
+        $team_members = $this->users->getTeamMembersByProjectId($id_project);
+        $project_offers_cooperation = $this->offers->getActiveOffersByProjectId($id_project);
         $files = $this->files->getFilesByProjectId($id_project);
 
         if(count($project) == 1) {

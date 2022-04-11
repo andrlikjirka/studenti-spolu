@@ -23,9 +23,9 @@
                     <div class="mt-3">
                         <span class="badge rounded-pill
                             @if($project->s_id_status == 1) {{ 'bg-warning' }}
-                            @elseif($project->s_id_status == 2) {{ 'bg-success' }}
-                            @elseif($project->s_id_status == 3) {{ 'bg-danger' }}
-                            @endif">{{ $project->s_name }}</span>
+                        @elseif($project->s_id_status == 2) {{ 'bg-success' }}
+                        @elseif($project->s_id_status == 3) {{ 'bg-danger' }}
+                        @endif">{{ $project->s_name }}</span>
                         <p class="mt-2 mb-0 small">Autor: <a href=""
                                                              class="text-decoration-none">{{ $project->u_first_name.' '.$project->u_last_name }}</a>
                         </p>
@@ -96,7 +96,8 @@
                                             <tbody class="small">
                                             @foreach($files as $file)
                                                 <tr>
-                                                    <td><a href="{{ route('soubory', $file->id_file) }}" target="_blank">{{ $file->name }}</a></td>
+                                                    <td><a href="{{ route('soubory', $file->id_file) }}"
+                                                           target="_blank">{{ $file->name }}</a></td>
                                                     <td>
                                                         <span class="badge bg-light text-dark">{{ $file->type }}</span>
                                                     </td>
@@ -123,7 +124,6 @@
                                             </tr>
                                             </thead>
                                             <tbody class="small">
-
                                             @foreach($team_members as $member)
                                                 <tr>
                                                     <td>
@@ -144,6 +144,9 @@
                         <div class="tab-pane fade" id="nabidky-spoluprace" role="tabpanel"
                              aria-labelledby="nabidky-spoluprace-tab">
                             <div class="mt-4">
+                                @if(count($project_offers) == 0)
+                                    <p class="my-3 fst-italic">Žádné aktivní nabídky spolupráce</p>
+                                @endif
                                 @foreach($project_offers as $offer)
                                     <div class="card bg-white mb-3">
                                         <div class="card-body p-4">
@@ -161,7 +164,8 @@
                                                         {{ $offer->p_name }}
                                                     </a>
                                                 </p>
-                                                <p class="mt-0 mb-0 small">Datum zveřejnění: {{ $offer->o_create_date }}</p>
+                                                <p class="mt-0 mb-0 small">Datum
+                                                    zveřejnění: {{ $offer->o_create_date }}</p>
                                             </div>
                                         </div>
                                     </div>
