@@ -13,4 +13,5 @@ class AdminController extends Controller
         return view('admin.index')
             ->with('title', $title);
     }
+
 }

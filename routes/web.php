@@ -12,6 +12,7 @@ use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\admin\AdminController;
+use App\Http\Controllers\admin\AdminProjectsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -127,3 +128,21 @@ Route::get('/administrace', [AdminController::class, 'index'])
     ->middleware('auth')
     ->middleware('can:isAdmin')
     ->name('admin.index');
+
+Route::get('/administrace/projekty', [AdminProjectsController::class, 'index'])
+    ->middleware('auth')
+    ->middleware('can:isAdmin')
+    ->name('admin.projekty.index');
+
+Route::get('/administrace/projekty/{id}', [AdminProjectsController::class, 'show'])
+    ->where('id', '[0-9]+')
+    ->middleware('auth')
+    ->middleware('can:isAdmin')
+    ->name('admin.projekty.show');
+
+Route::post('/administrace/projekty/{id}', [AdminProjectsController::class, 'handle'])
+    ->where('id', '[0-9]+')
+    ->middleware('auth')
+    ->middleware('can:isAdmin')
+    ->name('admin.projekty.handle-forms');
+
