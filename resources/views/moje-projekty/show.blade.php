@@ -208,6 +208,7 @@
                                             <thead class="table-primary small">
                                             <tr>
                                                 <th>Název souboru</th>
+                                                <th>Typ souboru</th>
                                                 <th style="width: 5%;"></th>
                                             </tr>
                                             </thead>
@@ -215,6 +216,9 @@
                                             @foreach($files as $file)
                                                 <tr>
                                                     <td><a href="{{ route('soubory', $file->id_file) }}" target="_blank">{{ $file->name }}</a></td>
+                                                    <td>
+                                                        <span class="badge bg-light text-dark">{{ $file->type }}</span>
+                                                    </td>
                                                     <td>
                                                         <form action="{{ route('moje-projekty.handle-forms', $my_project->id_project) }}" method="post" class="m-0 p-0">
                                                             @csrf
