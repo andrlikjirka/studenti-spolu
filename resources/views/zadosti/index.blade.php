@@ -311,7 +311,9 @@
                                             class="badge rounded-pill bg-light text-dark"></span>
                             </div>
                             <div class="mb-3">
-                                <label for="edit-request-message" class="form-label">Zpráva žádosti</label>
+                                <label for="edit-request-message" class="form-label">Zpráva žádosti
+                                    <span class="text-danger">*</span>
+                                </label>
                                 <textarea class="form-control" id="edit-request-message" name="edit-request-message"
                                           rows="8" required></textarea>
                             </div>
