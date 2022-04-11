@@ -27,7 +27,7 @@ class RequestCooperationRepository implements RequestCooperationRepositoryInterf
                     AND   c.id_user = :id_user
                     AND   c.id_role = :id_role
                 )
-            ORDER BY r.create_date DESC;
+            ORDER BY r.create_date DESC, s.id_status;
         ', [
             ':id_user' => $id_user,
             ':id_role' => 1 //uzivatel je autor projektu
@@ -46,7 +46,7 @@ class RequestCooperationRepository implements RequestCooperationRepositoryInterf
                 AND   o.id_field = f.id_field
                 AND   r.id_status = s.id_status
                 AND   id_user = :id_user
-            ORDER BY r.create_date DESC;
+            ORDER BY r.create_date DESC, s.id_status;
         ', [
             ':id_user' => $id_user,
         ]);
