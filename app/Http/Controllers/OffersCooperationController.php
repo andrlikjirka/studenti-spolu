@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Intefaces\OfferCooperationRepositoryInterface;
 use App\Intefaces\ProjectRepositoryInterface;
+use App\Intefaces\RequestCooperationRepositoryInterface;
+use App\Intefaces\UserRepositoryInterface;
 use App\Repositories\OfferCooperationRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,9 +19,16 @@ class OffersCooperationController extends Controller
      */
     protected $offers;
 
-    public function __construct(OfferCooperationRepositoryInterface $offers)
+    protected $requests;
+
+    protected $users;
+
+    public function __construct(OfferCooperationRepositoryInterface $offers, RequestCooperationRepositoryInterface $requests,
+                                UserRepositoryInterface $users,)
     {
         $this->offers = $offers;
+        $this->requests = $requests;
+        $this->users = $users;
     }
 
     public function index(Request $request)
@@ -82,44 +91,25 @@ class OffersCooperationController extends Controller
         $id_user = $request->input('request-id-user');
         $create_date = date("Y-m-d H:i:s");
 
-        $result = $this->offers->createNewRequest($message, $create_date, $id_user, $id_offer);
+        $result = $this->requests->createNewRequest($message, $create_date, $id_user, $id_offer);
         return $result;
     }
 
     private function isUserTeamMember($id_project)
     {
-        $authUser_TeamMember = DB::select('
-            SELECT c.id_role
-            FROM project p, cooperation c
-            WHERE p.id_project = c.id_project
-            AND p.id_project = :id_project
-            AND c.id_user = :id_user;
-        ', [
-            ':id_project' => $id_project,
-            ':id_user' => Auth::id()
-        ]);
-
+        $id_user = Auth::id();
+        $authUser_TeamMember = $this->users->getUserAsTeamMember($id_user, $id_project);
         if(count($authUser_TeamMember) > 0) {
             return true;
         } else {
             return false;
         }
-
     }
 
     private function userAlreadySentWaitingRequest($id_offer)
     {
-        $alreadySentWRequest = DB::select('
-        SELECT id_request FROM request_cooperation
-        WHERE id_user = :id_user
-        AND   id_status = :id_status
-        AND   id_offer = :id_offer;
-        ', [
-            ':id_user' => Auth::id(),
-            ':id_status' => 1, //čekající na vyřízení
-            ':id_offer' => $id_offer
-        ]);
-
+        $id_user = Auth::id();
+        $alreadySentWRequest = $this->requests->userAlreadySentWaitingRequestByOfferId($id_user, $id_offer);
         if (count($alreadySentWRequest) > 0) { //existuje odeslaná čakající žádost reagující na nabídku
             return true;
         } else {
