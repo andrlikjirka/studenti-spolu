@@ -110,7 +110,7 @@ class AdminProjectsController extends Controller
                 return redirect()->route('admin.projekty.show', $id_project)
                     ->with('error_remove_team_member_message', 'Odebrání člena týmu selhalo.');
             }
-        }else if ($request->input('action') == 'remove-offer-cooperation') {
+        } else if ($request->input('action') == 'remove-offer-cooperation') {
             $result = $this->remove_offer_cooperation($request, $id_project);
             if ($result == 1) {
                 return redirect()->route('admin.projekty.show', $id_project)
@@ -120,14 +120,9 @@ class AdminProjectsController extends Controller
                     ->with('error-remove-offer-cooperation-message', 'Smazání nabídky spolupráce selhalo.');
             }
         } else if ($request->input('action') == 'edit-offer-cooperation') {
-            $result = $this->edit_offer_cooperation($request, $id_project);
-            if ($result == 1) {
-                return redirect()->route('admin.projekty.show', $id_project)
-                    ->with('edit-offer-cooperation-message', 'Úprava nabídky spolupráce proběhla úspěšně.');
-            } else {
-                return redirect()->route('admin.projekty.show', $id_project)
-                    ->with('error-edit-offer-cooperation-message', 'Úprava nabídky spolupráce selhala.');
-            }
+            $result = $this->editOfferCooperation($request);
+            return redirect()->route('admin.projekty.show', $id_project)
+                ->with('edit-offer-cooperation-message', 'Úprava nabídky spolupráce proběhla úspěšně.');
         }
         //default route back
         return redirect()->route('admin.projekty.show', $id_project);
@@ -184,7 +179,7 @@ class AdminProjectsController extends Controller
         return $result;
     }
 
-    private function edit_offer_cooperation(Request $request, $id_project)
+    private function editOfferCooperation(Request $request)
     {
         $request->validate([
             'edit-id-offer' => 'required|integer',
@@ -203,6 +198,5 @@ class AdminProjectsController extends Controller
         $result = $this->offers->editOfferById($edit_id_offer, $edit_name_offer, $edit_description_offer, $edit_id_field_offer, $edit_id_status_offer);
         return $result;
     }
-
 
 }

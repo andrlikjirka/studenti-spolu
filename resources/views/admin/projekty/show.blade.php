@@ -73,7 +73,6 @@
                 <div class="col-lg-10">
                     <h3 class="mb-3 mb-1">{{ $project->name }}</h3>
                     <span class="badge bg-primary">Administrace projektu</span>
-
                 </div>
             </div>
 
@@ -483,7 +482,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zrušit</button>
-                        <button type="submit" form="edit-offer-cooperation" class="btn btn-warning" name="action"
+                        <button type="submit" form="edit-offer-cooperation" class="btn btn-warning edit-offer-button" name="action"
                                 value="edit-offer-cooperation">Uložit úpravy
                         </button>
                     </div>
@@ -521,6 +520,17 @@
             }
         }
 
+        let edit_offer_buttons = document.getElementsByClassName('edit-offer-button');
+        for (let i = 0; i < edit_offer_buttons.length; i++) {
+            edit_offer_buttons[i].addEventListener("click", editOffer)
+        }
+
+        function editOffer(event) {
+            if (!window.confirm('Opravdu chcete upravit nabídku spolupráce?')) {
+                event.preventDefault();
+            }
+        }
+
         let remove_offer_buttons = document.getElementsByClassName('remove-offer-button');
         for (let i = 0; i < remove_offer_buttons.length; i++) {
             remove_offer_buttons[i].addEventListener("click", removeOffer)
@@ -553,6 +563,7 @@
                 event.preventDefault();
             }
         }
+
 
     </script>
 
