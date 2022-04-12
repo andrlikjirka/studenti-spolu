@@ -23,7 +23,6 @@ class UsersController extends Controller
         $this->projects = $projects;
     }
 
-
     public function index(Request $request)
     {
         $title = 'Uživatelé';

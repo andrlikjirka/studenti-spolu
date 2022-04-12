@@ -58,7 +58,7 @@ class MyProfileController extends Controller
             $result = $this->editFields($request);
             if ($result == null) {
                 return redirect()->route('muj-profil.index')
-                    ->with('edit-fields-message', 'Úprava znalostní a dovedností v oborech proběhla úspěšně.');
+                    ->with('edit-fields-message', 'Úprava znalostí a dovedností v oborech proběhla úspěšně.');
             }
         }
         //default route
@@ -73,18 +73,14 @@ class MyProfileController extends Controller
             'last-name' => 'required|string|max:45',
             'email' => 'required|email|max:255',
         ]);
-
+        $id_user = Auth::id();
         $edit_first_name = $request->input('first-name');
         $edit_last_name = $request->input('last-name');
         $edit_email = $request->input('email');
         $edit_description = $request->input('description');
 
-        $user = User::find(Auth::id());
-        $user->first_name = $edit_first_name;
-        $user->last_name = $edit_last_name;
-        $user->email = $edit_email;
-        $user->description = $edit_description;
-        $user->save();
+        $this->users->editUserById($id_user, $edit_first_name, $edit_last_name, $edit_email, $edit_description);
+
     }
 
     private function editPassword(Request $request)

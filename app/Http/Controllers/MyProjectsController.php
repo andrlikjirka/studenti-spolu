@@ -130,7 +130,7 @@ class MyProjectsController extends Controller
         $create_date = date("Y-m-d H:i:s");
 
         $result = $this->projects->createNewProject($logged_user_id, $name, $abstract, $description, $create_date);
-        if ($result === null) {
+        if ($result == null) {
             return redirect()->route('moje-projekty.index')->with('new_project_message', 'Vytvoření a zveřejnění nového projektu proběhlo úspěšně.');
         } else {
             return redirect()->route('moje-projekty.index')->with('error_new_project_message', 'Vytvoření a zveřejnění nového projektu selhalo.');

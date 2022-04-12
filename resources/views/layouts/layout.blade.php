@@ -52,12 +52,12 @@
                             <li><a class="dropdown-item" href="{{ route('moje-projekty.index') }}">Moje projekty</a></li>
                             <li><a class="dropdown-item" href="{{ route('zadosti-o-spolupraci.index') }}">Žádosti o
                                     spolupráci</a></li>
-                            @if($loggedUser->id_right == 1)
+                            @can('isAdmin')
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
                                 <li><a class="dropdown-item" href="{{ route('admin.index') }}">Administrace aplikace</a></li>
-                            @endif
+                            @endcan
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
