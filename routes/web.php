@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\AdminUsersController;
 use App\Http\Controllers\FilesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectsController;
@@ -146,3 +147,19 @@ Route::post('/administrace/projekty/{id}', [AdminProjectsController::class, 'han
     ->middleware('can:isAdmin')
     ->name('admin.projekty.handle-forms');
 
+Route::get('/administrace/uzivatele', [AdminUsersController::class, 'index'])
+    ->middleware('auth')
+    ->middleware('can:isAdmin')
+    ->name('admin.uzivatele.index');
+
+Route::get('/administrace/uzivatele/{id}', [AdminUsersController::class, 'show'])
+    ->where('id', '[0-9]+')
+    ->middleware('auth')
+    ->middleware('can:isAdmin')
+    ->name('admin.uzivatele.show');
+
+Route::post('/administrace/uzivatele/{id}', [AdminUsersController::class, 'handle'])
+    ->where('id', '[0-9]+')
+    ->middleware('auth')
+    ->middleware('can:isAdmin')
+    ->name('admin.uzivatele.handle-forms');

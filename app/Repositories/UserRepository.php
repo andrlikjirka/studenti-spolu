@@ -2,12 +2,26 @@
 
 namespace App\Repositories;
 
+use App\Intefaces\ProjectRepositoryInterface;
 use App\Intefaces\UserRepositoryInterface;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class UserRepository implements UserRepositoryInterface
 {
+    public function getAllUsers()
+    {
+        return DB::select('
+                SELECT u.id_user, u.first_name, u.last_name, u.login, u.email, u.id_status, u.id_right, s.name as s_name, r.name as r_name
+                FROM users u
+                LEFT JOIN status_user s
+                ON u.id_status = s.id_status
+                LEFT JOIN `right` r
+                ON u.id_right = r.id_right;
+            ');
+    }
+
     public function getAllActiveUsers()
     {
         return DB::select('
@@ -24,6 +38,16 @@ class UserRepository implements UserRepositoryInterface
                 AND   u.first_name LIKE :first_name
                 AND   u.last_name LIKE :last_name;
         ', [':first_name' => $first_name, ':last_name' => $last_name]);
+    }
+
+    public function getUserById($id_user) {
+        return DB::select('
+            SELECT u.id_user, u.first_name, u.last_name, u.login, u.email, u.description, u.id_status, u.id_right
+                FROM users u
+                WHERE u.id_user = :id_user
+        ', [
+            ':id_user' => $id_user,
+        ]);
     }
 
     public function getActiveUserById($id_user)
@@ -81,5 +105,39 @@ class UserRepository implements UserRepositoryInterface
             ':id_user' => $id_user
         ]);
     }
+
+    public function editUserById($id_user, $edit_first_name, $edit_last_name, $edit_email, $edit_description)
+    {
+        $user = User::find($id_user);
+        $user->first_name = $edit_first_name;
+        $user->last_name = $edit_last_name;
+        $user->email = $edit_email;
+        $user->description = $edit_description;
+        $user->save();
+    }
+
+    public function editUserByIdSuperAdmin($id_user, $edit_first_name, $edit_last_name, $edit_email, $edit_description, $id_status, $id_right)
+    {
+        $user = User::find($id_user);
+        $user->first_name = $edit_first_name;
+        $user->last_name = $edit_last_name;
+        $user->email = $edit_email;
+        $user->description = $edit_description;
+        $user->id_status = $id_status;
+        $user->id_right = $id_right;
+        $user->save();
+    }
+
+    public function deleteUserById($id_user, $projects, ProjectRepositoryInterface $projectRepository)
+    {
+        $result = DB::transaction(function () use ($id_user, $projects, $projectRepository){
+            foreach ($projects as $project) {
+                $projectRepository->deleteProjectById($project->p_id_project); //smazu autorske projekty, kaskadou se smazou i nabidky
+            }
+            DB::delete('DELETE FROM users WHERE id_user = :id_user', [':id_user' => $id_user]);
+        });
+        return $result;
+    }
+
 
 }
