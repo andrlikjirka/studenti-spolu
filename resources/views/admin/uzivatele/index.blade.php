@@ -22,8 +22,9 @@
                 <div class="col-lg-10">
                     <h3 class="mb-3">{{ $title }}</h3>
                     <p class="text-secondary">
-                        Tato stránka je věnována administraci uživatelů. Můžete zde upravovat informace o uživatelích a
-                        jednotlivé uživatele i ze systému zcela odstranit. V případě že máte právo Super Administrátor,
+                        Tato stránka je věnována administraci žádostí o spolupráci. Můžete zde upravovat informace o
+                        všech žádostech o spolupráci jednotlivých uživatelů nebo je ze systému zcela odstranit. V případě že
+                        máte právo Super Administrátor,
                         můžete měnit práva ostatních uživatelů (tj. vytvářet administrátory, nebo administrátorská práva
                         odebírat).
                     </p>
@@ -39,6 +40,7 @@
                                 <table class="table table-hover">
                                     <thead class="table-primary small">
                                     <tr class="">
+                                        <th class="">ID</th>
                                         <th class="">Jméno a příjmení</th>
                                         <th class="">Login</th>
                                         <th class="">Stav</th>
@@ -49,6 +51,7 @@
                                     <tbody>
                                     @foreach($users as $user)
                                         <tr>
+                                            <td class="">{{ $user->id_user }}</td>
                                             <td class="">{{ $user->first_name.' '.$user->last_name }}</td>
                                             <td class="">{{ $user->login }}</td>
                                             <td class="">
