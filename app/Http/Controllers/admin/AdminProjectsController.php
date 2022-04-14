@@ -79,7 +79,7 @@ class AdminProjectsController extends Controller
                 ->with('fields_all', $fields_all)
                 ->with('status_offer_all', $status_offer_all);
         } else {
-            return abort(404, 'Můj projekt nenalezen.'); //404 strana
+            return abort(404, 'Projekt nenalezen.'); //404 strana
         }
     }
 

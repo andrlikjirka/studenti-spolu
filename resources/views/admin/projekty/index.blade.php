@@ -32,6 +32,7 @@
                                 <table class="table table-hover">
                                     <thead class="table-primary small">
                                     <tr class="">
+                                        <th class="">ID</th>
                                         <th class="">Název projektu</th>
                                         <th class="">Datum zveřejnění</th>
                                         <th class="">Stav</th>
@@ -41,6 +42,7 @@
                                     <tbody>
                                     @foreach($projects as $project)
                                         <tr>
+                                            <td class="">{{ $project->id_project }}</td>
                                             <td class="">{{ $project->name }}</td>
                                             <td class="">{{ $project->create_date }}</td>
                                             <td>
