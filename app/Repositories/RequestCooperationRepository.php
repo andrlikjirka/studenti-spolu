@@ -8,6 +8,21 @@ use Illuminate\Support\Facades\DB;
 
 class RequestCooperationRepository implements RequestCooperationRepositoryInterface
 {
+    public function getAllRequests()
+    {
+        return DB::select('
+            SELECT r.id_request as r_id_request, r.message as r_message, DATE(r.create_date) as r_create_date,
+                    o.id_offer as o_id_offer, o.name as o_name, p.id_project as p_id_project,
+                    p.name as p_name, f.name as f_name, s.id_status as s_id_status, s.name as s_name
+                FROM request_cooperation r, offer_cooperation o, status_request s, project p, field f
+                    WHERE r.id_offer = o.id_offer
+                    AND   o.id_project = p.id_project
+                    AND   o.id_field = f.id_field
+                    AND   r.id_status = s.id_status
+                ORDER BY r.create_date DESC, s.id_status;
+            ');
+    }
+
     public function getAllRecievedRequests($id_user)
     {
         return DB::select('
@@ -49,6 +64,26 @@ class RequestCooperationRepository implements RequestCooperationRepositoryInterf
             ORDER BY r.create_date DESC, s.id_status;
         ', [
             ':id_user' => $id_user,
+        ]);
+    }
+
+    public function getRequestById($id_request)
+    {
+        return DB::select('
+            SELECT r.id_request as r_id_request, r.message as r_message, DATE(r.create_date) as r_create_date,
+                o.id_offer as o_id_offer, o.name as o_name, p.id_project as p_id_project,
+                p.name as p_name, f.name as f_name, s.id_status as s_id_status, s.name as s_name,
+                u.id_user as u_id_user, u.first_name as u_first_name, u.last_name as u_last_name
+            FROM request_cooperation r, offer_cooperation o, status_request s, project p, field f, users u
+                WHERE r.id_offer = o.id_offer
+                AND   o.id_project = p.id_project
+                AND   o.id_field = f.id_field
+                AND   r.id_status = s.id_status
+                AND   r.id_user = u.id_user
+                AND   r.id_request = :id_request
+            ORDER BY r.create_date DESC, s.id_status;
+        ', [
+            ':id_request' => $id_request,
         ]);
     }
 

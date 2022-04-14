@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\AdminRequestsController;
 use App\Http\Controllers\admin\AdminUsersController;
 use App\Http\Controllers\FilesController;
 use Illuminate\Support\Facades\Route;
@@ -163,3 +164,20 @@ Route::post('/administrace/uzivatele/{id}', [AdminUsersController::class, 'handl
     ->middleware('auth')
     ->middleware('can:isAdmin')
     ->name('admin.uzivatele.handle-forms');
+
+Route::get('/administrace/zadosti', [AdminRequestsController::class, 'index'])
+    ->middleware('auth')
+    ->middleware('can:isAdmin')
+    ->name('admin.zadosti.index');
+
+Route::get('/administrace/zadosti/{id}', [AdminRequestsController::class, 'show'])
+    ->where('id', '[0-9]+')
+    ->middleware('auth')
+    ->middleware('can:isAdmin')
+    ->name('admin.zadosti.show');
+
+Route::post('/administrace/zadosti/{id}', [AdminRequestsController::class, 'handle'])
+    ->where('id', '[0-9]+')
+    ->middleware('auth')
+    ->middleware('can:isAdmin')
+    ->name('admin.zadosti.handle-forms');
