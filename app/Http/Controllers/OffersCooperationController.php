@@ -87,8 +87,8 @@ class OffersCooperationController extends Controller
             'request-id-user' => 'required',
         ]);
 
-        $message = $request->input('request-message');
-        $id_user = $request->input('request-id-user');
+        $message = $this->testStringInput($request->input('request-message'));
+        $id_user = $this->testIntegerInput($request->input('request-id-user'));
         $create_date = date("Y-m-d H:i:s");
 
         $result = $this->requests->createNewRequest($message, $create_date, $id_user, $id_offer);

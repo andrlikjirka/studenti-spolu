@@ -31,8 +31,8 @@ class UsersController extends Controller
                 'first_name' => 'nullable|string',
                 'last_name' => 'nullable|string',
             ]);
-            $first_name = htmlspecialchars($request->input('first_name')).'%';
-            $last_name = htmlspecialchars($request->input('last_name')).'%';
+            $first_name = $this->testStringInput($request->input('first_name')).'%';
+            $last_name = $this->testStringInput($request->input('last_name')).'%';
             $users = $this->users->getSearchActiveUsers($first_name, $last_name);
         } else {
             $users = $this->users->getAllActiveUsers();

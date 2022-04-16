@@ -40,7 +40,7 @@ class ProjectsController extends Controller
             $request->validate([
                 'project_name' => 'nullable|string',
             ]);
-            $project_name = htmlspecialchars($request->input('project_name')).'%';
+            $project_name = $this->testStringInput($request->input('project_name')).'%';
             $projects = $this->projects->getSearchProjects($project_name);
         } else {
             $projects = $this->projects->getAllProjects();

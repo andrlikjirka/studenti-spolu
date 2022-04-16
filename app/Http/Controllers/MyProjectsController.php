@@ -103,12 +103,12 @@ class MyProjectsController extends Controller
             'edit-status-project' => 'required|integer|between:1,3',
         ]);
 
-        $edit_name = $request->input('edit-name-project');
-        $edit_abstract = $request->input('edit-abstract-project');
-        $edit_description = $request->input('edit-description-project');
-        $edit_status = $request->input('edit-status-project');
+        $edit_name = $this->testStringInput($request->input('edit-name-project'));
+        $edit_abstract = $this->testStringInput($request->input('edit-abstract-project'));
+        $edit_description = $this->testStringInput($request->input('edit-description-project'));
+        $edit_id_status = $this->testIntegerInput($request->input('edit-status-project'));
 
-        $result = $this->projects->editProjectById($id, $edit_name, $edit_abstract, $edit_description, $edit_status);
+        $result = $this->projects->editProjectById($id, $edit_name, $edit_abstract, $edit_description, $edit_id_status);
 
         return redirect()->route('moje-projekty.show', $id)
             ->with('edit_project', 'Úprava projektu proběhla úspěšně.');
@@ -124,9 +124,9 @@ class MyProjectsController extends Controller
             'new-description-project' => 'required',
         ]);
 
-        $name = $request->input('new-name-project');
-        $abstract = $request->input('new-abstract-project');
-        $description = $request->input('new-description-project');
+        $name = $this->testStringInput($request->input('new-name-project'));
+        $abstract = $this->testStringInput($request->input('new-abstract-project'));
+        $description = $this->testStringInput($request->input('new-description-project'));
         $create_date = date("Y-m-d H:i:s");
 
         $result = $this->projects->createNewProject($logged_user_id, $name, $abstract, $description, $create_date);
@@ -139,7 +139,7 @@ class MyProjectsController extends Controller
 
     public function destroy(Request $request)
     {
-        $delete_project_id = $request->input('delete_id_project');
+        $delete_project_id = $this->testIntegerInput($request->input('delete_id_project'));
         $result = $this->projects->deleteProjectById($delete_project_id);
         if ($result == 1) {
             return redirect()->route('moje-projekty.index')->with('delete_project', 'Odstranění projektu proběhlo úspěšně.');
@@ -212,7 +212,7 @@ class MyProjectsController extends Controller
 
     private function remove_team_member(Request $request, $id_project)
     {
-        $id_user = $request->input('remove_id_user');
+        $id_user = $this->testIntegerInput($request->input('remove_id_user'));
         $result = $this->users->removeTeamMember($id_project, $id_user);
         return $result;
     }
@@ -225,9 +225,9 @@ class MyProjectsController extends Controller
             'description-offer-cooperation' => 'required',
         ]);
 
-        $name = $request->input('name-offer-cooperation');
-        $id_field = $request->input('field-offer-cooperation');
-        $description = $request->input('description-offer-cooperation');
+        $name = $this->testStringInput($request->input('name-offer-cooperation'));
+        $id_field = $this->testIntegerInput($request->input('field-offer-cooperation'));
+        $description = $this->testStringInput($request->input('description-offer-cooperation'));
         $create_date = date("Y-m-d H:i:s");
 
         $result = $this->offers->createNewOffer($name, $description, $create_date, $id_field, $id_project);
@@ -244,11 +244,11 @@ class MyProjectsController extends Controller
             'edit-status-offer-cooperation' => 'required|integer'
         ]);
 
-        $edit_id_offer = $request->input('edit-id-offer');
-        $edit_name_offer = $request->input('edit-name-offer-cooperation');
-        $edit_description_offer = $request->input('edit-description-offer-cooperation');
-        $edit_id_status_offer = $request->input('edit-status-offer-cooperation');
-        $edit_id_field_offer = $request->input('edit-field-offer-cooperation');
+        $edit_id_offer = $this->testIntegerInput($request->input('edit-id-offer'));
+        $edit_name_offer = $this->testStringInput($request->input('edit-name-offer-cooperation'));
+        $edit_description_offer = $this->testStringInput($request->input('edit-description-offer-cooperation'));
+        $edit_id_status_offer = $this->testIntegerInput($request->input('edit-status-offer-cooperation'));
+        $edit_id_field_offer = $this->testIntegerInput($request->input('edit-field-offer-cooperation'));
 
         $result = $this->offers->editOfferById($edit_id_offer, $edit_name_offer, $edit_description_offer, $edit_id_field_offer, $edit_id_status_offer);
         return $result;
@@ -259,7 +259,7 @@ class MyProjectsController extends Controller
         $request->validate([
             'remove_id_offer' => 'required|integer',
         ]);
-        $remove_id_offer = $request->input('remove_id_offer');
+        $remove_id_offer = $this->testIntegerInput($request->input('remove_id_offer'));
         $result = $this->offers->removeOfferById($remove_id_offer);
         return $result;
     }
@@ -269,7 +269,7 @@ class MyProjectsController extends Controller
         $request->validate([
             'id_user' => 'required|integer'
         ]);
-        $id_user = $request->input('id_user');
+        $id_user = $this->testIntegerInput($request->input('id_user'));
         $file = $request->file('uploadFile');
         $originalName = $file->getClientOriginalName();
         $type = $file->getClientOriginalExtension();
@@ -288,7 +288,7 @@ class MyProjectsController extends Controller
         $request->validate([
             'delete_id_file' => 'required|integer'
         ]);
-        $delete_id_file = $request->input('delete_id_file');
+        $delete_id_file = $this->testIntegerInput($request->input('delete_id_file'));
         $fileInfo = $this->files->getFileInfoById($delete_id_file);
         $result = $this->files->deleteFile($delete_id_file);
         if ($result == 1) {

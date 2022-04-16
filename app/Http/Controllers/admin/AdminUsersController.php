@@ -109,12 +109,12 @@ class AdminUsersController extends Controller
             'last-name' => 'required|string|max:45',
             'email' => 'required|email|max:255',
         ]);
-        $edit_first_name = $request->input('first-name');
-        $edit_last_name = $request->input('last-name');
-        $edit_email = $request->input('email');
-        $edit_description = $request->input('description');
-        $edit_id_status = $request->input('edit_id_status');
-        $edit_id_right = $request->input('edit_id_right');
+        $edit_first_name = $this->testStringInput($request->input('first-name'));
+        $edit_last_name = $this->testStringInput($request->input('last-name'));
+        $edit_email = $this->testStringInput($request->input('email'));
+        $edit_description = $this->testStringInput($request->input('description'));
+        $edit_id_status = $this->testIntegerInput($request->input('edit_id_status'));
+        $edit_id_right = $this->testIntegerInput($request->input('edit_id_right'));
         $this->users->editUserByIdSuperAdmin($id_user, $edit_first_name, $edit_last_name, $edit_email, $edit_description, $edit_id_status, $edit_id_right);
     }
 
@@ -131,7 +131,7 @@ class AdminUsersController extends Controller
             'password' => 'required|string|max:255|confirmed'
         ]);
         $user = User::find($id_user);
-        $user->password = Hash::make($request->input('password'));
+        $user->password = Hash::make($this->testStringInput($request->input('password')));
         $user->save();
     }
 

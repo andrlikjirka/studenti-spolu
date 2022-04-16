@@ -34,11 +34,11 @@ class RegistrationController extends Controller
         ]);
 
         $user = User::create([
-            'first_name' => $request->input('first_name'),
-            'last_name' => $request->input('last_name'),
-            'email' => $request->input('email'),
-            'login' => $request->input('login'),
-            'password' => Hash::make($request->input('password')),
+            'first_name' => $this->testStringInput($request->input('first_name')),
+            'last_name' => $this->testStringInput($request->input('last_name')),
+            'email' => $this->testStringInput($request->input('email')),
+            'login' => $this->testStringInput($request->input('login')),
+            'password' => Hash::make($this->testStringInput($request->input('password'))),
         ]);
 
         $fields = $request->input('fields');

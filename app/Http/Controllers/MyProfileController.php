@@ -74,10 +74,10 @@ class MyProfileController extends Controller
             'email' => 'required|email|max:255',
         ]);
         $id_user = Auth::id();
-        $edit_first_name = $request->input('first-name');
-        $edit_last_name = $request->input('last-name');
-        $edit_email = $request->input('email');
-        $edit_description = $request->input('description');
+        $edit_first_name = $this->testStringInput($request->input('first-name'));
+        $edit_last_name = $this->testStringInput($request->input('last-name'));
+        $edit_email = $this->testStringInput($request->input('email'));
+        $edit_description = $this->testStringInput($request->input('description'));
 
         $this->users->editUserById($id_user, $edit_first_name, $edit_last_name, $edit_email, $edit_description);
 
@@ -89,7 +89,7 @@ class MyProfileController extends Controller
             'password' => 'required|string|max:255|confirmed'
         ]);
         $user = User::find(Auth::id());
-        $user->password = Hash::make($request->input('password'));
+        $user->password = Hash::make($this->testStringInput($request->input('password')));
         $user->save();
     }
 

@@ -111,7 +111,7 @@ class AdminRequestsController extends Controller
         $request->validate([
             'edit-request-message' => 'required',
         ]);
-        $edit_request_message = $request->input('edit-request-message');
+        $edit_request_message = $this->testStringInput($request->input('edit-request-message'));
         $old_request = $this->requests->getOldRequestBeforeEdit($id_request);
         if (strcmp($edit_request_message, $old_request[0]->message) !== 0) {
             $result = $this->requests->editRequestById($id_request, $edit_request_message);
@@ -128,8 +128,8 @@ class AdminRequestsController extends Controller
             'accept_id_user' => 'required|integer',
             'accept_id_project' => 'required|integer',
         ]);
-        $id_user = $request->input('accept_id_user');
-        $id_project = $request->input('accept_id_project');
+        $id_user = $this->testIntegerInput($request->input('accept_id_user'));
+        $id_project = $this->testIntegerInput($request->input('accept_id_project'));
 
         $result = $this->requests->acceptRequestById($id_request, $id_project, $id_user);
         return $result;
@@ -141,8 +141,8 @@ class AdminRequestsController extends Controller
             'waiting_id_user' => 'required|integer',
             'waiting_id_project' => 'required|integer',
         ]);
-        $id_user = $request->input('waiting_id_user');
-        $id_project = $request->input('waiting_id_project');
+        $id_user = $this->testIntegerInput($request->input('waiting_id_user'));
+        $id_project = $this->testIntegerInput($request->input('waiting_id_project'));
 
         $result = $this->requests->setWaitingRequestById($id_request, $id_project, $id_user);
         return $result;

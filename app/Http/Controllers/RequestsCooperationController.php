@@ -88,8 +88,8 @@ class RequestsCooperationController extends Controller
             'edit-request-message' => 'required',
         ]);
 
-        $id_request = $request->input('edit-id-request');
-        $edit_request_message = $request->input('edit-request-message');
+        $id_request = $this->testIntegerInput($request->input('edit-id-request'));
+        $edit_request_message = $this->testStringInput($request->input('edit-request-message'));
 
         $old_request = $this->requests->getOldRequestBeforeEdit($id_request);
         if (strcmp($edit_request_message, $old_request[0]->message) !== 0) {
@@ -105,7 +105,7 @@ class RequestsCooperationController extends Controller
         $request->validate([
             'delete-request-sent' => 'required|integer'
         ]);
-        $id_request = $request->input('delete-request-sent');
+        $id_request = $this->testIntegerInput($request->input('delete-request-sent'));
         $result = $this->requests->deleteRequestById($id_request);
         return $result;
     }
@@ -117,9 +117,9 @@ class RequestsCooperationController extends Controller
             'accept_id_user' => 'required|integer',
             'accept_id_project' => 'required|integer',
         ]);
-        $id_request = $request->input('accept_id_request');
-        $id_user = $request->input('accept_id_user');
-        $id_project = $request->input('accept_id_project');
+        $id_request = $this->testIntegerInput($request->input('accept_id_request'));
+        $id_user = $this->testIntegerInput($request->input('accept_id_user'));
+        $id_project = $this->testIntegerInput($request->input('accept_id_project'));
 
         $result = $this->requests->acceptRequestById($id_request, $id_project, $id_user);
         return $result;
@@ -130,7 +130,7 @@ class RequestsCooperationController extends Controller
         $request->validate([
             'reject_id_request' => 'required|integer',
         ]);
-        $id_request = $request->input('reject_id_request');
+        $id_request = $this->testIntegerInput($request->input('reject_id_request'));
 
         $result = $this->requests->rejectRequestById($id_request);
         return $result;
@@ -143,9 +143,9 @@ class RequestsCooperationController extends Controller
             'waiting_id_user' => 'required|integer',
             'waiting_id_project' => 'required|integer',
         ]);
-        $id_request = $request->input('waiting_id_request');
-        $id_user = $request->input('waiting_id_user');
-        $id_project = $request->input('waiting_id_project');
+        $id_request = $this->testIntegerInput($request->input('waiting_id_request'));
+        $id_user = $this->testIntegerInput($request->input('waiting_id_user'));
+        $id_project = $this->testIntegerInput($request->input('waiting_id_project'));
 
         $result = $this->requests->setWaitingRequestById($id_request, $id_project, $id_user);
         return $result;

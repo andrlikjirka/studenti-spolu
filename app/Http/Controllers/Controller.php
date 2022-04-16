@@ -10,4 +10,20 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    protected function testStringInput($input)
+    {
+        $input = trim($input);
+        $input = stripslashes($input);
+        $input = htmlspecialchars($input);
+        return $input;
+    }
+
+    protected function testIntegerInput($input)
+    {
+        $input = trim($input);
+        $input = stripslashes($input);
+        $input = intval($input);
+        return $input;
+    }
 }
