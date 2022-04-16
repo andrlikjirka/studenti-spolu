@@ -47,7 +47,7 @@ class AdminProjectsController extends Controller
 
     public function index()
     {
-        $title = 'Administrace projektů';
+        $title = 'Administrace projektů a nabídek spolupráce';
         $projects = $this->projects->getAllProjects();
 
         return view('admin.projekty.index')

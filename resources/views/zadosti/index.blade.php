@@ -16,30 +16,22 @@
             @elseif(session('error_edit_request_message'))
                 <div
                     class="alert alert-danger small text-center mb-5"> {{ session('error_edit_request_message') }} </div>
-            @endif
-
-            @if(session('delete_request_message'))
+            @elseif(session('delete_request_message'))
                 <div class="alert alert-success small text-center mb-5"> {{ session('delete_request_message') }} </div>
             @elseif(session('error_delete_request_message'))
                 <div
                     class="alert alert-danger small text-center mb-5"> {{ session('error_delete_request_message') }} </div>
-            @endif
-
-            @if(session('accept_request_message'))
+            @elseif(session('accept_request_message'))
                 <div class="alert alert-success small text-center mb-5"> {{ session('accept_request_message') }} </div>
             @elseif(session('error_accept_request_message'))
                 <div
                     class="alert alert-danger small text-center mb-5"> {{ session('error_accept_request_message') }} </div>
-            @endif
-
-            @if(session('reject_request_message'))
+            @elseif(session('reject_request_message'))
                 <div class="alert alert-success small text-center mb-5"> {{ session('reject_request_message') }} </div>
             @elseif(session('error_reject_request_message'))
                 <div
                     class="alert alert-danger small text-center mb-5"> {{ session('error_reject_request_message') }} </div>
-            @endif
-
-            @if(session('waiting_request_message'))
+            @elseif(session('waiting_request_message'))
                 <div class="alert alert-success small text-center mb-5"> {{ session('waiting_request_message') }} </div>
             @elseif(session('error_waiting_request_message'))
                 <div

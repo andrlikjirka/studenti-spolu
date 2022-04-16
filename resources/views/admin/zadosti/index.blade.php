@@ -3,16 +3,30 @@
 @section('content')
     <section class="bg-light" style="padding-top: 70px">
         <div class="container px-5 py-5">
-            @if(count($errors) > 0)
-                <div class="alert alert-danger small text-center mb-5">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
+            <div>
+                @if(count($errors) > 0)
+                    <div class="alert alert-danger small text-center mb-5">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </div>
+                @endif
+                @if(session('delete_project_message'))
+                    <div class="alert alert-success small text-center mb-5"> {{ session('delete_project_message') }} </div>
+                @endif
+            </div>
+
+            <div class="row mb-3 justify-content-center small">
+                <div class="col-lg-10">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ route('index') }}">Domovská stránka</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Administrace aplikace</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Administrace žádostí o spolupráci</li>
+                        </ol>
+                    </nav>
                 </div>
-            @endif
-            @if(session('delete_project_message'))
-                <div class="alert alert-success small text-center mb-5"> {{ session('delete_project_message') }} </div>
-            @endif
+            </div>
 
             <div class="row mb-4 justify-content-center">
                 <div class="col-lg-10">
@@ -69,8 +83,6 @@
                                                     method="post"
                                                     class="d-inline-block">
                                                     @csrf
-                                                    <input type="hidden" name="delete_id_request"
-                                                           value="{{ $request->r_id_request }}">
                                                     <button type="submit"
                                                             class="btn btn-sm btn-danger delete-request-button"
                                                             name="action" value="delete-request">

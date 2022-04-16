@@ -3,27 +3,44 @@
 @section('content')
     <section class="bg-light" style="padding-top: 70px">
         <div class="container px-5 py-5">
-            @if(count($errors) > 0)
-                <div class="alert alert-danger small text-center mb-5">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </div>
-            @endif
+            <div>
+                @if(count($errors) > 0)
+                    <div class="alert alert-danger small text-center mb-5">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </div>
+                @endif
 
-            @if(session('edit-user-message'))
-                <div class="alert alert-success small text-center mb-5"> {{ session('edit-user-message') }} </div>
-            @elseif(session('delete-user-message'))
-                <div class="alert alert-success small text-center mb-5"> {{ session('delete-user-message') }} </div>
-            @elseif(session('error-delete-user-message'))
-                <div class="alert alert-danger small text-center mb-5"> {{ session('error-delete-user-message') }} </div>
-            @elseif(session('edit-password-message'))
-                <div class="alert alert-success small text-center mb-5"> {{ session('edit-password-message') }} </div>
-            @elseif(session('edit-fields-message'))
-                <div class="alert alert-success small text-center mb-5"> {{ session('edit-fields-message') }} </div>
-            @elseif(session('edit-fields-message'))
-                <div class="alert alert-danger small text-center mb-5"> {{ session('error-edit-fields-message') }} </div>
-            @endif
+                @if(session('edit-user-message'))
+                    <div class="alert alert-success small text-center mb-5"> {{ session('edit-user-message') }} </div>
+                @elseif(session('delete-user-message'))
+                    <div class="alert alert-success small text-center mb-5"> {{ session('delete-user-message') }} </div>
+                @elseif(session('error-delete-user-message'))
+                    <div class="alert alert-danger small text-center mb-5"> {{ session('error-delete-user-message') }} </div>
+                @elseif(session('edit-password-message'))
+                    <div class="alert alert-success small text-center mb-5"> {{ session('edit-password-message') }} </div>
+                @elseif(session('edit-fields-message'))
+                    <div class="alert alert-success small text-center mb-5"> {{ session('edit-fields-message') }} </div>
+                @elseif(session('edit-fields-message'))
+                    <div class="alert alert-danger small text-center mb-5"> {{ session('error-edit-fields-message') }} </div>
+                @endif
+
+            </div>
+
+            <div class="row mb-3 justify-content-center small">
+                <div class="col-lg-10">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ route('index') }}">Domovská stránka</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Administrace aplikace</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.uzivatele.index') }}">Administrace uživatelů</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Úprava uživatele</li>
+                        </ol>
+                    </nav>
+
+                </div>
+            </div>
 
             <div class="row mb-5 justify-content-center">
                 <div class="col-lg-10">
@@ -240,7 +257,7 @@
         }
 
         function editProject(event) {
-            if (!window.confirm('Opravdu chcete provést úravu?')) {
+            if (!window.confirm('Opravdu chcete provést úpravu?')) {
                 event.preventDefault();
             }
         }

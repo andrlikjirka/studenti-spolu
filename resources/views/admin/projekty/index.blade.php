@@ -3,22 +3,39 @@
 @section('content')
     <section class="bg-light" style="padding-top: 70px">
         <div class="container px-5 py-5">
-            @if(count($errors) > 0)
-                <div class="alert alert-danger small text-center mb-5">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
+            <div>
+                @if(count($errors) > 0)
+                    <div class="alert alert-danger small text-center mb-5">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </div>
+                @endif
+                @if(session('delete_project_message'))
+                    <div
+                        class="alert alert-success small text-center mb-5"> {{ session('delete_project_message') }} </div>
+                @endif
+            </div>
+
+            <div class="row mb-3 justify-content-center small">
+                <div class="col-lg-10">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ route('index') }}">Domovská stránka</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Administrace aplikace</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Administrace projektů a nabídek spolupráce</li>
+                        </ol>
+                    </nav>
+
                 </div>
-            @endif
-            @if(session('delete_project_message'))
-                <div class="alert alert-success small text-center mb-5"> {{ session('delete_project_message') }} </div>
-            @endif
+            </div>
 
             <div class="row mb-4 justify-content-center">
                 <div class="col-lg-10">
                     <h3 class="mb-3">{{ $title }}</h3>
                     <p class="text-secondary">
-                        Tato stránka je věnována administraci projektů. Můžete zde upravovat informace o vytvořených projektech, nebo jednotlivé projekty zcela odstranit.
+                        Tato stránka je věnována administraci projektů. Můžete zde upravovat informace o vytvořených
+                        projektech, nebo jednotlivé projekty zcela odstranit.
                     </p>
                 </div>
             </div>

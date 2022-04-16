@@ -74,7 +74,7 @@
 
                             @foreach($projects_author as $project_author)
 
-                                <div class="card bg-white mb-3">
+                                <div class="card bg-white mb-4">
                                     <div class="card-body p-4">
                                         <h5 class="card-title text-primary">{{ $project_author->p_name }}</h5>
                                         <p class="card-text">{{ $project_author->p_abstract }}</p>

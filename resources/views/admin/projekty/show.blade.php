@@ -4,68 +4,71 @@
 
     <section class="bg-light" style="padding-top: 70px">
         <div class="container px-5 py-5">
-            @if(count($errors) > 0)
-                <div class="alert alert-danger small text-center mb-5">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </div>
-            @endif
+            <div>
+                @if(count($errors) > 0)
+                    <div class="alert alert-danger small text-center mb-5">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </div>
+                @endif
 
-            @if(session('new_project_message'))
-                <div class="alert alert-success small text-center mb-5"> {{ session('new_project_message') }} </div>
-            @elseif(session('error_new_project_message'))
-                <div
-                    class="alert alert-danger small text-center mb-5"> {{ session('error_new_project_message') }} </div>
-            @elseif(session('edit_project_message'))
-                <div class="alert alert-success small text-center mb-5"> {{ session('edit_project_message') }} </div>
-            @elseif(session('remove_team_member_message'))
-                <div
-                    class="alert alert-success small text-center mb-5"> {{ session('remove_team_member_message') }} </div>
-            @elseif(session('error_remove_team_member_message'))
-                <div
-                    class="alert alert-danger small text-center mb-5"> {{ session('error_remove_team_member_message') }} </div>
-            @elseif(session('new-offer-cooperation-message'))
-                <div
-                    class="alert alert-success small text-center mb-5"> {{ session('new-offer-cooperation-message') }} </div>
-            @elseif(session('error-new-offer-cooperation-message'))
-                <div
-                    class="alert alert-danger small text-center mb-5"> {{ session('error-new-offer-cooperation-message') }} </div>
-            @elseif(session('remove-offer-cooperation-message'))
-                <div
-                    class="alert alert-success small text-center mb-5"> {{ session('remove-offer-cooperation-message') }} </div>
-            @elseif(session('error-remove-offer-cooperation-message'))
-                <div
-                    class="alert alert-danger small text-center mb-5"> {{ session('error-remove-offer-cooperation-message') }} </div>
-            @elseif(session('edit-offer-cooperation-message'))
-                <div
-                    class="alert alert-success small text-center mb-5"> {{ session('edit-offer-cooperation-message') }} </div>
-            @elseif(session('error-edit-offer-cooperation-message'))
-                <div
-                    class="alert alert-danger small text-center mb-5"> {{ session('error-edit-offer-cooperation-message') }} </div>
-            @elseif(session('file-upload-message'))
-                <div
-                    class="alert alert-success small text-center mb-5"> {{ session('file-upload-message') }} </div>
-            @elseif(session('error-file-upload-message'))
-                <div
-                    class="alert alert-danger small text-center mb-5"> {{ session('error-file-upload-message') }} </div>
-            @elseif(session('delete-file-message'))
-                <div
-                    class="alert alert-success small text-center mb-5"> {{ session('delete-file-message') }} </div>
-            @elseif(session('error-delete-file-message'))
-                <div
-                    class="alert alert-danger small text-center mb-5"> {{ session('error-delete-file-message') }} </div>
-            @endif
+                @if(session('new_project_message'))
+                    <div class="alert alert-success small text-center mb-5"> {{ session('new_project_message') }} </div>
+                @elseif(session('error_new_project_message'))
+                    <div
+                        class="alert alert-danger small text-center mb-5"> {{ session('error_new_project_message') }} </div>
+                @elseif(session('edit_project_message'))
+                    <div class="alert alert-success small text-center mb-5"> {{ session('edit_project_message') }} </div>
+                @elseif(session('remove_team_member_message'))
+                    <div
+                        class="alert alert-success small text-center mb-5"> {{ session('remove_team_member_message') }} </div>
+                @elseif(session('error_remove_team_member_message'))
+                    <div
+                        class="alert alert-danger small text-center mb-5"> {{ session('error_remove_team_member_message') }} </div>
+                @elseif(session('new-offer-cooperation-message'))
+                    <div
+                        class="alert alert-success small text-center mb-5"> {{ session('new-offer-cooperation-message') }} </div>
+                @elseif(session('error-new-offer-cooperation-message'))
+                    <div
+                        class="alert alert-danger small text-center mb-5"> {{ session('error-new-offer-cooperation-message') }} </div>
+                @elseif(session('remove-offer-cooperation-message'))
+                    <div
+                        class="alert alert-success small text-center mb-5"> {{ session('remove-offer-cooperation-message') }} </div>
+                @elseif(session('error-remove-offer-cooperation-message'))
+                    <div
+                        class="alert alert-danger small text-center mb-5"> {{ session('error-remove-offer-cooperation-message') }} </div>
+                @elseif(session('edit-offer-cooperation-message'))
+                    <div
+                        class="alert alert-success small text-center mb-5"> {{ session('edit-offer-cooperation-message') }} </div>
+                @elseif(session('error-edit-offer-cooperation-message'))
+                    <div
+                        class="alert alert-danger small text-center mb-5"> {{ session('error-edit-offer-cooperation-message') }} </div>
+                @elseif(session('file-upload-message'))
+                    <div
+                        class="alert alert-success small text-center mb-5"> {{ session('file-upload-message') }} </div>
+                @elseif(session('error-file-upload-message'))
+                    <div
+                        class="alert alert-danger small text-center mb-5"> {{ session('error-file-upload-message') }} </div>
+                @elseif(session('delete-file-message'))
+                    <div
+                        class="alert alert-success small text-center mb-5"> {{ session('delete-file-message') }} </div>
+                @elseif(session('error-delete-file-message'))
+                    <div
+                        class="alert alert-danger small text-center mb-5"> {{ session('error-delete-file-message') }} </div>
+                @endif
+            </div>
 
-            <div class="row mb-5 justify-content-center">
+            <div class="row mb-3 justify-content-center small">
                 <div class="col-lg-10">
-                    <a href="{{ route('admin.projekty.index') }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                             class="bi bi-arrow-left me-2" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd"
-                                  d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-                        </svg>
-                        Zpět na seznam administrace projektů</a>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ route('index') }}">Domovská stránka</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Administrace aplikace</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.projekty.index') }}">Administrace projektů a nabídek spolupráce</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Úprava projektu</li>
+                        </ol>
+                    </nav>
                 </div>
             </div>
 
