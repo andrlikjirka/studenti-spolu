@@ -126,7 +126,9 @@ Route::get('/soubory/{id}', [FilesController::class, 'show'])
     ->middleware('auth')
     ->name('soubory');
 
-Route::get('/administrace', [AdminController::class, 'index'])
+Route::get('/administrace', function () {
+    return view('admin.index');
+})
     ->middleware('auth')
     ->middleware('can:isAdmin')
     ->name('admin.index');

@@ -16,7 +16,7 @@
 
             <div class="row mb-4 justify-content-center">
                 <div class="col-lg-10">
-                    <h3 class="mb-3">{{ $title }}</h3>
+                    <h3 class="mb-3">Administrace aplikace</h3>
                     <p class="text-secondary">
                         Tato stránka je věnována administraci celé aplikace. Stránka funguje jako rozcestí, ze kterého
                         se můžete vydat administrovat projekty a nabídky spolupráce, uživatele či žádosti o spolupráce.
