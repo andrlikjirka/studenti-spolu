@@ -4,6 +4,18 @@
 
     <section class="bg-light" style="padding-top: 70px">
         <div class="container px-5 py-5">
+
+            <div class="row mb-3 justify-content-center small">
+                <div class="col-lg-10">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ route('index') }}">Domovská stránka</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Uživatelé</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+
             <div class="row mb-4 justify-content-center">
                 <div class="col-lg-10">
                     <h3 class="mb-3">{{ $title }}</h3>

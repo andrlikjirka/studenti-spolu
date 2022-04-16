@@ -111,7 +111,7 @@ class MyProjectsController extends Controller
         $result = $this->projects->editProjectById($id, $edit_name, $edit_abstract, $edit_description, $edit_status);
 
         return redirect()->route('moje-projekty.show', $id)
-            ->with('edit_project_message', 'Úprava projektu proběhla úspěšně.');
+            ->with('edit_project', 'Úprava projektu proběhla úspěšně.');
     }
 
     public function store(Request $request)
@@ -131,17 +131,21 @@ class MyProjectsController extends Controller
 
         $result = $this->projects->createNewProject($logged_user_id, $name, $abstract, $description, $create_date);
         if ($result == null) {
-            return redirect()->route('moje-projekty.index')->with('new_project_message', 'Vytvoření a zveřejnění nového projektu proběhlo úspěšně.');
+            return redirect()->route('moje-projekty.index')->with('new_project', 'Vytvoření a zveřejnění nového projektu proběhlo úspěšně.');
         } else {
-            return redirect()->route('moje-projekty.index')->with('error_new_project_message', 'Vytvoření a zveřejnění nového projektu selhalo.');
+            return redirect()->route('moje-projekty.index')->with('error_new_project', 'Vytvoření a zveřejnění nového projektu selhalo.');
         }
     }
 
     public function destroy(Request $request)
     {
         $delete_project_id = $request->input('delete_id_project');
-        $this->projects->deleteProjectById($delete_project_id);
-        return redirect()->route('moje-projekty.index')->with('delete_project_message', 'Odstranění projektu proběhlo úspěšně.');
+        $result = $this->projects->deleteProjectById($delete_project_id);
+        if ($result == 1) {
+            return redirect()->route('moje-projekty.index')->with('delete_project', 'Odstranění projektu proběhlo úspěšně.');
+        } else {
+            return redirect()->route('moje-projekty.index')->with('error_delete_project', 'Odstranění projektu selhalo.');
+        }
     }
 
     // funkce pro zpracovani doplnujicich formularu na strance detailu mého projektu
@@ -151,55 +155,55 @@ class MyProjectsController extends Controller
             $result = $this->file_upload($request, $id_project);
             if ($result == 1) {
                 return redirect()->route('moje-projekty.show', $id_project)
-                    ->with('file-upload-message', 'Nahrání souboru proběhlo úspěšně.');
+                    ->with('file-upload', 'Nahrání souboru proběhlo úspěšně.');
             } else {
                 return redirect()->route('moje-projekty.show', $id_project)
-                    ->with('error-file-upload-message', 'Nahrání souboru selhalo.');
+                    ->with('error-file-upload', 'Nahrání souboru selhalo.');
             }
         } else if ($request->input('action') == 'delete-file') {
             $result = $this->deleteFile($request);
             if ($result == 1) {
                 return redirect()->route('moje-projekty.show', $id_project)
-                ->with('delete-file-message', 'Smazání souboru proběhlo úspěšně.');
+                ->with('delete-file', 'Smazání souboru proběhlo úspěšně.');
             } else {
                 return redirect()->route('moje-projekty.show', $id_project)
-                    ->with('error-delete-file-message', 'Smazání souboru selhalo.');
+                    ->with('error-delete-file', 'Smazání souboru selhalo.');
             }
         } else if ($request->input('action') == 'remove-team-member') {
             $result = $this->remove_team_member($request, $id_project);
             if ($result == 1) {
                 return redirect()->route('moje-projekty.show', $id_project)
-                    ->with('remove_team_member_message', 'Odebrání člena týmu proběhlo úspěšně.');
+                    ->with('remove_team_member', 'Odebrání člena týmu proběhlo úspěšně.');
             } else {
                 return redirect()->route('moje-projekty.show', $id_project)
-                    ->with('error_remove_team_member_message', 'Odebrání člena týmu selhalo.');
+                    ->with('error_remove_team_member', 'Odebrání člena týmu selhalo.');
             }
         } else if ($request->input('action') == 'new-offer-cooperation') {
             $result = $this->new_cooperation_offer($request, $id_project);
             if ($result == 1) {
                 return redirect()->route('moje-projekty.show', $id_project)
-                    ->with('new-offer-cooperation-message', 'Vytvoření a zveřejnění nové nabídky spolupráce proběhlo úspěšně.');
+                    ->with('new-offer-cooperation', 'Vytvoření a zveřejnění nové nabídky spolupráce proběhlo úspěšně.');
             } else {
                 return redirect()->route('moje-projekty.show', $id_project)
-                    ->with('error-new-offer-cooperation-message', 'Vytvoření a zveřejnění nové nabídky spolupráce selhalo.');
+                    ->with('error-new-offer-cooperation', 'Vytvoření a zveřejnění nové nabídky spolupráce selhalo.');
             }
         } else if ($request->input('action') == 'remove-offer-cooperation') {
             $result = $this->remove_offer_cooperation($request, $id_project);
             if ($result == 1) {
                 return redirect()->route('moje-projekty.show', $id_project)
-                    ->with('remove-offer-cooperation-message', 'Smazání nabídky spolupráce proběhlo úspěšně.');
+                    ->with('remove-offer-cooperation', 'Smazání nabídky spolupráce proběhlo úspěšně.');
             } else {
                 return redirect()->route('moje-projekty.show', $id_project)
-                    ->with('error-remove-offer-cooperation-message', 'Smazání nabídky spolupráce selhalo.');
+                    ->with('error-remove-offer-cooperation', 'Smazání nabídky spolupráce selhalo.');
             }
         } else if ($request->input('action') == 'edit-offer-cooperation') {
             $result = $this->edit_offer_cooperation($request, $id_project);
             if ($result == 1) {
                 return redirect()->route('moje-projekty.show', $id_project)
-                    ->with('edit-offer-cooperation-message', 'Úprava nabídky spolupráce proběhla úspěšně.');
+                    ->with('edit-offer-cooperation', 'Úprava nabídky spolupráce proběhla úspěšně.');
             } else {
                 return redirect()->route('moje-projekty.show', $id_project)
-                    ->with('error-edit-offer-cooperation-message', 'Úprava nabídky spolupráce selhala.');
+                    ->with('error-edit-offer-cooperation', 'Úprava nabídky spolupráce selhala.');
             }
         }
         //default route back

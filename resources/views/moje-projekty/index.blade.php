@@ -6,23 +6,37 @@
 
     <section class="bg-light" style="padding-top: 70px">
         <div class="container px-5 py-5">
-            @if(count($errors) > 0)
-                <div class="alert alert-danger small text-center mb-5">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
+            <div>
+                @if(count($errors) > 0)
+                    <div class="alert alert-danger small text-center mb-5">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </div>
+                @endif
+
+                @if(session('new_project'))
+                    <div class="alert alert-success small text-center mb-5"> {{ session('new_project') }} </div>
+                @elseif(session('error_new_project'))
+                    <div class="alert alert-danger small text-center mb-5"> {{ session('error_new_project') }} </div>
+                @elseif(session('delete_project'))
+                    <div class="alert alert-success small text-center mb-5"> {{ session('delete_project') }} </div>
+                @elseif(session('error_delete_project'))
+                    <div class="alert alert-success small text-center mb-5"> {{ session('error_delete_project') }} </div>
+                @endif
+            </div>
+
+            <div class="row mb-3 justify-content-center small">
+                <div class="col-lg-10">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ route('index') }}">Domovská stránka</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Moje projekty</li>
+                        </ol>
+                    </nav>
+
                 </div>
-            @endif
-
-            @if(session('new_project_message'))
-                <div class="alert alert-success small text-center mb-5"> {{ session('new_project_message') }} </div>
-            @elseif(session('error_new_project_message'))
-                <div class="alert alert-danger small text-center mb-5"> {{ session('error_new_project_message') }} </div>
-            @endif
-
-            @if(session('delete_project_message'))
-                <div class="alert alert-success small text-center mb-5"> {{ session('delete_project_message') }} </div>
-            @endif
+            </div>
 
             <div class="row mb-4 justify-content-center">
                 <div class="col-lg-10">
@@ -85,13 +99,7 @@
                                         @endif">
                                             {{ $project_author->s_name }}
                                         </span>
-                                        <!--
-                                        <p class="mt-2 mb-0 small">Autor:
-                                            <a href="" class="text-decoration-none">
-                                                $project_author->u_first_name.' '.$project_author->u_last_name
-                                            </a>
-                                        </p>
-                                        -->
+
                                         <p class="mt-2 mb-0 small ">Datum
                                             zveřejnění: {{ $project_author->create_date }}</p>
                                     </div>
@@ -237,12 +245,10 @@
 
     <script type="text/javascript">
         // Vymazání obsahu modal okna při novém zobrazení stránky
-        window.onpageshow = function (event) {
+        window.onpageshow = function () {
             document.getElementById("new-name-project").value = '';
             document.getElementById("new-abstract-project").value = '';
             document.getElementById("new-description-project").value = '';
-            //var myModal = document.getElementById('NewProjectModal');
-            //myModal.hide();
         };
 
         let delete_project_buttons = document.getElementsByClassName('delete-project-button');

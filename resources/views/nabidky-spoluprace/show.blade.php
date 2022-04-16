@@ -4,15 +4,27 @@
 
     <section class="bg-light" style="padding-top: 70px;">
         <div class="container px-5 py-5">
-            @if(session('new-request-cooperation-message'))
-                <div
-                    class="alert alert-success small text-center mb-5"> {{ session('new-request-cooperation-message') }} </div>
-            @endif
+            <div>
+                @if(session('new-request-cooperation-message'))
+                    <div
+                        class="alert alert-success small text-center mb-5"> {{ session('new-request-cooperation-message') }} </div>
+                @elseif(session('error-new-request-cooperation-message'))
+                    <div
+                        class="alert alert-danger small text-center mb-5"> {{ session('error-new-request-cooperation-message') }} </div>
+                @endif
+            </div>
 
-            @if(session('error-new-request-cooperation-message'))
-                <div
-                    class="alert alert-danger small text-center mb-5"> {{ session('error-new-request-cooperation-message') }} </div>
-            @endif
+            <div class="row mb-3 justify-content-center small">
+                <div class="col-lg-10">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{{ route('index') }}">Domovská stránka</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('nabidky-spoluprace.index') }}">Nabídky spolupráce</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Detail nabídky spolupráce</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
 
             <div class="row mb-5 justify-content-center">
                 <div class="col-lg-10">
