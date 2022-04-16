@@ -267,7 +267,8 @@ class MyProjectsController extends Controller
     private function file_upload(Request $request, $id_project)
     {
         $request->validate([
-            'id_user' => 'required|integer'
+            'id_user' => 'required|integer',
+            'uploadFile' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpg,jpeg,png,txt|max:10000|uploaded',
         ]);
         $id_user = $this->testIntegerInput($request->input('id_user'));
         $file = $request->file('uploadFile');

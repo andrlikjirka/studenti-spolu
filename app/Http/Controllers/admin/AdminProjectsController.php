@@ -140,9 +140,9 @@ class AdminProjectsController extends Controller
         $edit_name = $this->testStringInput($request->input('edit-name-project'));
         $edit_abstract = $this->testStringInput($request->input('edit-abstract-project'));
         $edit_description = $this->testStringInput($request->input('edit-description-project'));
-        $edit_status = $this->testStringInput($request->input('edit-status-project'));
+        $edit_id_status = $this->testIntegerInput($request->input('edit-status-project'));
 
-        $result = $this->projects->editProjectById($id_project, $edit_name, $edit_abstract, $edit_description, $edit_status);
+        $result = $this->projects->editProjectById($id_project, $edit_name, $edit_abstract, $edit_description, $edit_id_status);
         return $result;
     }
 

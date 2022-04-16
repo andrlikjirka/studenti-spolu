@@ -17,48 +17,48 @@
                     </div>
                 @endif
 
-                @if(session('new_project_message'))
-                    <div class="alert alert-success small text-center mb-5"> {{ session('new_project_message') }} </div>
-                @elseif(session('error_new_project_message'))
-                    <div class="alert alert-danger small text-center mb-5"> {{ session('error_new_project_message') }} </div>
-                @elseif(session('edit_project_message'))
-                    <div class="alert alert-success small text-center mb-5"> {{ session('edit_project_message') }} </div>
-                @elseif(session('remove_team_member_message'))
+                @if(session('new_project'))
+                    <div class="alert alert-success small text-center mb-5"> {{ session('new_project') }} </div>
+                @elseif(session('error_new_project'))
+                    <div class="alert alert-danger small text-center mb-5"> {{ session('error_new_project') }} </div>
+                @elseif(session('edit_project'))
+                    <div class="alert alert-success small text-center mb-5"> {{ session('edit_project') }} </div>
+                @elseif(session('remove_team_member'))
                     <div
-                        class="alert alert-success small text-center mb-5"> {{ session('remove_team_member_message') }} </div>
-                @elseif(session('error_remove_team_member_message'))
+                        class="alert alert-success small text-center mb-5"> {{ session('remove_team_member') }} </div>
+                @elseif(session('error_remove_team_member'))
                     <div
-                        class="alert alert-danger small text-center mb-5"> {{ session('error_remove_team_member_message') }} </div>
-                @elseif(session('new-offer-cooperation-message'))
+                        class="alert alert-danger small text-center mb-5"> {{ session('error_remove_team_member') }} </div>
+                @elseif(session('new-offer-cooperation'))
                     <div
-                        class="alert alert-success small text-center mb-5"> {{ session('new-offer-cooperation-message') }} </div>
-                @elseif(session('error-new-offer-cooperation-message'))
+                        class="alert alert-success small text-center mb-5"> {{ session('new-offer-cooperation') }} </div>
+                @elseif(session('error-new-offer-cooperation'))
                     <div
-                        class="alert alert-danger small text-center mb-5"> {{ session('error-new-offer-cooperation-message') }} </div>
-                @elseif(session('remove-offer-cooperation-message'))
+                        class="alert alert-danger small text-center mb-5"> {{ session('error-new-offer-cooperation') }} </div>
+                @elseif(session('remove-offer-cooperation'))
                     <div
-                        class="alert alert-success small text-center mb-5"> {{ session('remove-offer-cooperation-message') }} </div>
-                @elseif(session('error-remove-offer-cooperation-message'))
+                        class="alert alert-success small text-center mb-5"> {{ session('remove-offer-cooperation') }} </div>
+                @elseif(session('error-remove-offer-cooperation'))
                     <div
-                        class="alert alert-danger small text-center mb-5"> {{ session('error-remove-offer-cooperation-message') }} </div>
-                @elseif(session('edit-offer-cooperation-message'))
+                        class="alert alert-danger small text-center mb-5"> {{ session('error-remove-offer-cooperation') }} </div>
+                @elseif(session('edit-offer-cooperation'))
                     <div
-                        class="alert alert-success small text-center mb-5"> {{ session('edit-offer-cooperation-message') }} </div>
-                @elseif(session('error-edit-offer-cooperation-message'))
+                        class="alert alert-success small text-center mb-5"> {{ session('edit-offer-cooperation') }} </div>
+                @elseif(session('error-edit-offer-cooperation'))
                     <div
-                        class="alert alert-danger small text-center mb-5"> {{ session('error-edit-offer-cooperation-message') }} </div>
-                @elseif(session('file-upload-message'))
+                        class="alert alert-danger small text-center mb-5"> {{ session('error-edit-offer-cooperation') }} </div>
+                @elseif(session('file-upload'))
                     <div
-                        class="alert alert-success small text-center mb-5"> {{ session('file-upload-message') }} </div>
-                @elseif(session('error-file-upload-message'))
+                        class="alert alert-success small text-center mb-5"> {{ session('file-upload') }} </div>
+                @elseif(session('error-file-upload'))
                     <div
-                        class="alert alert-danger small text-center mb-5"> {{ session('error-file-upload-message') }} </div>
-                @elseif(session('delete-file-message'))
+                        class="alert alert-danger small text-center mb-5"> {{ session('error-file-upload') }} </div>
+                @elseif(session('delete-file'))
                     <div
-                        class="alert alert-success small text-center mb-5"> {{ session('delete-file-message') }} </div>
-                @elseif(session('error-delete-file-message'))
+                        class="alert alert-success small text-center mb-5"> {{ session('delete-file') }} </div>
+                @elseif(session('error-delete-file'))
                     <div
-                        class="alert alert-danger small text-center mb-5"> {{ session('error-delete-file-message') }} </div>
+                        class="alert alert-danger small text-center mb-5"> {{ session('error-delete-file') }} </div>
                 @endif
             </div>
 
