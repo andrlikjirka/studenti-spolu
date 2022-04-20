@@ -102,7 +102,7 @@
                         </div>
                         <div class="tab-pane fade" id="cooperation_projects" role="tabpanel"
                              aria-labelledby="projekty-tab">
-                            <p class="my-3">Seznam mých spolupracovnickýh projektů:</p>
+                            <p class="my-3">Seznam mých spolupracovnických projektů:</p>
                             @if(count($user_cooperation_projects) == 0)
                                 <p class="my-3 fst-italic">Žádné spolupracovnické projekty</p>
                             @endif
