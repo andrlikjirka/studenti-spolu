@@ -2,18 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
+/**
+ * Třída reprezentující kontroller pro přihlašování
+ */
 class LoginController extends Controller
 {
 
+    /**
+     * Metoda zajistí zobrazení přihlašovací stránky
+     * @return View Šablona přihlašovací stránky
+     */
     public function index()
     {
         return view('prihlaseni/index');
     }
 
-    public function handle(Request $request)
+    /**
+     * Metoda slouží pro zpracování přihlašovacího formuláře
+     * @param Request $request HTTP požadavek
+     * @return RedirectResponse Přesměrování na route pro úvodní stránku
+     */
+    public function handle(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
             'login' => ['required'],

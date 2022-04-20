@@ -2,17 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Intefaces\FileRepositoryInterface;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Třída reprezentující kontroller pro zobrazení souborů
+ */
 class FilesController extends Controller
 {
+    /** @var FileRepositoryInterface Atribut typu repository pro práci se soubory */
+    private $files;
 
-    public function show(Request $request, $id)
+    /**
+     * Konstruktor třídy
+     * @param $files FileRepositoryInterface Rozhraní třídy pro práci se soubory
+     */
+    public function __construct(FileRepositoryInterface $files)
+    {
+        $this->files = $files;
+    }
+
+    /**
+     * Metoda zajišťuje zobrazení konkrétního souboru
+     * @param $id int ID souboru
+     * @return RedirectResponse Přesměrování na konkrétní route
+     */
+    public function show($id):RedirectResponse
     {
         if (Auth::check()) {
-            $fileInfo = DB::select('SELECT * FROM file WHERE id_file=:id_file', [':id_file' => $id]);
+            $fileInfo = $this->files->getFileInfoById($id);
             if (count($fileInfo) == 1) {
                 $destinationPath = storage_path() .'\app\uploads\\';
                 $file_extension = $fileInfo[0]->type;

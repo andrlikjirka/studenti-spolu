@@ -10,28 +10,42 @@ use App\Intefaces\ProjectRepositoryInterface;
 use App\Intefaces\StatusOfferRepositoryInterface;
 use App\Intefaces\StatusProjectRepositoryInterface;
 use App\Intefaces\UserRepositoryInterface;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
+use Ramsey\Uuid\Type\Integer;
 
+/**
+ * Třída reprezentujcí kontroller pro administraci projektů
+ */
 class AdminProjectsController extends Controller
 {
-    /**
-     * @var ProjectRepositoryInterface
-     */
+    /** @var ProjectRepositoryInterface Atribut typu repository pro práci s projekty */
     protected $projects;
-
+    /** @var UserRepositoryInterface Atribut typu repository pro práci s uživateli */
     protected $users;
-
+    /** @var StatusProjectRepositoryInterface Atribut typu repository pro práci se stavy projektů */
     protected $status_project;
-
+    /** @var OfferCooperationRepositoryInterface Atribut typu repositry pro práci s nabídkami spolupráce */
     protected $offers;
-
+    /** @var StatusOfferRepositoryInterface Atribut typu repository pro práci se stavy nabídek spolupráce */
     protected $status_offer;
-
+    /** @var FileRepositoryInterface Atribut typu repository pro práci se soubory */
     protected $files;
-
+    /** @var FieldRepositoryInterface Atribut typu repository pro práci s obory */
     protected $fields;
 
+    /**
+     * Konstruktor třídy
+     * @param ProjectRepositoryInterface $projects Rozhraní třídy pro práci s projekty
+     * @param UserRepositoryInterface $users Rozhraní třídy pro práci s uživateli
+     * @param StatusProjectRepositoryInterface $status_project Rozhraní třídy pro práci se stavy projektů
+     * @param OfferCooperationRepositoryInterface $offers Rozhraní třídy pro práci s nabídkami spolupráce
+     * @param StatusOfferRepositoryInterface $status_offer Rozhraní třídy pro práci se stavy nabídek spolupráce
+     * @param FileRepositoryInterface $files Rozhraní třídy pro práci se soubory
+     * @param FieldRepositoryInterface $fields Rozhraní třídy pro práci s obory
+     */
     public function __construct(ProjectRepositoryInterface          $projects, UserRepositoryInterface $users, StatusProjectRepositoryInterface $status_project,
                                 OfferCooperationRepositoryInterface $offers, StatusOfferRepositoryInterface $status_offer,
                                 FileRepositoryInterface             $files, FieldRepositoryInterface $fields)
@@ -45,7 +59,11 @@ class AdminProjectsController extends Controller
         $this->fields = $fields;
     }
 
-    public function index()
+    /**
+     * Metoda získá data všech projektů a předá je šabloně
+     * @return View Šablona pro stránku administrace projektů a nabídek spolupráce
+     */
+    public function index():View
     {
         $title = 'Administrace projektů a nabídek spolupráce';
         $projects = $this->projects->getAllProjects();
@@ -55,6 +73,11 @@ class AdminProjectsController extends Controller
             ->with('projects', $projects);
     }
 
+    /**
+     * Metoda získá příslušná data o vybraném projektu a předá je šabloně pro úpravu vybraného projektu
+     * @param $id int ID vybraného projektu
+     * @return View reprezentující šablonu pro administraci projektu | stránka 404
+     */
     public function show($id)
     {
         $title = 'Úprava projektu';
@@ -83,7 +106,13 @@ class AdminProjectsController extends Controller
         }
     }
 
-    public function handle(Request $request, $id_project)
+    /**
+     * Metoda slouží pro zpracování formulářů na stránkách pro Administraci projektů
+     * @param Request $request HTTP požadavek
+     * @param $id_project int ID vybraného projektu
+     * @return RedirectResponse Přesměrování na konkrétní route
+     */
+    public function handle(Request $request, $id_project): RedirectResponse
     {
         if ($request->input('action') == 'edit-project') {
             $this->editProject($request, $id_project);
@@ -128,7 +157,12 @@ class AdminProjectsController extends Controller
         return redirect()->route('admin.projekty.show', $id_project);
     }
 
-    private function editProject(Request $request, $id_project)
+    /**
+     * Metoda slouží pro získání dat z formuláře a úpravu projektu
+     * @param Request $request HTTP požadavek
+     * @param $id_project int ID vybraného projektu
+     */
+    private function editProject(Request $request, $id_project):void
     {
         $request->validate([
             'edit-name-project' => 'required|string|max:255',
@@ -142,11 +176,15 @@ class AdminProjectsController extends Controller
         $edit_description = $this->testStringInput($request->input('edit-description-project'));
         $edit_id_status = $this->testIntegerInput($request->input('edit-status-project'));
 
-        $result = $this->projects->editProjectById($id_project, $edit_name, $edit_abstract, $edit_description, $edit_id_status);
-        return $result;
+        $this->projects->editProjectById($id_project, $edit_name, $edit_abstract, $edit_description, $edit_id_status);
     }
 
-    private function deleteFile(Request $request)
+    /**
+     * Metoda slouží pro odstranění vybraného projektu
+     * @param Request $request HTTP požadavek
+     * @return mixed Výsledek odstranění souboru
+     */
+    private function deleteFile(Request $request): mixed
     {
         $request->validate([
             'delete_id_file' => 'required|integer'
@@ -162,14 +200,25 @@ class AdminProjectsController extends Controller
         return $result;
     }
 
-    private function remove_team_member(Request $request, $id_project)
+    /**
+     * Metoda pro odstranění vybraného člena týmu
+     * @param Request $request HTTP požadavek
+     * @param $id_project int Vybraný ID projektu
+     * @return mixed Výsledek funkce odstranění člena týmu
+     */
+    private function remove_team_member(Request $request, $id_project): mixed
     {
         $id_user = $this->testIntegerInput($request->input('remove_id_user'));
         $result = $this->users->removeTeamMember($id_project, $id_user);
         return $result;
     }
 
-    private function remove_offer_cooperation(Request $request)
+    /**
+     * Metoda pro odstranění vybrané nabídky spolupráce
+     * @param Request $request HTTP požadavek
+     * @return mixed Výsledek funkce pro odstranění nabídky spolupráce
+     */
+    private function remove_offer_cooperation(Request $request): mixed
     {
         $request->validate([
             'remove_id_offer' => 'required|integer',
@@ -179,7 +228,12 @@ class AdminProjectsController extends Controller
         return $result;
     }
 
-    private function editOfferCooperation(Request $request)
+    /**
+     * Metoda získá data z formuláře a provede úpravu nabídky spolupráce
+     * @param Request $request HTTP požadavek
+     * @return mixed Výsledek funkce pro úpravu nabídky spolupráce
+     */
+    private function editOfferCooperation(Request $request): mixed
     {
         $request->validate([
             'edit-id-offer' => 'required|integer',

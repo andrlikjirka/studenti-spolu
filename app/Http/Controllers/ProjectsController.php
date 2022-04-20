@@ -9,20 +9,29 @@ use App\Intefaces\UserRepositoryInterface;
 use App\Repositories\ProjectRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
+/**
+ * Třída reprezentující kontroller pro Projekty
+ */
 class ProjectsController extends Controller
 {
-    /**
-     * @var ProjectRepositoryInterface
-     */
+    /** @var ProjectRepositoryInterface Atribut typu repository pro práci s projekty */
     protected $projects;
-
+    /** @var OfferCooperationRepositoryInterface Atribut typu repository pro práci s nabídkami spolupráce */
     protected $offers;
-
+    /** @var FileRepositoryInterface Atribut typu repository pro práci se soubory */
     protected $files;
-
+    /** @var UserRepositoryInterface Atribut typu repository pro práci s uživateli */
     protected $users;
 
+    /**
+     * Konstruktor třídy
+     * @param ProjectRepositoryInterface $projects Rozhraní třídy pro práci s projekty
+     * @param OfferCooperationRepositoryInterface $offers Rozhraní třídy pro práci s nabídkami spolupráce
+     * @param FileRepositoryInterface $files Rozhraní třídy pro práci se soubory
+     * @param UserRepositoryInterface $users Rozhraní třídy pro práci s uživateli
+     */
     public function __construct(ProjectRepositoryInterface $projects, OfferCooperationRepositoryInterface $offers,
                                 FileRepositoryInterface $files, UserRepositoryInterface $users)
     {
@@ -32,7 +41,12 @@ class ProjectsController extends Controller
         $this->users = $users;
     }
 
-    public function index(Request $request)
+    /**
+     * Metoda získá data o projektech a předá je šabloně
+     * @param Request $request HTTP požadavek
+     * @return View View reprezentující šablonu pro Projekty
+     */
+    public function index(Request $request): View
     {
         $title = 'Projekty';
 
@@ -51,7 +65,12 @@ class ProjectsController extends Controller
             ->with('projects', $projects);
     }
 
-    public function show($id_project)
+    /**
+     * Metoda získá data o vybraném projektu a předá je šabloně
+     * @param int $id_project ID projektu
+     * @return mixed View reprezentující šablonu pro detail projektu | 404 stránka
+     */
+    public function show($id_project): mixed
     {
         $project = $this->projects->getProjectById($id_project);
         $team_members = $this->users->getTeamMembersByProjectId($id_project);

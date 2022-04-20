@@ -6,9 +6,16 @@ use App\Intefaces\ProjectRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Rozhraní obalové třídy pro práci s projekty
+ */
 class ProjectRepository implements ProjectRepositoryInterface
 {
-    public function getAllProjects()
+    /**
+     * Metoda vrátí všechny projekty
+     * @return array Pole všech projektů
+     */
+    public function getAllProjects(): array
     {
         return DB::select('
             SELECT p.id_project as id_project, p.name as name, p.abstract as abstract, s.id_status as s_id_status, DATE(p.create_date) as create_date,
@@ -24,7 +31,12 @@ class ProjectRepository implements ProjectRepositoryInterface
         ', [':id_status' => 1, ':id_role' => 1]);
     }
 
-    public function getSearchProjects($projectName)
+    /**
+     * Metoda vrátí vyhledané projekty dle jejich názvu
+     * @param string $projectName Název projektu
+     * @return array Pole vyhledaných projektů
+     */
+    public function getSearchProjects($projectName): array
     {
         return DB::select('
             SELECT p.id_project as id_project, p.name as name, p.abstract as abstract, s.id_status as s_id_status, DATE(p.create_date) as create_date,
@@ -41,6 +53,11 @@ class ProjectRepository implements ProjectRepositoryInterface
         ', [':id_status' => 1, ':id_role' => 1, ':p_name' => $projectName]);
     }
 
+    /**
+     * Metoda vrátí konkrétní projekt
+     * @param int $id_project ID projektu
+     * @return array Konkrétní projekt
+     */
     public function getProjectById($id_project)
     {
         return DB::select('
@@ -56,6 +73,12 @@ class ProjectRepository implements ProjectRepositoryInterface
         ', [':id_project' => $id_project, ':id_role' => 1, ':id_status' => 1]);
     }
 
+    /**
+     * Metoda vrátí projekty konkrétního uživatele
+     * @param int $id_user ID uživatele
+     * @param int $id_role ID role na projektu
+     * @return array Pole projektů uživatele
+     */
     public function getProjectsByUserId($id_user, $id_role)
     {
         return DB::select('
@@ -79,6 +102,15 @@ class ProjectRepository implements ProjectRepositoryInterface
         ]);
     }
 
+    /**
+     * Metoda upraví vybraný projekt
+     * @param int $id_project ID projektu
+     * @param string $edit_name Název projektu
+     * @param string $edit_abstract Abstrakt projektu
+     * @param string $edit_description Popis projektu
+     * @param int $edit_status ID stavu projektu
+     * @return int Výsledek úpravy projektu
+     */
     public function editProjectById($id_project, $edit_name, $edit_abstract, $edit_description, $edit_status)
     {
         return DB::update('
@@ -90,6 +122,16 @@ class ProjectRepository implements ProjectRepositoryInterface
             ':id_status' => $edit_status, ':id_project' => $id_project]);
     }
 
+    /**
+     * Metoda vytvoří nový projekt
+     * @param int $logged_user_id ID přihlášeného uživatele
+     * @param string $name Název projektu
+     * @param string $abstract Abstrakt projektu
+     * @param string $description Popis projektu
+     * @param mixed $create_date Datum vytvoření projektu
+     * @param int $status ID stavu projektu
+     * @return mixed Výsledek vytvoření nového projektu (1 - úspěšné, 0 - neúspěšné)
+     */
     public function createNewProject($logged_user_id, $name, $abstract, $description, $create_date, $status = 1)
     {
         return DB::transaction(function () use ($name, $abstract, $description, $create_date, $logged_user_id) {
@@ -119,6 +161,11 @@ class ProjectRepository implements ProjectRepositoryInterface
         });
     }
 
+    /**
+     * Metoda odstraní vybraný projekt
+     * @param int $id_project ID projektu
+     * @return int Výsledek odstranění projektu (1 - úspěšné | 0 - neúspěšné)
+     */
     public function deleteProjectById($id_project)
     {
         return DB::delete('

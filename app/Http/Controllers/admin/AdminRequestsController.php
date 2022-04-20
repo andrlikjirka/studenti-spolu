@@ -12,33 +12,52 @@ use App\Intefaces\StatusOfferRepositoryInterface;
 use App\Intefaces\StatusProjectRepositoryInterface;
 use App\Intefaces\StatusRequestRepositoryInterface;
 use App\Intefaces\UserRepositoryInterface;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Ramsey\Uuid\Type\Integer;
 
+/**
+ * Třída reprezentující kontroller pro administraci žádostí o spolupráci
+ */
 class AdminRequestsController extends Controller
 {
-
+    /** @var RequestCooperationRepositoryInterface Atribut typu repository pro práci se žádostmi o spolupráci */
     protected $requests;
-
+    /** @var StatusRequestRepositoryInterface Atribut typu repository pro práci se stavy žádostí o spolupráci */
     protected $status_request;
 
+    /**
+     * Konstruktor třídy
+     * @param RequestCooperationRepositoryInterface $requests Rozhraní třídy pro práci se žádostmi o spolupráci
+     * @param StatusRequestRepositoryInterface $status_request Rozhraní třídy pro práci se stavy žádostí o spolupráci
+     */
     public function __construct(RequestCooperationRepositoryInterface $requests, StatusRequestRepositoryInterface $status_request)
     {
         $this->requests = $requests;
         $this->status_request = $status_request;
     }
 
-    public function index()
+    /**
+     * Metoda získá data všech žádostí o spolupráci a předá je šabloně
+     * @return View Šablona pro stránku administrace žádostí o spolupráci
+     */
+    public function index():View
     {
         $title = 'Administrace žádostí o spolupráci';
         $requests = $this->requests->getAllRequests();
-
 
         return view('admin.zadosti.index')
             ->with('title', $title)
             ->with('requests', $requests);
     }
 
-    public function show($id_request)
+    /**
+     * Metoda získá příslušná data o vybrané žádosti o spolupráci a předá je šabloně
+     * @param $id_request int ID vybrané žádosti o spolupráci
+     * @return mixed View reprezentující šablonu pro administraci žádostí | stránka 404
+     */
+    public function show($id_request):mixed
     {
         $title = 'Úprava žádosti o spolupráci';
         $request = $this->requests->getRequestById($id_request);
@@ -54,7 +73,13 @@ class AdminRequestsController extends Controller
         }
     }
 
-    public function handle(Request $request, $id_request)
+    /**
+     * Metoda slouží pro zpracování formulářů na stránkách pro administraci žádostí o spolupráci
+     * @param Request $request HTTP požadavek
+     * @param $id_request int ID vybrané žádosti o spolupráci
+     * @return RedirectResponse Přesměrování na konkrétní route
+     */
+    public function handle(Request $request, $id_request): RedirectResponse
     {
         if ($request->input('action') === 'edit-request') {
             $result = $this->editRequest($request, $id_request);
@@ -106,7 +131,13 @@ class AdminRequestsController extends Controller
         return redirect()->route('admin.zadosti.index');
     }
 
-    private function editRequest(Request $request, $id_request)
+    /**
+     * Metoda slouží pro získání dat z formuláře a úpravu projektu
+     * @param Request $request HTTP požadavek
+     * @param $id_request int ID vybrané žádosti o spolupráci
+     * @return int Výsledek úpravy žádosti o spolupráci
+     */
+    private function editRequest(Request $request, $id_request): int
     {
         $request->validate([
             'edit-request-message' => 'required',
@@ -122,6 +153,12 @@ class AdminRequestsController extends Controller
         return $result;
     }
 
+    /**
+     * Metoda slouží pro schválení žádosti o spolupráce
+     * @param Request $request HTTP požadavek
+     * @param $id_request int ID žádosti o spolupráci
+     * @return mixed Výsledek schválení žádosti o spolupráci
+     */
     private function acceptRequestCooperation(Request $request, $id_request)
     {
         $request->validate([
@@ -135,6 +172,12 @@ class AdminRequestsController extends Controller
         return $result;
     }
 
+    /**
+     * Metoda slouží pro převod žádosti o spolupráci do stavu Čeká na vyřízení
+     * @param Request $request HTTP požadavek
+     * @param $id_request int ID žádosti o spolupráci
+     * @return mixed Výsledek znovuposouzení žádosti o spolupráci
+     */
     private function waitingRequestCooperation(Request $request, $id_request)
     {
         $request->validate([

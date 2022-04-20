@@ -7,23 +7,35 @@ use App\Intefaces\UserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
+/**
+ * Třída reprezentující kontroller pro uživatele
+ */
 class UsersController extends Controller
 {
-    /**
-     * @var UserRepositoryInterface
-     */
+    /** @var UserRepositoryInterface Atribut typu repository pro práci s uživateli */
     protected $users;
-
+    /** @var ProjectRepositoryInterface Atribut typu repository pro práci s projekty */
     protected $projects;
 
+    /**
+     * Konstruktor třídy
+     * @param UserRepositoryInterface $users Rozhraní třídy pro práci s uživateli
+     * @param ProjectRepositoryInterface $projects Rozhraní třídy pro práci s projekty
+     */
     public function __construct(UserRepositoryInterface $users, ProjectRepositoryInterface $projects)
     {
         $this->users = $users;
         $this->projects = $projects;
     }
 
-    public function index(Request $request)
+    /**
+     * Metoda získá data o aktivních uživatelích a předá je šabloně
+     * @param Request $request HTTP požadavek
+     * @return View View reprezentující šablonu pro Uživatele
+     */
+    public function index(Request $request): View
     {
         $title = 'Uživatelé';
         if ($request->input('action') == 'search-user') {
@@ -42,7 +54,12 @@ class UsersController extends Controller
                 ->with('users', $users);
     }
 
-    public function show($id_user)
+    /**
+     * Metoda získá data o konkrétním uživateli a předá je šabloně
+     * @param int $id_user ID uživatele
+     * @return mixed View reprezentující šablonu pro detail uživatele | 404 stránka
+     */
+    public function show($id_user): mixed
     {
         $user = $this->users->getActiveUserById($id_user);
         if(count($user) == 1) {
@@ -58,7 +75,6 @@ class UsersController extends Controller
         } else {
             return abort(404, 'Uživatel nenalezen.'); //404 strana
         }
-
     }
 
 }

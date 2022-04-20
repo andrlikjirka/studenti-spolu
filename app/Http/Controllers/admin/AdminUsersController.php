@@ -10,27 +10,39 @@ use App\Intefaces\StatusUserRepositoryInterface;
 use App\Intefaces\UserFieldRepositoryInterface;
 use App\Intefaces\UserRepositoryInterface;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 
+/**
+ * Třída reprezentující kontroller pro administraci uživatelů
+ */
 class AdminUsersController extends Controller
 {
-    /**
-     * @var UserRepositoryInterface
-     */
+    /** @var UserRepositoryInterface Atribut typu repository pro práci s uživateli */
     protected $users;
-
+    /** @var ProjectRepositoryInterface Atribut typu repository pro práci s projekty */
     protected $projects;
-
+    /** @var FieldRepositoryInterface Atribut typu repository pro práci s obory */
     protected $fields;
-
+    /** @var UserFieldRepositoryInterface Atribut typu repository pro práci s obory uživatelů */
     protected $user_fields;
-
+    /** @var StatusUserRepositoryInterface Atribut typu repository pro práci se stavy uživatelů */
     protected $status_user;
-
+    /** @var RightRepositoryInterface Atribut typu repository pro práci s právy uživatelů */
     protected $rights;
 
+    /**
+     * Konstruktor třídy
+     * @param UserRepositoryInterface $users Rozhraní třídy pro práci s uživateli
+     * @param StatusUserRepositoryInterface $status_user Rozhraní třídy pro práci se stavy uživatelů
+     * @param FieldRepositoryInterface $fields Rozhraní třídy pro práci s obory
+     * @param UserFieldRepositoryInterface $user_fields Rozhraní třídy pro práci s obory uživatelů
+     * @param RightRepositoryInterface $rights Rozhraní třídy pro práci s právy uživatelů
+     * @param ProjectRepositoryInterface $projects Rozhraní třídy pro práci s projekty
+     */
     public function __construct(UserRepositoryInterface $users, StatusUserRepositoryInterface $status_user, FieldRepositoryInterface $fields,
                                 UserFieldRepositoryInterface $user_fields, RightRepositoryInterface $rights, ProjectRepositoryInterface $projects)
     {
@@ -42,7 +54,11 @@ class AdminUsersController extends Controller
         $this->projects = $projects;
     }
 
-    public function index(Request $request)
+    /**
+     * Metoda získá data všech uživatelů a předá je šabloně pro administraci uživatelů
+     * @return View Šablona pro administraci uživatelů
+     */
+    public function index(): View
     {
         $title = 'Administrace uživatelů';
         $users = $this->users->getAllUsers();
@@ -51,7 +67,12 @@ class AdminUsersController extends Controller
             ->with('users', $users);
     }
 
-    public function show($id_user)
+    /**
+     * Metoda získá příslušná data o vybraném uživateli a předá je šabloně pro úpravu vybraného uživatele
+     * @param $id_user int ID uživatele
+     * @return mixed View reprezentující šablonu pro administraci uživatelů | stránka 404
+     */
+    public function show($id_user):mixed
     {
         $user = $this->users->getUserById($id_user);
         if (count($user) == 1) {
@@ -70,7 +91,13 @@ class AdminUsersController extends Controller
         }
     }
 
-    public function handle(Request $request, $id_user) {
+    /**
+     * Metoda slouží pro zpracování formulářů na stránkách pro administraci uživatelů
+     * @param Request $request HTTP požadavek
+     * @param $id_user int ID uživatele
+     * @return RedirectResponse Přesměrování na konkrétní route
+     */
+    public function handle(Request $request, $id_user):RedirectResponse {
         if ($request->input('action') == 'edit-user') {
             $this->editUser($request, $id_user);
             return redirect()->route('admin.uzivatele.show', $id_user)
@@ -102,6 +129,11 @@ class AdminUsersController extends Controller
         return redirect()->route('admin.uzivatele.show', $id_user);
     }
 
+    /**
+     * Metoda slouží pro úpravu vybraného uživatele
+     * @param Request $request HTTP požadavek
+     * @param $id_user int ID uživatele
+     */
     private function editUser(Request $request, $id_user)
     {
         $request->validate([
@@ -118,6 +150,11 @@ class AdminUsersController extends Controller
         $this->users->editUserByIdSuperAdmin($id_user, $edit_first_name, $edit_last_name, $edit_email, $edit_description, $edit_id_status, $edit_id_right);
     }
 
+    /**
+     * Metoda slouží pro odstranění vybraného uživatele
+     * @param $id_user int ID uživatele
+     * @return mixed Výsledek odstranění uživatele
+     */
     private function deleteUser($id_user)
     {
         $author_projects = $this->projects->getProjectsByUserId($id_user, 1);
@@ -125,6 +162,11 @@ class AdminUsersController extends Controller
         return $result;
     }
 
+    /**
+     * Metoda slouží pro úpravu přihlašovacích údajů uživatele
+     * @param Request $request HTTP požadavek
+     * @param $id_user int ID uživatele
+     */
     private function editPassword(Request $request, $id_user)
     {
         $request->validate([
@@ -135,6 +177,12 @@ class AdminUsersController extends Controller
         $user->save();
     }
 
+    /**
+     * Metoda slouží pro úpravu oborů znalostí a dovedností vybraného uživatele
+     * @param Request $request HTTP požadavek
+     * @param $id_user int ID uživatele
+     * @return mixed Výsledek úpravy výběru oborů znalostí a dovedností uživatele
+     */
     private function editFields(Request $request, $id_user)
     {
         $request->validate([

@@ -2,22 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use App\Intefaces\OfferCooperationRepositoryInterface;
 use App\Intefaces\RequestCooperationRepositoryInterface;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 
+/**
+ * Třída reprezentující kontroller pro žádosti o spolupráci
+ */
 class RequestsCooperationController extends Controller
 {
+    /** @var RequestCooperationRepositoryInterface Atribut typu repository pro práci se žádostmi o spolupráci */
     protected $requests;
 
+    /**
+     * Konstruktor třídy
+     * @param RequestCooperationRepositoryInterface $requests Rozhraní třídy pro práci se žádostmi o spolupráci
+     */
     public function __construct(RequestCooperationRepositoryInterface $requests)
     {
         $this->requests = $requests;
     }
 
-    public function index()
+    /**
+     * Metoda získá data o žádostech o spolupráci a předá je šabloně
+     * @return View View reprezentující šablonu pro žádosti o spolupráci
+     */
+    public function index(): View
     {
         $title = "Žádosti o spolupráci";
         $id_user = Auth::id();
@@ -29,7 +41,12 @@ class RequestsCooperationController extends Controller
                 ->with('requests_sent', $requests_sent);
     }
 
-    public function handle(Request $request)
+    /**
+     * Metoda slouží pro zpracování formulářů
+     * @param Request $request HTTP požadavek
+     * @return RedirectResponse Přesměrování na konkrétní route
+     */
+    public function handle(Request $request): RedirectResponse
     {
         if ($request->input('action') == 'edit-request-cooperation') {
             $result = $this->editRequestCooperation($request);
@@ -81,7 +98,12 @@ class RequestsCooperationController extends Controller
         return redirect()->route('zadosti-o-spolupraci.index');
     }
 
-    private function editRequestCooperation(Request $request)
+    /**
+     * Metoda slouží pro úpravu žádosti o spolupráci
+     * @param Request $request HTTP požadavek
+     * @return mixed Výsledek úpravy žádosti o spolupráci
+     */
+    private function editRequestCooperation(Request $request): mixed
     {
         $request->validate([
             'edit-id-request' => 'required|integer',
@@ -100,7 +122,12 @@ class RequestsCooperationController extends Controller
         return $result;
     }
 
-    private function deleteRequestCooperation(Request $request)
+    /**
+     * Metoda slouží ke zrušení odeslané žádosti o spolupráci
+     * @param Request $request HTTP požadavek
+     * @return mixed Výsledek zrušení žádosti o spolupráci
+     */
+    private function deleteRequestCooperation(Request $request): mixed
     {
         $request->validate([
             'delete-request-sent' => 'required|integer'
@@ -110,7 +137,12 @@ class RequestsCooperationController extends Controller
         return $result;
     }
 
-    private function acceptRequestCooperation(Request $request)
+    /**
+     * Metoda slouží pro schválení přijaté žádosti o spolupráci
+     * @param Request $request HTTP požadavek
+     * @return mixed Výsledek schválení přijaté žádosti o spolupráci
+     */
+    private function acceptRequestCooperation(Request $request): mixed
     {
         $request->validate([
             'accept_id_request' => 'required|integer',
@@ -125,6 +157,11 @@ class RequestsCooperationController extends Controller
         return $result;
     }
 
+    /**
+     * Metoda slouží pro zamítnutí přijaté žádosti o spolupráci
+     * @param Request $request HTTP požadavek
+     * @return mixed Výsledek zamítnutí přijaté žádosti o spolupráci
+     */
     private function rejectRequestCooperation(Request $request)
     {
         $request->validate([
@@ -136,6 +173,11 @@ class RequestsCooperationController extends Controller
         return $result;
     }
 
+    /**
+     * Metoda slouží pro znovuposouzení žádosti o spolupráci
+     * @param Request $request HTTP požadavek
+     * @return mixed Výsledek znovuposouzení žádosti o spolupráci
+     */
     private function waitingRequestCooperation(Request $request)
     {
         $request->validate([

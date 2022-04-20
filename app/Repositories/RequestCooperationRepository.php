@@ -6,9 +6,16 @@ use App\Intefaces\RequestCooperationRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Rozhraní obalové třídy pro práci se žádostmi o spolupráci
+ */
 class RequestCooperationRepository implements RequestCooperationRepositoryInterface
 {
-    public function getAllRequests()
+    /**
+     * Metoda vrátí všechny žádosti o spolupráci
+     * @return array Pole všech žádostí o spolupráci
+     */
+    public function getAllRequests(): array
     {
         return DB::select('
             SELECT r.id_request as r_id_request, r.message as r_message, DATE(r.create_date) as r_create_date,
@@ -23,7 +30,12 @@ class RequestCooperationRepository implements RequestCooperationRepositoryInterf
             ');
     }
 
-    public function getAllRecievedRequests($id_user)
+    /**
+     * Metoda vrátí všechny přijaté žádosti o spolupráci
+     * @param int $id_user ID uživatele
+     * @return array Pole všeech přijatých žádostí o spolupráci
+     */
+    public function getAllRecievedRequests($id_user): array
     {
         return DB::select('
             SELECT r.id_request as r_id_request, r.message as r_message, DATE(r.create_date) as r_create_date,
@@ -49,7 +61,12 @@ class RequestCooperationRepository implements RequestCooperationRepositoryInterf
         ]);
     }
 
-    public function getAllSentRequests($id_user)
+    /**
+     * Metoda vrátí všechny odeslané žádosti o spolupráci
+     * @param int $id_user ID uživatele
+     * @return array Pole odeslaných žádostí o spolupráci
+     */
+    public function getAllSentRequests($id_user): array
     {
         return DB::select('
             SELECT r.id_request as r_id_request, r.message as r_message, DATE(r.create_date) as r_create_date,
@@ -67,7 +84,12 @@ class RequestCooperationRepository implements RequestCooperationRepositoryInterf
         ]);
     }
 
-    public function getRequestById($id_request)
+    /**
+     * Metoda vrátí konkrétní žádost o spolupráci
+     * @param int $id_request ID žádosti o spolupráci
+     * @return array Konkrétní žádost o spolupráci
+     */
+    public function getRequestById($id_request): array
     {
         return DB::select('
             SELECT r.id_request as r_id_request, r.message as r_message, DATE(r.create_date) as r_create_date,
@@ -87,7 +109,16 @@ class RequestCooperationRepository implements RequestCooperationRepositoryInterf
         ]);
     }
 
-    public function createNewRequest($message, $create_date, $id_user, $id_offer, $id_status = 1)
+    /**
+     * Metoda vytvoří novou žádost o spolupráci
+     * @param string $message Zpráva žádosti o spolupráci
+     * @param mixed $create_date Datum vytvoření žádosti o spolupráci
+     * @param int $id_user ID uživatele
+     * @param int $id_offer ID nabídky spolupráce
+     * @param int $id_status ID stavu žádosti o spolupráci
+     * @return bool Výsledek vytvoření nové žádosti o spolupráci
+     */
+    public function createNewRequest($message, $create_date, $id_user, $id_offer, $id_status = 1): bool
     {
         return DB::insert('
             INSERT INTO request_cooperation (message, create_date, id_user, id_offer, id_status)
@@ -101,7 +132,13 @@ class RequestCooperationRepository implements RequestCooperationRepositoryInterf
         ]);
     }
 
-    public function userAlreadySentWaitingRequestByOfferId($id_user, $id_offer)
+    /**
+     * Metoda zjistí, zda uživatel odeslal žádost, která čeká na schválení
+     * @param int $id_user ID uživatele
+     * @param int $id_offer ID nabídky spolupráce
+     * @return array Pole odeslaných žádostí o spolupráci ve stavu Čeká na vyřízení
+     */
+    public function userAlreadySentWaitingRequestByOfferId($id_user, $id_offer): array
     {
         return DB::select('
         SELECT id_request FROM request_cooperation
@@ -115,14 +152,25 @@ class RequestCooperationRepository implements RequestCooperationRepositoryInterf
         ]);
     }
 
-    public function getOldRequestBeforeEdit($id_request)
+    /**
+     * Metoda vrátí konkrétní žádost před úpravou
+     * @param int $id_request ID žádosti o spolupráci
+     * @return array Konkrétní žádost o spolupráci
+     */
+    public function getOldRequestBeforeEdit($id_request): array
     {
         return DB::select('
             SELECT * FROM request_cooperation WHERE id_request=:id_request;
         ', [':id_request' => $id_request]);
     }
 
-    public function editRequestById($id_request, $edit_request_message)
+    /**
+     * Metoda upraví konkrétní žádost o spolupráci
+     * @param int $id_request ID žádosti o spolupráci
+     * @param string $edit_request_message Upravená zpráva žádosti o spolupráci
+     * @return int Výsledek úpravy žádosti o spolupráci
+     */
+    public function editRequestById($id_request, $edit_request_message): int
     {
         return DB::update('
             UPDATE request_cooperation
@@ -134,14 +182,26 @@ class RequestCooperationRepository implements RequestCooperationRepositoryInterf
         ]);
     }
 
-    public function deleteRequestById($id_request)
+    /**
+     * Metoda odstraní konkrétní žádost o spolupráci
+     * @param int $id_request ID žádost o spolupráci
+     * @return int Výsledek odstranění žádosti o spolupráci (1- úspěšné | 0 - neúspěšné)
+     */
+    public function deleteRequestById($id_request): int
     {
         return DB::delete('
             DELETE FROM request_cooperation WHERE id_request = :id_request
         ', [':id_request' => $id_request]);
     }
 
-    public function acceptRequestById($id_request, $id_project, $id_user)
+    /**
+     * Metoda schválí konkrétní žádost o spolupráci
+     * @param int $id_request ID žádosti o spolupráci
+     * @param int $id_project ID projektu
+     * @param int $id_user ID uživatele
+     * @return mixed Výsledek schválení žádosti o spolupráci
+     */
+    public function acceptRequestById($id_request, $id_project, $id_user): mixed
     {
         return DB::transaction(function () use ($id_request, $id_project, $id_user) {
             DB::update('
@@ -163,7 +223,12 @@ class RequestCooperationRepository implements RequestCooperationRepositoryInterf
         });
     }
 
-    public function rejectRequestById($id_request)
+    /**
+     * Metoda zamítne konkrétní žádost o spolupráci
+     * @param int $id_request ID žádosti o spolupráci
+     * @return mixed Výsledek zamítnutí žádosti o spolupráci
+     */
+    public function rejectRequestById($id_request): mixed
     {
         return DB::transaction(function () use ($id_request) {
             DB::update('
@@ -177,7 +242,14 @@ class RequestCooperationRepository implements RequestCooperationRepositoryInterf
         });
     }
 
-    public function setWaitingRequestById($id_request, $id_project, $id_user)
+    /**
+     * Metoda vrátí žádost o spolupráci do stavu Čeká na vyřízení
+     * @param int $id_request ID žádosti o spolupráci
+     * @param int $id_project ID projektu
+     * @param int $id_user ID uživatele
+     * @return mixed Výsledek znovuposouzení žádosti o spolupráci
+     */
+    public function setWaitingRequestById($id_request, $id_project, $id_user): mixed
     {
         return DB::transaction(function () use ($id_request, $id_project, $id_user) {
             DB::update('

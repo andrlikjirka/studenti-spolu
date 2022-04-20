@@ -9,34 +9,44 @@ use App\Intefaces\ProjectRepositoryInterface;
 use App\Intefaces\StatusOfferRepositoryInterface;
 use App\Intefaces\StatusProjectRepositoryInterface;
 use App\Intefaces\UserRepositoryInterface;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use function Symfony\Component\String\s;
+use Illuminate\View\View;
 
-
+/**
+ * Třída reprezentující kontroller pro Moje projekty
+ */
 class MyProjectsController extends Controller
 {
-    /**
-     * @var ProjectRepositoryInterface
-     */
+    /** @var ProjectRepositoryInterface Atribut typu repository pro práci s projekty */
     protected $projects;
-
+    /** @var UserRepositoryInterface Atribut typu repository pro práci s uživateli */
     protected $users;
-
+    /** @var StatusProjectRepositoryInterface Atribut typu repository pro práci se stavy projektů */
     protected $status_project;
-
+    /** @var OfferCooperationRepositoryInterface Atribut typu repository pro práci s nabídkami spolupráce */
     protected $offers;
-
+    /** @var StatusOfferRepositoryInterface Atribut typu repository pro práci se stavy nabídek spolupráce */
     protected $status_offer;
-
+    /** @var FileRepositoryInterface Atribut typu repository pro práci se soubory */
     protected $files;
-
+    /** @var FieldRepositoryInterface Atribut typu repository pro práci s obory */
     protected $fields;
 
-    public function __construct(ProjectRepositoryInterface $projects, UserRepositoryInterface $users, StatusProjectRepositoryInterface $status_project,
+    /**
+     * Konstruktor třídy
+     * @param ProjectRepositoryInterface $projects Rozhraní třídy pro práci s projekty
+     * @param UserRepositoryInterface $users Rozhraní třídy pro práci s uživateli
+     * @param StatusProjectRepositoryInterface $status_project Rozhraní třídy pro práci se stavy projektů
+     * @param OfferCooperationRepositoryInterface $offers Rozhraní třídy pro práci s nabídkami spolupráce
+     * @param StatusOfferRepositoryInterface $status_offer Rozhraní třídy pro práci se stavy nabídek
+     * @param FileRepositoryInterface $files Rozhraní třídy pro práci se soubory
+     * @param FieldRepositoryInterface $fields Rozhraní třídy pro práci s obory
+     */
+    public function __construct(ProjectRepositoryInterface          $projects, UserRepositoryInterface $users, StatusProjectRepositoryInterface $status_project,
                                 OfferCooperationRepositoryInterface $offers, StatusOfferRepositoryInterface $status_offer,
-                                FileRepositoryInterface $files, FieldRepositoryInterface $fields)
+                                FileRepositoryInterface             $files, FieldRepositoryInterface $fields)
     {
         $this->projects = $projects;
         $this->users = $users;
@@ -47,7 +57,11 @@ class MyProjectsController extends Controller
         $this->fields = $fields;
     }
 
-    public function index()
+    /**
+     * Metoda získá data o autorských a spolupracovnických projektech uživatele a předá je šabloně
+     * @return View View reprezentující šablonu pro stránku Moje projekty
+     */
+    public function index(): View
     {
         $title = 'Moje projekty';
         $logged_user_id = Auth::id();
@@ -64,11 +78,15 @@ class MyProjectsController extends Controller
             ->with('projects_collab', $projects_collab);
     }
 
-    public function show($id)
+    /**
+     * Metoda získá data o vybraném autorském nebo spolupracovnickém projektu a předá je šabloně
+     * @param $id int ID projektu
+     * @return mixed View reprezentující šablonu pro detail mého projektu | 404 stránka
+     */
+    public function show($id): mixed
     {
         $title = 'Úprava projektu';
-        $logged_user_id = Auth::id();
-        $my_project = $this->projects->getProjectById($id);;
+        $my_project = $this->projects->getProjectById($id);
 
         if (count($my_project) == 1) {
             $status_project_all = $this->status_project->getAllStatusProject();
@@ -94,7 +112,13 @@ class MyProjectsController extends Controller
 
     }
 
-    public function update(Request $request, $id)
+    /**
+     * Metoda slouží pro úpravu vybraného autorského nebo spolupracovnického projektu
+     * @param Request $request HTTP požadavek
+     * @param $id int ID projektu
+     * @return RedirectResponse Přesměrování na route pro moje projekty
+     */
+    public function update(Request $request, $id): RedirectResponse
     {
         $request->validate([
             'edit-name-project' => 'required|string|max:255',
@@ -108,13 +132,18 @@ class MyProjectsController extends Controller
         $edit_description = $this->testStringInput($request->input('edit-description-project'));
         $edit_id_status = $this->testIntegerInput($request->input('edit-status-project'));
 
-        $result = $this->projects->editProjectById($id, $edit_name, $edit_abstract, $edit_description, $edit_id_status);
+        $this->projects->editProjectById($id, $edit_name, $edit_abstract, $edit_description, $edit_id_status);
 
         return redirect()->route('moje-projekty.show', $id)
             ->with('edit_project', 'Úprava projektu proběhla úspěšně.');
     }
 
-    public function store(Request $request)
+    /**
+     * Metoda slouží pro vytvoření a uložení nového projektu
+     * @param Request $request HTTP požadavek
+     * @return RedirectResponse Přesměrování na route pro moje projekty
+     */
+    public function store(Request $request): RedirectResponse
     {
         $logged_user_id = Auth::id();
 
@@ -137,7 +166,12 @@ class MyProjectsController extends Controller
         }
     }
 
-    public function destroy(Request $request)
+    /**
+     * Metoda slouží pro odstranění vybraného projektu
+     * @param Request $request HTTP požadavek
+     * @return RedirectResponse Přesměrování na route pro moje projekty
+     */
+    public function destroy(Request $request): RedirectResponse
     {
         $delete_project_id = $this->testIntegerInput($request->input('delete_id_project'));
         $result = $this->projects->deleteProjectById($delete_project_id);
@@ -148,8 +182,13 @@ class MyProjectsController extends Controller
         }
     }
 
-    // funkce pro zpracovani doplnujicich formularu na strance detailu mého projektu
-    public function handle(Request $request, $id_project)
+    /**
+     * Metoda slouží pro zpracování formulářů na stránce Moje projekty
+     * @param Request $request HTTP požadavek
+     * @param $id_project int ID projektu
+     * @return RedirectResponse Přesměrování na konkrétní route
+     */
+    public function handle(Request $request, $id_project): RedirectResponse
     {
         if ($request->input('action') == 'file-upload') {
             $result = $this->file_upload($request, $id_project);
@@ -164,7 +203,7 @@ class MyProjectsController extends Controller
             $result = $this->deleteFile($request);
             if ($result == 1) {
                 return redirect()->route('moje-projekty.show', $id_project)
-                ->with('delete-file', 'Smazání souboru proběhlo úspěšně.');
+                    ->with('delete-file', 'Smazání souboru proběhlo úspěšně.');
             } else {
                 return redirect()->route('moje-projekty.show', $id_project)
                     ->with('error-delete-file', 'Smazání souboru selhalo.');
@@ -210,7 +249,13 @@ class MyProjectsController extends Controller
         return redirect()->route('moje-projekty.show', $id_project);
     }
 
-    private function remove_team_member(Request $request, $id_project)
+    /**
+     * Metoda slouží pro odstranění vybraného člena týmu
+     * @param Request $request HTTP požadavek
+     * @param $id_project int ID projektu
+     * @return mixed Výsledek odstranění člena týmu
+     */
+    private function remove_team_member(Request $request, $id_project): mixed
     {
         $id_user = $this->testIntegerInput($request->input('remove_id_user'));
         $result = $this->users->removeTeamMember($id_project, $id_user);
@@ -234,7 +279,12 @@ class MyProjectsController extends Controller
         return $result;
     }
 
-    private function edit_offer_cooperation(Request $request, $id_project)
+    /**
+     * Metoda slouží pro úpravu nabídky spolupráce
+     * @param Request $request HTTP požadavek
+     * @return mixed Výsledek úpravy nabídky spolupráce
+     */
+    private function edit_offer_cooperation(Request $request): mixed
     {
         $request->validate([
             'edit-id-offer' => 'required|integer',
@@ -254,7 +304,12 @@ class MyProjectsController extends Controller
         return $result;
     }
 
-    private function remove_offer_cooperation(Request $request, $id_project)
+    /**
+     * Metoda slouží pro odstranění vybrané nabídky spolupráce
+     * @param Request $request HTTP požadavek
+     * @return mixed Výsledek odstranění nabídky spolupráce
+     */
+    private function remove_offer_cooperation(Request $request): mixed
     {
         $request->validate([
             'remove_id_offer' => 'required|integer',
@@ -264,7 +319,13 @@ class MyProjectsController extends Controller
         return $result;
     }
 
-    private function file_upload(Request $request, $id_project)
+    /**
+     * Metoda slouží pro nahrání souboru k projektu
+     * @param Request $request HTTP požadavek
+     * @param $id_project int ID projektu
+     * @return mixed Výsledek nahrání souboru
+     */
+    private function file_upload(Request $request, $id_project): mixed
     {
         $request->validate([
             'id_user' => 'required|integer',
@@ -276,15 +337,20 @@ class MyProjectsController extends Controller
         $type = $file->getClientOriginalExtension();
         $uploadDate = date('Y-m-d G:i:s');
         $uploadDateTime = date("Y-m-d") . "_" . time();
-        $uniqueName = $id_user.'_'.$id_project.'_'.$uploadDateTime;
-        $destinationPath = storage_path() .'\app\uploads\\';
-        $target = $destinationPath.basename($uniqueName.'.'.$type);
+        $uniqueName = $id_user . '_' . $id_project . '_' . $uploadDateTime;
+        $destinationPath = storage_path() . '\app\uploads\\';
+        $target = $destinationPath . basename($uniqueName . '.' . $type);
         $result = $this->files->uploadFile($id_project, $originalName, $uniqueName, $type, $uploadDate);
         move_uploaded_file($_FILES['uploadFile']['tmp_name'], $target);
         return $result;
     }
 
-    private function deleteFile(Request $request)
+    /**
+     * Metoda slouží pro odstranění vybraného souboru
+     * @param Request $request HTTP požadavek
+     * @return mixed Výsledek odstranění souboru
+     */
+    private function deleteFile(Request $request): mixed
     {
         $request->validate([
             'delete_id_file' => 'required|integer'
@@ -293,12 +359,11 @@ class MyProjectsController extends Controller
         $fileInfo = $this->files->getFileInfoById($delete_id_file);
         $result = $this->files->deleteFile($delete_id_file);
         if ($result == 1) {
-            $destinationPath = storage_path() .'\app\uploads\\';
-            $target = $destinationPath.basename($fileInfo[0]->unique_name.'.'.$fileInfo[0]->type);
+            $destinationPath = storage_path() . '\app\uploads\\';
+            $target = $destinationPath . basename($fileInfo[0]->unique_name . '.' . $fileInfo[0]->type);
             unlink($target);
         }
         return $result;
     }
-
 
 }

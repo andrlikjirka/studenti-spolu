@@ -13,7 +13,6 @@ use App\Http\Controllers\RequestsCooperationController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
-use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\AdminProjectsController;
 
 /*

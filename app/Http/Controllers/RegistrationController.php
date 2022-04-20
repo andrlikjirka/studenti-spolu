@@ -6,14 +6,23 @@ use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\View\View;
 
+/**
+ * Třída reprezentující kontroller pro registraci nového uživatele
+ */
 class RegistrationController extends Controller
 {
-    public function index()
+    /**
+     * Metoda získá data o oborech a předá je šabloně pro registraci
+     * @return View View reprezentující šablonu pro stránku registrace
+     */
+    public function index(): View
     {
         $fields = DB::select('
             SELECT * FROM field;
@@ -22,7 +31,12 @@ class RegistrationController extends Controller
                 ->with('fields', $fields);
     }
 
-    public function handle(Request $request)
+    /**
+     * Metoda slouží pro zpracování registračního formuláře (tj. registraci nového uživatele)
+     * @param Request $request HTTP požadavek
+     * @return RedirectResponse Přesměrování na konkrétní route
+     */
+    public function handle(Request $request): RedirectResponse
     {
         $request->validate([
             'first_name' => 'required|string|max:45',
