@@ -1,0 +1,1 @@
+INSERT INTO `studenti-spolu`.users (id_user, first_name, last_name, description, email, login, password, remember_token, id_right, id_status) VALUES (2, 'Jiří', 'Andrlík', 'Jsem Jiří Andrlík a je mi 23 let.', 'jandrlik@email.cz', 'jandrlik', '$2y$10$qQUBQgiNasMrLehzEwKwIe48ALdAvmWLwuVBdTZOG29pN5lbM1PLO', null, 1, 1);
