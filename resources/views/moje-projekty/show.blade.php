@@ -189,17 +189,23 @@
                                     <form id="project-file" action="{{ route('moje-projekty.handle-forms', $my_project->id_project) }}" method="post" enctype="multipart/form-data">
                                         @csrf
                                         <label for="formFileMultiple" class="form-label">Výběr souboru</label>
+                                        <div class="mb-3 small fst-italic">
+                                            <p>Povolené formáty: .pdf, .doc, .docx, .jpg, .jpeg, .png, .txt<br>
+                                            Maximální velikost nahraného souboru: 10MB</p>
+                                        </div>
                                         <div class="row">
                                             <div class="col-lg-9 col-md-8">
                                                 <div class="mb-3">
-                                                    <input class="form-control" type="file" id="formFile"
-                                                           name="uploadFile" required>
+                                                    <input class="form-control" type="file" id="fileInput"
+                                                           name="uploadFile"
+                                                           accept=".pdf, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .jpg, .jpeg, .png, .txt"
+                                                           required>
                                                     <input type="hidden" name="id_user"
                                                            value="{{ $loggedUser->id_user }}">
                                                 </div>
                                             </div>
                                             <div class="col-lg-3 col-md-4">
-                                                <button type="submit" class="btn btn-primary" name="action"
+                                                <button type="submit" class="btn btn-primary" name="action" id="upload-btn"
                                                         value="file-upload">Nahrát soubor
                                                 </button>
                                             </div>
@@ -581,7 +587,47 @@
                     event.preventDefault();
                 }
             }
+
+            const fileTypes = [
+                "image/jpeg",
+                "image/png",
+                "application/pdf",
+                "application/msword",
+                "text/plain"
+            ];
+            let fileInput = document.getElementById('fileInput');
+            fileInput.addEventListener('change', fileType);
+            fileInput.addEventListener('change', fileSize);
+
+            function fileSize() {
+                let files = document.getElementById('fileInput').files;
+                for (const file of files) {
+                    if(file.size <= 10000000) {
+                        document.getElementById('upload-btn').classList.remove('disabled');
+                    } else {
+                        document.getElementById('upload-btn').classList.add('disabled');
+                    }
+                }
+            }
+
+            function fileType() {
+                let files = document.getElementById('fileInput').files;
+                for (const file of files) {
+                    if(validFileType(file)) {
+                        document.getElementById('upload-btn').classList.remove('disabled');
+                    } else {
+                        document.getElementById('upload-btn').classList.add('disabled');
+                    }
+                }
+            }
+
+            function validFileType(file) {
+                return fileTypes.includes(file.type);
+            }
+
         </script>
+
+
     @endif
 
 @endsection

@@ -12,6 +12,7 @@ use App\Intefaces\UserRepositoryInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
 /**
@@ -197,7 +198,7 @@ class MyProjectsController extends Controller
                     ->with('file-upload', 'Nahrání souboru proběhlo úspěšně.');
             } else {
                 return redirect()->route('moje-projekty.show', $id_project)
-                    ->with('error-file-upload', 'Nahrání souboru selhalo.');
+                    ->with('error-file-upload', 'Nahrání souboru selhalo. Zkontrolujte formát a velikost nahrávaného souboru.');
             }
         } else if ($request->input('action') == 'delete-file') {
             $result = $this->deleteFile($request);
@@ -329,7 +330,7 @@ class MyProjectsController extends Controller
     {
         $request->validate([
             'id_user' => 'required|integer',
-            'uploadFile' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,jpg,jpeg,png,txt|max:10000|uploaded',
+            'uploadFile' => 'required|file|mimes:pdf,doc,docx,jpg,jpeg,png,txt|max:10000',
         ]);
         $id_user = $this->testIntegerInput($request->input('id_user'));
         $file = $request->file('uploadFile');
@@ -338,10 +339,11 @@ class MyProjectsController extends Controller
         $uploadDate = date('Y-m-d G:i:s');
         $uploadDateTime = date("Y-m-d") . "_" . time();
         $uniqueName = $id_user . '_' . $id_project . '_' . $uploadDateTime;
-        $destinationPath = storage_path() . '\app\uploads\\';
-        $target = $destinationPath . basename($uniqueName . '.' . $type);
         $result = $this->files->uploadFile($id_project, $originalName, $uniqueName, $type, $uploadDate);
-        move_uploaded_file($_FILES['uploadFile']['tmp_name'], $target);
+        if ($result == 1) {
+            $fileName = basename($uniqueName . '.' . $type);
+            $file->storeAs('uploads', $fileName);
+        }
         return $result;
     }
 
