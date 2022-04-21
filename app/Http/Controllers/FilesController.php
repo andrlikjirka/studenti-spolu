@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Třída reprezentující kontroller pro zobrazení souborů
@@ -28,45 +29,26 @@ class FilesController extends Controller
     /**
      * Metoda zajišťuje zobrazení konkrétního souboru
      * @param $id int ID souboru
-     * @return RedirectResponse Přesměrování na konkrétní route
+     * @return mixed Přesměrování na konkrétní route
      */
-    public function show($id):RedirectResponse
+    public function show($id)
     {
         if (Auth::check()) {
             $fileInfo = $this->files->getFileInfoById($id);
             if (count($fileInfo) == 1) {
-                $destinationPath = storage_path() .'\app\uploads\\';
                 $file_extension = $fileInfo[0]->type;
-                $file = $destinationPath.basename($fileInfo[0]->unique_name.'.'.$file_extension);
-                if (file_exists($file)) {
-                    switch( $file_extension )
-                    {
-                        case "pdf": $ctype="application/pdf"; break;
-                        case "txt": $ctype="application/txt"; break;
-                        case "doc": $ctype="application/doc"; break;
-                        case "xls": $ctype="application/vnd.ms-excel"; break;
-                        case "ppt": $ctype="application/vnd.ms-powerpoint"; break;
-                        case "gif": $ctype="image/gif"; break;
-                        case "png": $ctype="image/png"; break;
-                        case "jpeg":
-                        case "jpg": $ctype="image/jpg"; break;
-                        default: $ctype="application/octet-stream";
-                    }
-                    // Header content type
-                    header("Content-type: $ctype");
-                    header('Content-Disposition: inline; filename="' . $fileInfo[0]->name . '"');
-                    header('Content-Transfer-Encoding: binary');
-                    header('Content-Length: ' . filesize($file));
-                    header('Accept-Ranges: bytes');
-                    readfile($file);
-                } else { //soubor neexistuje
-                    return redirect()->route('index');
+                $file = basename($fileInfo[0]->unique_name.'.'.$file_extension);
+                $fileName = $fileInfo[0]->name;
+                if ($file) {
+                    return Storage::disk('s3')->response('uploads/'. $file, $fileName);
+                } else {
+                    abort(404, 'Soubor nenalezen');
                 }
             } else {
                 abort(404, 'Soubor nenalezen');
             }
         } else {
-            return redirect()->route('index');
+            abort(403);
         }
         return redirect()->route('index');
     }

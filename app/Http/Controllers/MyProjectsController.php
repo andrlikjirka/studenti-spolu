@@ -12,6 +12,7 @@ use App\Intefaces\UserRepositoryInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 
@@ -342,7 +343,8 @@ class MyProjectsController extends Controller
         $result = $this->files->uploadFile($id_project, $originalName, $uniqueName, $type, $uploadDate);
         if ($result == 1) {
             $fileName = basename($uniqueName . '.' . $type);
-            $file->storeAs('uploads', $fileName);
+            //$file->storeAs('uploads', $fileName); //local upload
+            $file->storeAs('uploads', $fileName, 's3'); //amazon-s3 upload
         }
         return $result;
     }
@@ -361,9 +363,9 @@ class MyProjectsController extends Controller
         $fileInfo = $this->files->getFileInfoById($delete_id_file);
         $result = $this->files->deleteFile($delete_id_file);
         if ($result == 1) {
-            $destinationPath = storage_path() . '\app\uploads\\';
-            $target = $destinationPath . basename($fileInfo[0]->unique_name . '.' . $fileInfo[0]->type);
-            unlink($target);
+            $file = basename($fileInfo[0]->unique_name . '.' . $fileInfo[0]->type);
+            //unlink($target); //local delete
+            Storage::disk('s3')->delete('uploads/'.$file); //s3 delete
         }
         return $result;
     }

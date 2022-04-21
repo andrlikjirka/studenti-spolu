@@ -4,7 +4,7 @@
 
     <!-- Login -->
     <section class="bg-primary bg-gradient" style="padding-top: 70px">
-        <div class="container px-5 py-5">
+        <div class="container px-5 py-5 ">
             @if(count($errors) > 0)
                 <div class="alert alert-danger small">
                     @foreach ($errors->all() as $error)
@@ -13,7 +13,7 @@
                 </div>
             @endif
 
-            <div class="row justify-content-center">
+            <div class="row justify-content-center py-xxl-5">
                 <div class="col-lg-6 col-md-8 col-sm-12">
                     <div class="card">
                         <div class="card-header py-3 px-4 text-primary">Přihlásit</div>
