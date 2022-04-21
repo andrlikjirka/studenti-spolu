@@ -77,9 +77,9 @@ class AdminProjectsController extends Controller
     /**
      * Metoda získá příslušná data o vybraném projektu a předá je šabloně pro úpravu vybraného projektu
      * @param $id int ID vybraného projektu
-     * @return View reprezentující šablonu pro administraci projektu | stránka 404
+     * @return mixed reprezentující šablonu pro administraci projektu | stránka 404
      */
-    public function show($id)
+    public function show($id): mixed
     {
         $title = 'Úprava projektu';
         $project = $this->projects->getProjectById($id);;
@@ -104,6 +104,32 @@ class AdminProjectsController extends Controller
                 ->with('status_offer_all', $status_offer_all);
         } else {
             return abort(404, 'Projekt nenalezen.'); //404 strana
+        }
+    }
+
+    /**
+     * Metoda slouží pro odstranění vybraného projektu
+     * @param Request $request HTTP požadavek
+     * @return RedirectResponse Přesměrování na route pro admin projekty
+     */
+    public function destroy(Request $request): RedirectResponse
+    {
+        $delete_project_id = $this->testIntegerInput($request->input('delete_id_project'));
+        $files = $this->files->getFilesByProjectId($delete_project_id);
+        foreach ($files as $file) {
+            $fileInfo = $this->files->getFileInfoById($file->id_file);
+            $result = $this->files->deleteFile($file->id_file);
+            if ($result == 1) {
+                $fileName = basename($fileInfo[0]->unique_name . '.' . $fileInfo[0]->type);
+                //unlink($target); //local delete
+                Storage::disk('s3')->delete('uploads/'.$fileName); //s3 delete
+            }
+        }
+        $result = $this->projects->deleteProjectById($delete_project_id);
+        if ($result == 1) {
+            return redirect()->route('admin.projekty.index')->with('delete_project', 'Odstranění projektu proběhlo úspěšně.');
+        } else {
+            return redirect()->route('admin.projekty.index')->with('error_delete_project', 'Odstranění projektu selhalo.');
         }
     }
 

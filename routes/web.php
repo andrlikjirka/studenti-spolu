@@ -134,6 +134,10 @@ Route::middleware(['prevent-back-history'])->group(function () {
         ->middleware('can:isAdmin')
         ->name('admin.projekty.index');
 
+    Route::delete('/administrace/projekty', [AdminProjectsController::class, 'destroy'])
+        ->middleware('auth')
+        ->name('admin.projekty.destroy');
+
     Route::get('/administrace/projekty/{id}', [AdminProjectsController::class, 'show'])
         ->where('id', '[0-9]+')
         ->middleware('auth')

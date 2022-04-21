@@ -176,6 +176,16 @@ class MyProjectsController extends Controller
     public function destroy(Request $request): RedirectResponse
     {
         $delete_project_id = $this->testIntegerInput($request->input('delete_id_project'));
+        $files = $this->files->getFilesByProjectId($delete_project_id);
+        foreach ($files as $file) {
+            $fileInfo = $this->files->getFileInfoById($file->id_file);
+            $result = $this->files->deleteFile($file->id_file);
+            if ($result == 1) {
+                $fileName = basename($fileInfo[0]->unique_name . '.' . $fileInfo[0]->type);
+                //unlink($target); //local delete
+                Storage::disk('s3')->delete('uploads/'.$fileName); //s3 delete
+            }
+        }
         $result = $this->projects->deleteProjectById($delete_project_id);
         if ($result == 1) {
             return redirect()->route('moje-projekty.index')->with('delete_project', 'Odstranění projektu proběhlo úspěšně.');
