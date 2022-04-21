@@ -101,7 +101,7 @@
     <div class="container px-5 text-center">
 
         <div class="small text-secondary">
-            <p>&copy; 2022, Jiří Andrlík</p>
+            <p>&copy; 2022, <a href="mailto:andrlik.jirka@gmail.com" class="text-decoration-none">Jiří Andrlík</a></p>
         </div>
     </div>
 </footer>
