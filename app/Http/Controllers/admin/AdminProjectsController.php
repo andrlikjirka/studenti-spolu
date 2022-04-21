@@ -13,6 +13,7 @@ use App\Intefaces\UserRepositoryInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Ramsey\Uuid\Type\Integer;
 
@@ -193,9 +194,9 @@ class AdminProjectsController extends Controller
         $fileInfo = $this->files->getFileInfoById($delete_id_file);
         $result = $this->files->deleteFile($delete_id_file);
         if ($result == 1) {
-            $destinationPath = storage_path() . '\app\uploads\\';
-            $target = $destinationPath . basename($fileInfo[0]->unique_name . '.' . $fileInfo[0]->type);
-            unlink($target);
+            $file = basename($fileInfo[0]->unique_name . '.' . $fileInfo[0]->type);
+            //unlink($target);
+            Storage::disk('s3')->delete('uploads/'.$file); //s3 delete
         }
         return $result;
     }
