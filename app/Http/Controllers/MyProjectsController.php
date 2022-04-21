@@ -341,7 +341,7 @@ class MyProjectsController extends Controller
     {
         $request->validate([
             'id_user' => 'required|integer',
-            'uploadFile' => 'required|file|mimes:pdf,doc,docx,jpg,jpeg,png,txt|max:10000',
+            'uploadFile' => 'required|file|max:10000|mimes:pdf,doc,docx,jpg,jpeg,png,txt',
         ]);
         $id_user = $this->testIntegerInput($request->input('id_user'));
         $file = $request->file('uploadFile');
