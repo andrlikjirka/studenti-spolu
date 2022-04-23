@@ -11,8 +11,10 @@
                         @endforeach
                     </div>
                 @endif
-                @if(session('delete_project_message'))
-                    <div class="alert alert-success small text-center mb-5"> {{ session('delete_project_message') }} </div>
+                @if(session('delete_request_message'))
+                    <div class="alert alert-success small text-center mb-5"> {{ session('delete_request_message') }} </div>
+                @elseif(session('error_delete_request_message'))
+                    <div class="alert alert-danger small text-center mb-5"> {{ session('error_delete_request_message') }} </div>
                 @endif
             </div>
 

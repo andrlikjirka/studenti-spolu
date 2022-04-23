@@ -14,10 +14,6 @@
 
                 @if(session('edit-user-message'))
                     <div class="alert alert-success small text-center mb-5"> {{ session('edit-user-message') }} </div>
-                @elseif(session('delete-user-message'))
-                    <div class="alert alert-success small text-center mb-5"> {{ session('delete-user-message') }} </div>
-                @elseif(session('error-delete-user-message'))
-                    <div class="alert alert-danger small text-center mb-5"> {{ session('error-delete-user-message') }} </div>
                 @elseif(session('edit-password-message'))
                     <div class="alert alert-success small text-center mb-5"> {{ session('edit-password-message') }} </div>
                 @elseif(session('edit-fields-message'))
