@@ -37,9 +37,8 @@
                     <h3 class="mb-3">{{ $title }}</h3>
                     <p class="text-secondary">
                         Tato stránka je věnována administraci žádostí o spolupráci. Můžete zde upravovat informace o
-                        všech žádostech o spolupráci jednotlivých uživatelů nebo je ze systému zcela odstranit. V případě že
-                        máte právo Super Administrátor,
-                        můžete měnit práva ostatních uživatelů (tj. vytvářet administrátory, nebo administrátorská práva
+                        všech žádostech o spolupráci jednotlivých uživatelů nebo je ze systému zcela odstranit. V případě, že
+                        máte právo Super Administrátor, můžete měnit práva ostatních uživatelů (tj. vytvářet administrátory nebo administrátorská práva
                         odebírat).
                     </p>
                 </div>

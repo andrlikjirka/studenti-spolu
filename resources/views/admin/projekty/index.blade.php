@@ -35,7 +35,7 @@
                     <h3 class="mb-3">{{ $title }}</h3>
                     <p class="text-secondary">
                         Tato stránka je věnována administraci projektů. Můžete zde upravovat informace o vytvořených
-                        projektech, nebo jednotlivé projekty zcela odstranit.
+                        projektech nebo jednotlivé projekty zcela odstranit.
                     </p>
                 </div>
             </div>
