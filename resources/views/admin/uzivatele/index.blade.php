@@ -13,7 +13,7 @@
                     </div>
                 @endif
                 @if(session('delete-user-message'))
-                    <div class="alert alert-success small text-center mb-5"> {{ session('delete_user_message') }} </div>
+                    <div class="alert alert-success small text-center mb-5"> {{ session('delete-user-message') }} </div>
                 @elseif(session('error-delete-user-message'))
                     <div
                         class="alert alert-danger small text-center mb-5"> {{ session('error_delete_user_message') }} </div>
