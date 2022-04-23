@@ -1,3 +1,3 @@
 # studenti-spolu
 Bakalářská práce  
-Jiří Andrlík, 2021
+Jiří Andrlík, 2022  
