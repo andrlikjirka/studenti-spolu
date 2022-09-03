@@ -2,4 +2,4 @@
 Bakalářská práce  
 Jiří Andrlík, 2022  
 
-![1 index](https://user-images.githubusercontent.com/18737702/171995928-e244b85a-0fd0-41f6-b952-c2ddbcf80276.jpeg)
+![1 index](![image](https://user-images.githubusercontent.com/18737702/188264209-86fe2085-f3ec-4de1-8fbc-15941d03cc78.png))
